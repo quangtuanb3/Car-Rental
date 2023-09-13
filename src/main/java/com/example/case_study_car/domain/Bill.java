@@ -1,7 +1,6 @@
-package com.example.case_study_car.model;
+package com.example.case_study_car.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -46,7 +45,7 @@ public class Bill {
     private List<BillCar> billCars;
 
     @OneToMany(mappedBy = "bill")
-    private List<BillSurcharge> billSurcharges;
+    private List<BillCarSurcharge> billCarSurcharges;
 
 
 }

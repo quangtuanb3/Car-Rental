@@ -1,9 +1,11 @@
-package com.example.case_study_car.model;
+package com.example.case_study_car.domain;
 
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Table(name = "car_surcharges")
 @Entity
@@ -15,6 +17,8 @@ public class CarSurcharge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+
+    private BigDecimal priceSurcharge;
 
     @ManyToOne
     @JoinColumn(name = "car_id")

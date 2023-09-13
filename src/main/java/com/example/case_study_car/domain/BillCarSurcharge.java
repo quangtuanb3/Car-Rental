@@ -1,15 +1,15 @@
-package com.example.case_study_car.model;
+package com.example.case_study_car.domain;
 
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table(name = "bill_surcharges")
+@Table(name = "bill_car_surcharges")
 @Entity
 @Data
 @NoArgsConstructor
-public class BillSurcharge {
+public class BillCarSurcharge {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +17,8 @@ public class BillSurcharge {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "surcharge_id")
-    private Surcharge surcharge;
+//    @JoinColumn(name = "surcharge_id")
+    private CarSurcharge carSurcharge;
 
     @ManyToOne
     @JoinColumn(name = "bill_id")
