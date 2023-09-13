@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class Car {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,23 +23,19 @@ public class Car {
 
     private BigDecimal priceDays;
 
-
-
     private String description;
 
-    @OneToOne
-    private File poster;
+    @OneToMany(mappedBy = "car")
+    private List<Image> images;
 
     @ManyToOne
     @JoinColumn(name = "agency_id")
     private Agency agency;
 
     @OneToMany(mappedBy = "car")
-    private List<CarCategory> carCategories;
+    private List<CarSpecification> carSpecifications;
 
     @OneToMany(mappedBy = "car")
     private List<CarFeature> carFeatures;
 
-    @OneToMany(mappedBy = "car")
-    private List<File> files;
 }

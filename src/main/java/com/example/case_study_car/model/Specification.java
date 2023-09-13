@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "specifications")
 @Data
 @NoArgsConstructor
-public class Category {
+public class Specification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,14 +22,14 @@ public class Category {
 
     private String svg;
 
-    @OneToMany(mappedBy = "category")
-    private List<CarCategory> carCategories;
+    @OneToMany(mappedBy = "specification")
+    private List<CarSpecification> carSpecifications;
 
-    public Category(Long id) {
+    public Specification(Long id) {
         this.id = id;
     }
 
-    public Category(Long id, String name) {
+    public Specification(Long id, String name) {
         this.id = id;
         this.name = name;
     }

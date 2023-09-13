@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 public class Bill {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

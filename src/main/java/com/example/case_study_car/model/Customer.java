@@ -24,5 +24,8 @@ public class Customer {
     private String email;
 
     @OneToMany(mappedBy = "customer")
+    private List<Image> identification;
+
+    @OneToMany(mappedBy = "customer")
     private List<Bill> bills;
 }

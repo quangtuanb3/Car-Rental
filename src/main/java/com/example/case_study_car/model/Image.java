@@ -5,26 +5,24 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table(name = "car_categories")
 @Entity
+@Table(name = "files")
 @Data
 @NoArgsConstructor
-public class CarCategory {
+public class Image {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    private String url;
+
     @ManyToOne
-//    @JoinColumn(name = "car_id")
+    @JoinColumn(name = "car_id")
     private Car car;
 
-
     @ManyToOne
-//    @JoinColumn(name = "category_id")
-    private Category category;
-
-    public CarCategory(Car car, Category category) {
-        this.car = car;
-        this.category = category;
-    }
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }
