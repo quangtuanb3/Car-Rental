@@ -1,4 +1,4 @@
-package com.example.case_study_car.model;
+package com.example.case_study_car.domain;
 
 
 import jakarta.persistence.*;

@@ -1,11 +1,9 @@
-package com.example.case_study_car.model;
+package com.example.case_study_car.domain;
 
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Entity
 @Table(name = "agencies")
@@ -18,6 +16,8 @@ public class Agency {
 
     private String name;
 
+
+    @Column(columnDefinition = "LONGTEXT")
     private String svg;
 
 }

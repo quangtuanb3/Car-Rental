@@ -1,11 +1,10 @@
-package com.example.case_study_car.model;
+package com.example.case_study_car.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Table(name = "bill_cars")

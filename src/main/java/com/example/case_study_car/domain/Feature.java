@@ -1,4 +1,4 @@
-package com.example.case_study_car.model;
+package com.example.case_study_car.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "specifications")
+@Table(name = "features")
 @Data
 @NoArgsConstructor
-public class Specification {
+public class Feature {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,18 +18,15 @@ public class Specification {
 
     private String name;
 
-    private String description;
 
-    private String svg;
+    @OneToMany(mappedBy = "feature")
+    private List<CarFeature> carFeatures;
 
-    @OneToMany(mappedBy = "specification")
-    private List<CarSpecification> carSpecifications;
-
-    public Specification(Long id) {
+    public Feature(Long id) {
         this.id = id;
     }
 
-    public Specification(Long id, String name) {
+    public Feature(Long id, String name) {
         this.id = id;
         this.name = name;
     }
