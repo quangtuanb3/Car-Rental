@@ -22,6 +22,7 @@ public class Customer {
     private String numberPhone;
 
     private String email;
+    private String idNumber;
 
     @OneToMany(mappedBy = "customer")
     private List<Image> identification;

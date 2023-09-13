@@ -19,6 +19,8 @@ public class Car {
 
     private String name;
 
+    private String licensePlate;
+
     private BigDecimal priceHours;
 
     private BigDecimal priceDays;
