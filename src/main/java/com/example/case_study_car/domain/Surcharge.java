@@ -1,9 +1,7 @@
-package com.example.case_study_car.model;
+package com.example.case_study_car.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.math.BigDecimal;
 
 @Table(name = "surcharges")
 @Entity
@@ -21,13 +19,11 @@ public class Surcharge {
 
     private String name;
 
-    private BigDecimal price;
+
 
     @ManyToOne
-    @JoinColumn(name = "billSurcharge_id")
-    private BillSurcharge billSurcharge;
 
-
+    private CarSurcharge carSurcharge;
 
 
 }

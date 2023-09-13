@@ -1,28 +1,30 @@
-package com.example.case_study_car.model;
+package com.example.case_study_car.domain;
 
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Table(name = "car_features")
 @Entity
-@Table(name = "files")
 @Data
 @NoArgsConstructor
-public class Image {
-
+public class CarFeature {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
-    private String url;
 
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
 
+
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "feature_id")
+    private Feature feature;
+
+    public CarFeature(Car car, Feature feature) {
+        this.car = car;
+        this.feature = feature;
+    }
 }

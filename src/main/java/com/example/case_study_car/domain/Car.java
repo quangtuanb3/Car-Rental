@@ -1,4 +1,4 @@
-package com.example.case_study_car.model;
+package com.example.case_study_car.domain;
 
 
 import jakarta.persistence.*;
@@ -39,5 +39,8 @@ public class Car {
 
     @OneToMany(mappedBy = "car")
     private List<CarFeature> carFeatures;
+
+    @OneToMany(mappedBy = "car")
+    private List<CarSurcharge> carSurcharges;
 
 }
