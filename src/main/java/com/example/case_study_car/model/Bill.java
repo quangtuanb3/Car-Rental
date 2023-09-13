@@ -24,9 +24,14 @@ public class Bill {
     private String customerPhoneNumber;
 
     private String customerEmail;
+
     private String customerIdNumber;
 
     private LocalDateTime dateReceived;
+
+    private String pickupLocation;
+    
+    private String dropOffLocation;
 
     private LocalDateTime expectedDateReturn;
 

@@ -15,8 +15,21 @@ public class HomeController {
     @GetMapping
     public ModelAndView index() {
         ModelAndView view = new ModelAndView("user/index");
-//        view.addObject("categories", categoryService.findAll());
-//        view.addObject("types", typeService.findAll());
+        return view;
+    }
+    @GetMapping("/car")
+    public ModelAndView car() {
+        ModelAndView view = new ModelAndView("user/car");
+        return view;
+    }
+    @GetMapping("car-detail")
+    public ModelAndView detail() {
+        ModelAndView view = new ModelAndView("user/car-detail");
+        return view;
+    }
+    @GetMapping("pricing")
+    public ModelAndView pricing() {
+        ModelAndView view = new ModelAndView("user/pricing");
         return view;
     }
 
