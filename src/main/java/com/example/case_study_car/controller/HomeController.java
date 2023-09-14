@@ -22,14 +22,24 @@ public class HomeController {
     private final SurchargeService surchargeService;
     private final FeatureService featureService;
 
-
     @GetMapping
     public ModelAndView index() {
-        ModelAndView view = new ModelAndView("admin/index");
-        view.addObject("specifications", specificationService.findAll());
-        view.addObject("agencies", agencyService.findAll());
-        view.addObject("surcharges", surchargeService.findAll());
-        view.addObject("features", featureService.findAll());
+        ModelAndView view = new ModelAndView("user/index");
+        return view;
+    }
+    @GetMapping("/car")
+    public ModelAndView car() {
+        ModelAndView view = new ModelAndView("user/car");
+        return view;
+    }
+    @GetMapping("car-detail")
+    public ModelAndView detail() {
+        ModelAndView view = new ModelAndView("user/car-detail");
+        return view;
+    }
+    @GetMapping("pricing")
+    public ModelAndView pricinge () {
+        ModelAndView view = new ModelAndView("user/pricing");
         return view;
     }
 

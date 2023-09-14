@@ -28,6 +28,10 @@ public class Bill {
 
     private LocalDateTime dateReceived;
 
+    private String pickupLocation;
+    
+    private String dropOffLocation;
+
     private LocalDateTime expectedDateReturn;
 
     private LocalDateTime actualDateReturn;
