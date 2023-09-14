@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "files")
+@Table(name = "images")
 @Data
 @NoArgsConstructor
 public class Image {
@@ -24,4 +24,17 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    public Image(Long id) {
+        this.id = id;
+    }
+
+    public Image(String url, Car car) {
+        this.url = url;
+        this.car = car;
+    }
+    //    public Image(Car car, Customer customer) {
+//        this.car = car;
+//        this.customer= customer;
+//    }
 }

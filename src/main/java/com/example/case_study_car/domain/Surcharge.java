@@ -19,5 +19,9 @@ public class Surcharge {
 
     private String name;
 
+    public Surcharge(Long id) {
+        this.id = id;
+    }
+
 
 }

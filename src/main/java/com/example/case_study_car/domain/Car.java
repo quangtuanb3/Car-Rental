@@ -21,12 +21,15 @@ public class Car {
 
     private String name;
 
+    private String status;
+
     private String licensePlate;
 
     private BigDecimal priceHours;
 
     private BigDecimal priceDays;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
 
     @OneToMany(mappedBy = "car")
