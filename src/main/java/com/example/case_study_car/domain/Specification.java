@@ -18,6 +18,7 @@ public class Specification {
 
     private String name;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
 
     @Column(columnDefinition = "LONGTEXT")

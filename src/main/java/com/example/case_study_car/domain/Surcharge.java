@@ -19,11 +19,8 @@ public class Surcharge {
 
     private String name;
 
-
-
-    @ManyToOne
-
-    private CarSurcharge carSurcharge;
-
+    public Surcharge(Long id) {
+        this.id = id;
+    }
 
 }

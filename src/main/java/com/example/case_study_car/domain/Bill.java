@@ -23,6 +23,7 @@ public class Bill {
     private String customerPhoneNumber;
 
     private String customerEmail;
+
     private String customerIdNumber;
 
     private LocalDateTime dateReceived;

@@ -29,4 +29,8 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private List<Bill> bills;
+
+    public Customer(Long id) {
+        this.id = id;
+    }
 }
