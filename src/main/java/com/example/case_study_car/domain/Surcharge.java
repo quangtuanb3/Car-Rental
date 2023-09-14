@@ -20,10 +20,4 @@ public class Surcharge {
     private String name;
 
 
-
-    @ManyToOne
-
-    private CarSurcharge carSurcharge;
-
-
 }
