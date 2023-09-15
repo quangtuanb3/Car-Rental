@@ -1,6 +1,9 @@
 package com.example.case_study_car.domain;
 
+import com.example.case_study_car.domain.enumaration.ESpecificationType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +13,8 @@ import java.util.List;
 @Table(name = "specifications")
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Specification {
 
     @Id
@@ -17,6 +22,9 @@ public class Specification {
     private Long id;
 
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    private ESpecificationType type;
 
     @Column(columnDefinition = "LONGTEXT")
     private String description;
@@ -34,5 +42,10 @@ public class Specification {
     public Specification(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Specification(String name, ESpecificationType type) {
+        this.name = name;
+        this.type = type;
     }
 }

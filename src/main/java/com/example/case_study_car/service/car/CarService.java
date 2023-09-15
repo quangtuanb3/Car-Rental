@@ -4,14 +4,14 @@ import com.example.case_study_car.domain.*;
 import com.example.case_study_car.exception.CarNotFoundException;
 import com.example.case_study_car.repository.*;
 import com.example.case_study_car.service.car.request.CarSaveRequest;
-import com.example.case_study_car.service.car.response.CarDetailResponse;
-import com.example.case_study_car.service.car.response.CarListResponse;
+import com.example.case_study_car.service.car.response.*;
 import com.example.case_study_car.util.AppUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +32,7 @@ public class CarService {
     private final ImageRepository imageRepository;
 
 
-    public void create(CarSaveRequest request){
+    public void create(CarSaveRequest request) {
         var car = AppUtil.mapper.map(request, Car.class);
         car = carRepository.save(car);
 
@@ -60,7 +60,7 @@ public class CarService {
 
     }
 
-    public CarDetailResponse findById(Long id){
+    public CarDetailResponse findById(Long id) {
         var car = carRepository.findById(id).orElse(new Car());
         var result = AppUtil.mapper.map(car, CarDetailResponse.class);
         result.setAgencyId(car.getAgency().getId());
@@ -84,9 +84,9 @@ public class CarService {
         return result;
     }
 
-    public Page<CarListResponse> getCars(Pageable pageable, String search){
+    public Page<CarListResponse> getCars(Pageable pageable, String search) {
         search = "%" + search + "%";
-        return carRepository.searchEverything(search ,pageable).map(e -> {
+        return carRepository.searchEverything(search, pageable).map(e -> {
             var result = AppUtil.mapper.map(e, CarListResponse.class);
             result.setAgency(e.getAgency().getName());
             result.setSpecifications(e.getCarSpecifications()
@@ -105,10 +105,10 @@ public class CarService {
         });
     }
 
-    public void update(CarSaveRequest request, Long id){
+    public void update(CarSaveRequest request, Long id) {
         var carDb = carRepository.findById(id).orElse(new Car());
         carDb.setAgency(new Agency());
-        AppUtil.mapper.map(request,carDb);
+        AppUtil.mapper.map(request, carDb);
         carSpecificationRepository.deleteAll(carDb.getCarSpecifications());
         carFeatureRepository.deleteAll(carDb.getCarFeatures());
         carSurchargeRepository.deleteAll(carDb.getCarSurcharges());
@@ -170,9 +170,9 @@ public class CarService {
         }
     }
 
-    public Page<CarListResponse> getAll(Pageable pageable, String search){
+    public Page<CarListResponse> getAll(Pageable pageable, String search) {
         search = "%" + search + "%";
-        return carRepository.searchEverything(search ,pageable).map(e -> {
+        return carRepository.searchEverything(search, pageable).map(e -> {
             var result = new CarListResponse();
             result.setName(e.getName());
             result.setId(e.getId());
@@ -196,5 +196,50 @@ public class CarService {
                     .collect(Collectors.joining(", ")));
             return result;
         });
+    }
+
+    public List<BestCarResponse> getBestCars() {
+        return carRepository.getBestCars().stream().map(car -> BestCarResponse.builder()
+                .id(car.getId())
+                .name(car.getName())
+                .description(car.getDescription())
+                .agency(car.getAgency().getName())
+                .priceDays(car.getPriceDays())
+                .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
+                .build()).collect(Collectors.toList());
+    }
+    public List<RelatedCarResponse> getRelatedCars(String agency, BigDecimal priceDay, String seat, Long id){
+        return carRepository.getRelatedCars(agency, seat, priceDay, id)
+                .stream().map(car -> RelatedCarResponse.builder()
+                .id(car.getId())
+                .name(car.getName())
+                .description(car.getDescription())
+                .agency(car.getAgency().getName())
+                .priceDays(car.getPriceDays())
+                .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
+                .build()).collect(Collectors.toList());
+    }
+
+    public UserCarDetailResponse getCarDetailById(Long id) {
+        var car = carRepository.findById(id).orElse(new Car());
+        var result = AppUtil.mapper.map(car, UserCarDetailResponse.class);
+        result.setAgency(car.getAgency().getName());
+        result.setSpecifications(car
+                .getCarSpecifications()
+                .stream().map(carSpecification -> Specification.builder()
+                        .name(carSpecification.getSpecification().getName())
+                        .type(carSpecification.getSpecification().getType())
+                        .svg(carSpecification.getSpecification().getSvg())
+                        .build())
+                .collect(Collectors.toList()));
+        result.setFeatures(car
+                .getCarFeatures()
+                .stream().map(carFeature -> carFeature.getFeature().getName())
+                .collect(Collectors.toList()));
+        result.setUrlImages(car
+                .getImages()
+                .stream().map(Image::getUrl)
+                .collect(Collectors.toList()));
+        return result;
     }
 }

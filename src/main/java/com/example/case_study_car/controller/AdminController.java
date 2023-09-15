@@ -1,8 +1,6 @@
 package com.example.case_study_car.controller;
 
-
 import com.example.case_study_car.service.agency.AgencyService;
-import com.example.case_study_car.service.car.CarService;
 import com.example.case_study_car.service.feature.FeatureService;
 import com.example.case_study_car.service.specification.SpecificationService;
 import com.example.case_study_car.service.surcharge.SurchargeService;
@@ -15,8 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/home")
 @AllArgsConstructor
-public class HomeController {
-
+public class AdminController {
     private final SpecificationService specificationService;
     private final AgencyService agencyService;
     private final SurchargeService surchargeService;
@@ -24,23 +21,11 @@ public class HomeController {
 
     @GetMapping
     public ModelAndView index() {
-        ModelAndView view = new ModelAndView("user/index");
+        ModelAndView view = new ModelAndView("admin/index");
+        view.addObject("specifications", specificationService.findAll());
+        view.addObject("agencies", agencyService.findAll());
+        view.addObject("surcharges", surchargeService.findAll());
+        view.addObject("features", featureService.findAll());
         return view;
     }
-    @GetMapping("/car")
-    public ModelAndView car() {
-        ModelAndView view = new ModelAndView("user/car");
-        return view;
-    }
-    @GetMapping("car-detail")
-    public ModelAndView detail() {
-        ModelAndView view = new ModelAndView("user/car-detail");
-        return view;
-    }
-    @GetMapping("pricing")
-    public ModelAndView pricinge () {
-        ModelAndView view = new ModelAndView("user/pricing");
-        return view;
-    }
-
 }

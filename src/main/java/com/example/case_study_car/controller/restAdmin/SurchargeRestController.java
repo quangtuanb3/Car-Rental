@@ -1,7 +1,5 @@
-package com.example.case_study_car.controller.rest;
+package com.example.case_study_car.controller.restAdmin;
 
-
-import com.example.case_study_car.repository.CustomerRepository;
 import com.example.case_study_car.repository.SurchargeRepository;
 import com.example.case_study_car.service.response.SelectOptionResponse;
 import lombok.AllArgsConstructor;
@@ -13,14 +11,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/customers")
+@RequestMapping("api/surcharges")
 @AllArgsConstructor
-public class CustomerRestController {
+public class SurchargeRestController {
 
-    private final CustomerRepository customerRepository;
+    private final SurchargeRepository surchargeRepository;
 
     @GetMapping
     public List<SelectOptionResponse> getSelectOption(){
-        return customerRepository.findAll().stream().map(customer -> new SelectOptionResponse(customer.getId().toString(), customer.getName())).collect(Collectors.toList());
+        return surchargeRepository.findAll().stream().map(surcharge -> new SelectOptionResponse(surcharge.getId().toString(), surcharge.getName())).collect(Collectors.toList());
     }
 }
