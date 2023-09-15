@@ -16,6 +16,8 @@ public class BillCar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String licensePlate;
+
     private BigDecimal price;
 
     @ManyToOne
@@ -25,8 +27,6 @@ public class BillCar {
     @ManyToOne
     @JoinColumn(name = "bill_id")
     private Bill bill;
-
-
 
 
 }
