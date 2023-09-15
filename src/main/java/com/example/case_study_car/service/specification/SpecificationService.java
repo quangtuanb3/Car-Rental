@@ -1,5 +1,6 @@
 package com.example.case_study_car.service.specification;
 
+import com.example.case_study_car.domain.Specification;
 import com.example.case_study_car.repository.SpecificationRepository;
 import com.example.case_study_car.service.response.SelectOptionResponse;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,12 @@ public class SpecificationService {
     public List<SelectOptionResponse> findAll(){
         return specificationRepository.findAll().stream()
                 .map(specification -> new SelectOptionResponse(specification.getId().toString(), specification.getName()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Specification> getSpecifications() {
+        return specificationRepository.findAll().stream()
+                .map(specification -> new Specification(specification.getId(), specification.getName(), specification.getType()))
                 .collect(Collectors.toList());
     }
 }

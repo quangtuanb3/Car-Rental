@@ -8,6 +8,37 @@ const tBody = document.getElementById('tBody');
 const ePagination = document.getElementById('pagination')
 const eSearch = document.getElementById('search')
 const eHeaderPrice = document.getElementById('header-price')
+
+//car-model-details
+
+let eModalCarName = document.getElementById("modal-car-name");
+let eModalCarDes = document.getElementById("modal-car-description");
+let eModalPriceHours = document.getElementById("modal-car-priceHours");
+let eModalPriceDays = document.getElementById("modal-car-priceDays");
+let eModalSpecification = document.getElementById("modal-car-specification");
+let eModalFeature = document.getElementById("modal-car-feature");
+let eModalSurcharge = document.getElementById("modal-car-surcharge");
+let eModalImage = document.getElementsByClassName("modal-car-image");
+let eModalAgency = document.getElementById("modal-car-agency");
+
+//modal-car-populate price Hours và Day:
+
+// Đoạn mã JavaScript để lấy giá trị từ các thẻ <td> và định dạng chúng thành tiền tệ VND
+const priceHoursElement = document.getElementById("modal-car-priceHours");
+const priceDaysElement = document.getElementById("modal-car-priceDays");
+
+// Lấy giá trị từ các thẻ <td>
+const priceHoursValue = parseFloat(priceHoursElement.textContent.replace("$", ""));
+const priceDaysValue = parseFloat(priceDaysElement.textContent.replace("$", ""));
+
+// Chuyển đổi và định dạng giá trị thành tiền tệ VND bằng hàm formatCurrency
+const formattedPriceHours = formatCurrency(priceHoursValue);
+const formattedPriceDays = formatCurrency(priceDaysValue);
+
+// Cập nhật giá trị đã định dạng vào các thẻ <td>
+priceHoursElement.textContent = formattedPriceHours;
+priceDaysElement.textContent = formattedPriceDays;
+
 let specifications;
 let features;
 let surcharges;
@@ -24,14 +55,23 @@ let pageable = {
 carForm.onsubmit = async (e) => {
     e.preventDefault();
     let data = getDataFromForm(carForm);
+
+
+    //
+    // // Định dạng giá trị thành tiền tệ VND
+    // const formattedPriceHours = formatCurrency(priceHoursValue);x`
+    // const formattedPriceDays = formatCurrency(priceDaysValue);
+    //
+    // // Cập nhật giá trị hiển thị trong modal chi tiết xe
+    // document.getElementById("priceHoursValue").textContent = formattedPriceHours;
+    // document.getElementById("priceDaysValue").textContent = formattedPriceDays;
+   let specificationSelect =  getSpecificationSelects();
     data = {
         ...data,
         agency: {
             id: data.agency
         },
-        idSpecifications: Array.from(eCheckBoxSpecifications)
-            .filter(e => e.checked)
-            .map(e => e.value),
+        idSpecifications: Object.entries(specificationSelect).map(e=>e[1]) ,
         idFeatures: Array.from(eCheckBoxFeatures)
             .filter(e => e.checked)
             .map(e => e.value),
@@ -68,6 +108,22 @@ async function getSpecificationsSelectOption() {
     const res = await fetch('api/specifications');
     return await res.json();
 }
+
+// const ESpecificationType = {
+//     SEATS: 'Seats',
+//     FUEL: 'Fuel',
+//     GEAR: 'Gear'
+// };
+
+// async function getSpecificationsSelectOption() {
+//
+//     // const specifications = [ESpecificationType.SEATS, ESpecificationType.FUEL, ESpecificationType.GEAR];
+//
+//     // Chuyển danh sách specifications thành đối tượng JSON có cấu trúc { id: '...', name: '...' }
+//     const specificationsOptions = specifications.map(spec => ({ id: spec, name: spec }));
+//
+//     return specificationsOptions;
+// }
 async function getFeaturesSelectOption() {
     const res = await fetch('api/features');
     return await res.json();
@@ -82,7 +138,7 @@ async function getAgenciesSelectOption() {
     return await res.json();
 }
 async function getImagesSelectOption() {
-    const res = await fetch('api/files');
+    const res = await fetch('api/images');
     return await res.json();
 }
 
@@ -92,6 +148,8 @@ window.onload = async () => {
     surcharges = await getSurchargesSelectOption();
     agencies = await getAgenciesSelectOption();
     // urlImages = await getImagesSelectOption();
+
+
     await renderTable();
     onLoadSort();
 
@@ -175,7 +233,10 @@ async function findRoomById(id) {
     const res = await fetch('/api/cars/' + id);
     return await res.json();
 }
-
+async function findRoomDetailById(id) {
+    const res = await fetch('/api/cars/detail/' + id);
+    return await res.json();
+}
 
 async function showEdit(id) {
     $('#staticBackdropLabel').text('Edit Car');
@@ -202,13 +263,6 @@ async function showEdit(id) {
             }
         }
     })
-    // carSelected.imageIds.forEach(idImage => {
-    //     for (let i = 0; i < eCheckBoxSurcharges.length; i++) {
-    //         if (idImage === +eCheckBoxSurcharges[i].value) {
-    //             eCheckBoxFeatures[i].checked = true;
-    //         }
-    //     }
-    // })
     renderForm(formBody, getDataInput());
 }
 
@@ -226,42 +280,23 @@ function renderItemStr(item, index) {
                     <td>
                         ${item.name}
                     </td>
-                    <td>
-                        ${item.status}
-                    </td>
+                    
                     <td>
                         ${item.licensePlate}
                     </td>
-                    <td>
-                        ${item.description}
-                    </td>
-                   
-                    <td>
-                        ${item.priceHours}
-                    </td>
-                    <td>
-                        ${item.priceDays}
-                    </td>
+
                     <td>
                         ${item.agency}
                     </td>
+
                     <td>
-                        ${item.specifications}
-                    </td>
-                    <td>
-                        ${item.features}
-                    </td>
-                    <td>
-                        ${item.surcharges}
-                    </td>
-                    <td>
-                        ${item.urlImages}
+                        ${item.status}
                     </td>
                      
                     <td>
                         <a class="btn btn-primary text-white  edit " data-id="${item.id}" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Edit</a>           
                         <a class="btn btn-warning text-white delete" onclick="deleteCar(${item.id})" >Delete</a>
-                      <a class="btn btn-warning text-white detail" data-id="${item.id}"  data-bs-toggle="modal" data-bs-target="#detail-modal" onclick="showDetail(${item.id})" >Detail</a>
+                      <a class="btn btn-info text-white detail" data-id="${item.id}"  data-bs-toggle="modal" data-bs-target="#detail-modal" onclick="showDetail(${item.id})" >Detail</a>
                     </td>
                 </tr>`
 }
@@ -460,9 +495,56 @@ sortButton.addEventListener('click', () => {
 
 
 async function showDetail(id){
-let carDetail = await findRoomById(id)
-    let eModalCarName = document.getElementById("modal-car-name");
-    let eModalCarDes = document.getElementById("modal-car-description");
-eModalCarName.innerText = carDetail.name;
+let carDetail = await findRoomDetailById(id)
+    eModalCarName.innerText = carDetail.name;
     eModalCarDes.innerText = carDetail.description;
+    // eModalPriceHours.innerText = carDetail.priceHours;
+    // eModalPriceDays.innerText = carDetail.priceDays;
+    eModalSpecification.innerText = carDetail.specificationNames.join(", ");
+    eModalFeature.innerText = carDetail.featureNames.join(", ");
+    eModalSurcharge.innerText = carDetail.surchargeNames.join(", ");
+    eModalAgency.innerText = carDetail.agencyName;
+  carDetail.urlImages.forEach((imgUrl, index)=>{
+      eModalImage[index].src=imgUrl;
+  });
+
+    const formattedPriceHours = formatCurrency(carDetail.priceHours);
+    const formattedPriceDays = formatCurrency(carDetail.priceDays);
+    eModalPriceHours.innerText = formattedPriceHours;
+    eModalPriceDays.innerText = formattedPriceDays;
 }
+
+// Hàm cập nhật giá giờ theo định dạng tiền tệ VND
+
+// Hàm định dạng giá tiền tệ VND
+function formatCurrency(amount) {
+    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+}
+
+function getSpecificationSelects() {
+    // Lấy giá trị từ data cho các Specification (Seats, Fuel, Gear, ...)
+    // const seatsValue = data.seats;
+    // const fuelValue = data.fuel;
+    // const transmissionValue = data.transmission
+    // const luggageValue = data.luggage;
+
+    const seatsSelect = document.getElementById('seats');
+    let  seatsValue = seatsSelect.value ;
+
+    const fuelSelect = document.getElementById('fuel');
+    let fuelValue = fuelSelect.value ;
+
+    const transmissionSelect = document.getElementById('transmission');
+    let transmissionValue =  transmissionSelect.value;
+
+    const luggageSelect = document.getElementById('luggage');
+    let luggageValue =  luggageSelect.value;
+
+    return {
+      seatsValue,
+      fuelValue,
+      transmissionValue,
+      luggageValue
+  };
+}
+

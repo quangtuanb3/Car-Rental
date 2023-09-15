@@ -48,4 +48,10 @@ public class Specification {
         this.name = name;
         this.type = type;
     }
+
+    public Specification(Long id, String name, ESpecificationType type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
 }

@@ -1,10 +1,16 @@
 package com.example.case_study_car.service.car;
 
 import com.example.case_study_car.domain.*;
+import com.example.case_study_car.domain.enumaration.ESpecificationType;
 import com.example.case_study_car.exception.CarNotFoundException;
 import com.example.case_study_car.repository.*;
 import com.example.case_study_car.service.car.request.CarSaveRequest;
+
 import com.example.case_study_car.service.car.response.*;
+
+import com.example.case_study_car.service.car.response.CarDetailResponse;
+import com.example.case_study_car.service.car.response.CarListResponse;
+import com.example.case_study_car.service.car.response.CarShowDetailResponse;
 import com.example.case_study_car.util.AppUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,7 +38,9 @@ public class CarService {
     private final ImageRepository imageRepository;
 
 
-    public void create(CarSaveRequest request) {
+
+
+    public void create(CarSaveRequest request){
         var car = AppUtil.mapper.map(request, Car.class);
         car = carRepository.save(car);
 
@@ -83,6 +91,29 @@ public class CarService {
 
         return result;
     }
+    public CarShowDetailResponse findCarDetailById(Long id) {
+        var car = carRepository.findById(id).orElse(new Car());
+        var result = AppUtil.mapper.map(car, CarShowDetailResponse.class);
+        result.setAgencyName(car.getAgency().getName());
+        result.setSpecificationNames(car
+                .getCarSpecifications()
+                .stream().map(carSpecification -> carSpecification.getSpecification().getName())
+                .collect(Collectors.toList()));
+        result.setFeatureNames(car
+                .getCarFeatures()
+                .stream().map(carFeature -> carFeature.getFeature().getName())
+                .collect(Collectors.toList()));
+        result.setSurchargeNames(car
+                .getCarSurcharges()
+                .stream().map(carSurcharge -> carSurcharge.getSurcharge().getName())
+                .collect(Collectors.toList()));
+        result.setUrlImages(car
+                .getImages()
+                .stream().map(Image::getUrl)
+                .collect(Collectors.toList()));
+        return result;
+    }
+
 
     public Page<CarListResponse> getCars(Pageable pageable, String search) {
         search = "%" + search + "%";
@@ -105,7 +136,29 @@ public class CarService {
         });
     }
 
-    public void update(CarSaveRequest request, Long id) {
+
+//    public Page<CarListResponse> getCars(Pageable pageable, String search){
+//        search = "%" + search + "%";
+//        return carRepository.searchEverything(search ,pageable).map(e -> {
+//            var result = AppUtil.mapper.map(e, CarListResponse.class);
+//            result.setAgency(e.getAgency().getName());
+//            result.setSpecifications(e.getCarSpecifications()
+//                    .stream().map(s -> s.getSpecification().getName())
+//                    .collect(Collectors.joining(", ")));
+//            result.setFeatures(e.getCarFeatures()
+//                    .stream().map(f -> f.getFeature().getName())
+//                    .collect(Collectors.joining(", ")));
+//            result.setSurcharges(e.getCarSurcharges()
+//                    .stream().map(u -> u.getSurcharge().getName())
+//                    .collect(Collectors.joining(", ")));
+//            result.setUrlImages(e.getImages()
+//                    .stream().map(Image::getUrl)
+//                    .collect(Collectors.joining(", ")));
+//            return result;
+//        });
+//    }
+
+    public void update(CarSaveRequest request, Long id){
         var carDb = carRepository.findById(id).orElse(new Car());
         carDb.setAgency(new Agency());
         AppUtil.mapper.map(request, carDb);
@@ -177,7 +230,7 @@ public class CarService {
             result.setName(e.getName());
             result.setId(e.getId());
             result.setDescription(e.getDescription());
-            result.setStatus(e.getStatus());
+            result.setStatus(e.getStatus().toString());
             result.setLicensePlate(e.getLicensePlate());
             result.setPriceHours(e.getPriceHours());
             result.setPriceDays(e.getPriceDays());
@@ -185,6 +238,22 @@ public class CarService {
             result.setSpecifications(e.getCarSpecifications()
                     .stream().map(s -> s.getSpecification().getName())
                     .collect(Collectors.joining(", ")));
+
+            // Lọc danh sách CarSpecification theo loại specificationType
+//            List<CarSpecification> filteredSpecifications = e.getCarSpecifications()
+//                    .stream()
+//                    .filter(carSpecification -> carSpecification.getSpecification().getType() == specificationType)
+//                    .collect(Collectors.toList());
+
+            // Lấy danh sách các Specification từ danh sách CarSpecification
+//            List<Specification> specifications = filteredSpecifications
+//                    .stream()
+//                    .map(CarSpecification::getSpecification)
+//                    .collect(Collectors.toList());
+
+//            result.setSpecifications(specifications);
+
+
             result.setFeatures(e.getCarFeatures()
                     .stream().map(f -> f.getFeature().getName())
                     .collect(Collectors.joining(", ")));
