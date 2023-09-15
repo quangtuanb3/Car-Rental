@@ -5,14 +5,17 @@ import com.example.case_study_car.service.car.CarService;
 import com.example.case_study_car.service.car.request.CarSaveRequest;
 import com.example.case_study_car.service.car.response.CarDetailResponse;
 import com.example.case_study_car.service.car.response.CarListResponse;
+import com.example.case_study_car.service.car.response.CarShowDetailResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,6 +33,10 @@ public class CarRestController {
     @GetMapping("/{id}")
     public ResponseEntity<CarDetailResponse> findById(@PathVariable Long id){
         return new ResponseEntity<>(carService.findById(id), HttpStatus.OK);
+    }
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<CarShowDetailResponse> findCarDetail(@PathVariable Long id){
+        return new ResponseEntity<>(carService.findCarDetailById(id), HttpStatus.OK);
     }
 
     @GetMapping

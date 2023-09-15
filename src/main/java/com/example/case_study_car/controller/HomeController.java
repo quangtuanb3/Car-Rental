@@ -26,7 +26,7 @@ public class HomeController {
     @GetMapping
     public ModelAndView index() {
         ModelAndView view = new ModelAndView("admin/index");
-        view.addObject("specifications", specificationService.findAll());
+        view.addObject("specifications", specificationService.getSpecifications());
         view.addObject("agencies", agencyService.findAll());
         view.addObject("surcharges", surchargeService.findAll());
         view.addObject("features", featureService.findAll());

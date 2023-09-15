@@ -1,6 +1,7 @@
 package com.example.case_study_car.domain;
 
 
+import com.example.case_study_car.domain.enumaration.ECarStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,8 @@ public class Car {
 
     private String name;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ECarStatus status;
 
     private String licensePlate;
 
