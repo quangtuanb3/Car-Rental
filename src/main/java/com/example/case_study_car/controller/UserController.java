@@ -18,6 +18,11 @@ public class UserController {
         ModelAndView view = new ModelAndView("user/car");
         return view;
     }
+    @GetMapping("")
+    public ModelAndView index() {
+        ModelAndView view = new ModelAndView("user/index");
+        return view;
+    }
 
     @GetMapping("car-detail/{id}")
     public ModelAndView detail(@PathVariable String id) {
@@ -36,11 +41,6 @@ public class UserController {
     @GetMapping("car-detail")
     public ModelAndView detail() {
         ModelAndView view = new ModelAndView("user/car-detail");
-        return view;
-    }
-    @GetMapping("pricing")
-    public ModelAndView pricinge () {
-        ModelAndView view = new ModelAndView("user/pricing");
         return view;
     }
 

@@ -26,7 +26,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     )
     Page<Car> searchEverything(String search, Pageable pageable);
 
-<<<<<<< HEAD
     @Query(value = "SELECT c FROM Car c " +
             "ORDER BY (SELECT COUNT(cf.id) FROM CarFeature cf WHERE cf.car = c) DESC LIMIT 5")
     List<Car> getBestCars();
@@ -49,8 +48,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
                              @Param("seat") String seat,
                              @Param("priceDays") BigDecimal priceDays,
                              @Param("id") Long id);
-=======
->>>>>>> c6d4e12948c71576f3025ee83c2cd827ec3d0737
 
 
 }
