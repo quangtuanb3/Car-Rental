@@ -20,4 +20,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     )
     Page<Car> searchEverything(String search, Pageable pageable);
 
+
+
 }

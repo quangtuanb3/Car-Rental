@@ -1,5 +1,6 @@
 package com.example.case_study_car.domain;
 
+import com.example.case_study_car.domain.enumaration.ESpecificationType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,8 @@ public class Specification {
     private Long id;
 
     private String name;
+    @Enumerated(EnumType.STRING)
+    private ESpecificationType type;
 
     @Column(columnDefinition = "LONGTEXT")
     private String description;
@@ -34,5 +37,10 @@ public class Specification {
     public Specification(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+    public Specification(Long id, String name, ESpecificationType type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
     }
 }
