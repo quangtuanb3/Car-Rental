@@ -1,12 +1,16 @@
 package com.example.case_study_car.controller;
 
 import com.example.case_study_car.service.agency.AgencyService;
+import com.example.case_study_car.service.car.CarService;
 import com.example.case_study_car.service.feature.FeatureService;
 import com.example.case_study_car.service.specification.SpecificationService;
 import com.example.case_study_car.service.surcharge.SurchargeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,13 +26,11 @@ public class AdminController {
 
     @GetMapping
     public ModelAndView index() {
-
         ModelAndView view = new ModelAndView("admin/index");
-        view.addObject("specifications", specificationService.getSpecifications());
+        view.addObject("specifications", specificationService.findAll());
         view.addObject("agencies", agencyService.findAll());
         view.addObject("surcharges", surchargeService.findAll());
         view.addObject("features", featureService.findAll());
-
         return view;
     }
 }

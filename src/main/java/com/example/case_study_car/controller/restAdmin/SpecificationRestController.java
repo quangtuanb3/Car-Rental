@@ -1,7 +1,7 @@
-package com.example.case_study_car.controller.rest;
+package com.example.case_study_car.controller.restAdmin;
+
 
 import com.example.case_study_car.repository.SpecificationRepository;
-import com.example.case_study_car.repository.SurchargeRepository;
 import com.example.case_study_car.service.response.SelectOptionResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,14 +12,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/surcharges")
+@RequestMapping("api/specifications")
 @AllArgsConstructor
-public class SurchargeRestController {
+public class SpecificationRestController {
 
-    private final SurchargeRepository surchargeRepository;
+    private final SpecificationRepository specificationRepository;
 
     @GetMapping
     public List<SelectOptionResponse> getSelectOption(){
-        return surchargeRepository.findAll().stream().map(surcharge -> new SelectOptionResponse(surcharge.getId().toString(), surcharge.getName())).collect(Collectors.toList());
+        return specificationRepository.findAll().stream().map(specification -> new SelectOptionResponse(specification.getId().toString(), specification.getName())).collect(Collectors.toList());
     }
 }

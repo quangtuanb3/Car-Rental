@@ -1,8 +1,7 @@
-package com.example.case_study_car.controller.rest;
+package com.example.case_study_car.controller.restAdmin;
 
 
-import com.example.case_study_car.repository.ImageRepository;
-import com.example.case_study_car.repository.SpecificationRepository;
+import com.example.case_study_car.repository.CustomerRepository;
 import com.example.case_study_car.service.response.SelectOptionResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +12,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/files")
+@RequestMapping("api/customers")
 @AllArgsConstructor
-public class ImageRestController {
+public class CustomerRestController {
 
-    private final ImageRepository imageRepository;
+    private final CustomerRepository customerRepository;
 
     @GetMapping
     public List<SelectOptionResponse> getSelectOption(){
-        return imageRepository.findAll().stream().map(image -> new SelectOptionResponse(image.getId().toString(), image.getUrl())).collect(Collectors.toList());
+        return customerRepository.findAll().stream().map(customer -> new SelectOptionResponse(customer.getId().toString(), customer.getName())).collect(Collectors.toList());
     }
 }
