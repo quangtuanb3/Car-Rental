@@ -55,6 +55,9 @@ public class Car {
     @OneToMany(mappedBy = "car")
     private List<CarFeature> carFeatures;
 
+    @OneToMany(mappedBy = "car")
+    private List<Bill> bills;
+
 
     public Car(Long id) {
         this.id = id;

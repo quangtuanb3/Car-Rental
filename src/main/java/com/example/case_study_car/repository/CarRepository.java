@@ -21,8 +21,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             "c.description LIKE :search OR " +
             "c.agency.name LIKE :search " +
             " OR EXISTS (SELECT 1 FROM CarSpecification cs WHERE cs.car = c AND cs.specification.name LIKE :search)" +
-            " OR EXISTS (SELECT 1 FROM CarFeature cf WHERE cf.car = c AND cf.feature.name LIKE :search)" +
-            " OR EXISTS (SELECT 1 FROM CarSurcharge cc WHERE cc.car = c AND cc.surcharge.name LIKE :search)"
+            " OR EXISTS (SELECT 1 FROM CarFeature cf WHERE cf.car = c AND cf.feature.name LIKE :search)"
     )
     Page<Car> searchEverything(String search, Pageable pageable);
 

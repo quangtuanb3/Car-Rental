@@ -2,10 +2,10 @@ package com.example.case_study_car.service.bill;
 
 import com.example.case_study_car.domain.*;
 import com.example.case_study_car.repository.BillRepository;
+import com.example.case_study_car.repository.CarRepository;
 import com.example.case_study_car.repository.CustomerRepository;
-import com.example.case_study_car.repository.SpecificationRepository;
-import com.example.case_study_car.repository.SurchargeRepository;
 import com.example.case_study_car.service.bill.request.BillSaveRequest;
+import com.example.case_study_car.service.customer.CustomerService;
 import com.example.case_study_car.service.response.SelectOptionResponse;
 import com.example.case_study_car.util.AppUtil;
 import lombok.AllArgsConstructor;
@@ -20,8 +20,10 @@ import java.util.stream.Collectors;
 public class BillService {
 
     private final BillRepository billRepository;
+    private final CarRepository carRepository;
     private final CustomerRepository customerRepository;
-    private final SurchargeRepository surchargeRepository;
+    private final CustomerService customerService;
+
 
     public List<SelectOptionResponse> findAll() {
         return billRepository.findAll().stream()
@@ -31,19 +33,14 @@ public class BillService {
 
     public void create(BillSaveRequest request) {
         Bill bill = AppUtil.mapper.map(request, Bill.class);
-        Customer customer = customerRepository.findCustomerByEmail(request.getCustomerEmail())
-                .orElse(new Customer());
+        Car car = carRepository.findById(Long.valueOf(request.getCarId())).orElse(new Car());
+        Customer customer = customerService.findByEmail(request.getCustomerEmail());
         bill.setCustomer(customer);
-
-
-
-
-        BillCar billCar = BillCar.builder()
-                .car(new Car(Long.valueOf(request.getCarId())))
-
-                .build();
-
-
-        System.out.println(bill);
+        bill.setCleaningFee(car.getCleaningFee());
+        bill.setExcessDistanceFee(car.getExcessDistanceFee());
+        bill.setOvertimeFee(car.getOvertimeFee());
+        bill.setCar(car);
+       var save =  billRepository.save(bill);
+        System.out.println(save);
     }
 }

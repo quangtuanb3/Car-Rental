@@ -1,7 +1,6 @@
 package com.example.case_study_car.service.car;
 
 import com.example.case_study_car.domain.*;
-import com.example.case_study_car.domain.enumaration.ESpecificationType;
 import com.example.case_study_car.exception.CarNotFoundException;
 import com.example.case_study_car.repository.*;
 import com.example.case_study_car.service.car.request.CarSaveRequest;
@@ -31,7 +30,6 @@ public class CarService {
 
     private final CarFeatureRepository carFeatureRepository;
 
-    private final CarSurchargeRepository carSurchargeRepository;
 
     private final CarSpecificationRepository carSpecificationRepository;
 
@@ -53,11 +51,6 @@ public class CarService {
                 .stream()
                 .map(id -> new CarFeature(finalCar, new Feature(Long.valueOf(id))))
                 .collect(Collectors.toList()));
-        carSurchargeRepository.saveAll(request
-                .getIdSurcharges()
-                .stream()
-                .map(id -> new CarSurcharge(finalCar, new Surcharge(Long.valueOf(id))))
-                .collect(Collectors.toList()));
         imageRepository.saveAll(request
                 .getUrlImages()
                 .stream()
@@ -77,10 +70,6 @@ public class CarService {
         result.setFeatureIds(car
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getId())
-                .collect(Collectors.toList()));
-        result.setSurchargeIds(car
-                .getCarSurcharges()
-                .stream().map(carSurcharge -> carSurcharge.getSurcharge().getId())
                 .collect(Collectors.toList()));
         result.setUrlImages(car
                 .getImages()
@@ -102,10 +91,6 @@ public class CarService {
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getName())
                 .collect(Collectors.toList()));
-        result.setSurchargeNames(car
-                .getCarSurcharges()
-                .stream().map(carSurcharge -> carSurcharge.getSurcharge().getName())
-                .collect(Collectors.toList()));
         result.setUrlImages(car
                 .getImages()
                 .stream().map(Image::getUrl)
@@ -124,9 +109,6 @@ public class CarService {
                     .collect(Collectors.joining(", ")));
             result.setFeatures(e.getCarFeatures()
                     .stream().map(f -> f.getFeature().getName())
-                    .collect(Collectors.joining(", ")));
-            result.setSurcharges(e.getCarSurcharges()
-                    .stream().map(u -> u.getSurcharge().getName())
                     .collect(Collectors.joining(", ")));
             result.setUrlImages(e.getImages()
                     .stream().map(Image::getUrl)
@@ -163,7 +145,6 @@ public class CarService {
         AppUtil.mapper.map(request, carDb);
         carSpecificationRepository.deleteAll(carDb.getCarSpecifications());
         carFeatureRepository.deleteAll(carDb.getCarFeatures());
-        carSurchargeRepository.deleteAll(carDb.getCarSurcharges());
         imageRepository.deleteAll(carDb.getImages());
 
 
@@ -179,11 +160,6 @@ public class CarService {
             carFeatures.add(new CarFeature(carDb, feature));
         }
 
-        var carSurcharges = new ArrayList<CarSurcharge>();
-        for (String idSurcharge : request.getIdSurcharges()) {
-            Surcharge surcharge = new Surcharge(Long.valueOf(idSurcharge));
-            carSurcharges.add(new CarSurcharge(carDb, surcharge));
-        }
 
         var images = new ArrayList<Image>();
         for (String idImage : request.getUrlImages()) {
@@ -195,7 +171,6 @@ public class CarService {
 
         carSpecificationRepository.saveAll(carSpecifications);
         carFeatureRepository.saveAll(carFeatures);
-        carSurchargeRepository.saveAll(carSurcharges);
         imageRepository.saveAll(images);
         carRepository.save(carDb);
     }
@@ -209,7 +184,6 @@ public class CarService {
             // Xóa tất cả các mối quan hệ với danh mục
             carSpecificationRepository.deleteAll(car.getCarSpecifications());
             carFeatureRepository.deleteAll(car.getCarFeatures());
-            carSurchargeRepository.deleteAll(car.getCarSurcharges());
             imageRepository.deleteAll(car.getImages());
 
 
@@ -255,9 +229,6 @@ public class CarService {
 
             result.setFeatures(e.getCarFeatures()
                     .stream().map(f -> f.getFeature().getName())
-                    .collect(Collectors.joining(", ")));
-            result.setSurcharges(e.getCarSurcharges()
-                    .stream().map(u -> u.getSurcharge().getName())
                     .collect(Collectors.joining(", ")));
             result.setUrlImages(e.getImages()
                     .stream().map(Image::getUrl)

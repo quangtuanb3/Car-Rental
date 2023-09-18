@@ -1,18 +1,20 @@
 const eSearchCarForm = document.getElementById("search-car-form");
-const eConfirm_pickup_time = document.getElementById("confirm-pickup-time");
-const eConfirm_drop_off_time = document.getElementById("confirm-drop-off-time");
-const eConfirm_pickup_location = document.getElementById("confirm-pickup-location");
-const eConfirm_drop_off_location = document.getElementById("confirm-drop-off-location");
-const eConfirm_delivery_fee = document.getElementById("confirm-delivery-fee");
-const eConfirm_total = document.getElementById("confirm-total");
-const eConfirm_rent_price = document.getElementById("confirm-rent-price");
-const eConfirm_deposit = document.getElementById("confirm-deposit");
-const eTrade_code = document.getElementById("trade-code");
+// const eConfirm_pickup_time = document.getElementById("confirm-pickup-time");
+// const eConfirm_drop_off_time = document.getElementById("confirm-drop-off-time");
+// const eConfirm_pickup_location = document.getElementById("confirm-pickup-location");
+// const eConfirm_drop_off_location = document.getElementById("confirm-drop-off-location");
+// const eConfirm_delivery_fee = document.getElementById("confirm-delivery-fee");
+// const eConfirm_total = document.getElementById("confirm-total");
+// const eConfirm_rent_price = document.getElementById("confirm-rent-price");
+// const eConfirm_deposit = document.getElementById("confirm-deposit");
+
+const eConfirm_body = document.getElementById("confirm-body");
 const ePickup_time = document.getElementById("pickup-time");
 const eDrop_off_time = document.getElementById("drop-off-time");
 const eRent_price = document.getElementById("rent-price");
 const rentNowButton = document.getElementById("rent-now-btn");
 const urlAPICar = "/user/api/cars" + window.location.pathname;
+
 const ePickUpLocation = document.getElementById("pickup-location");
 const eDropOffLocation = document.getElementById("drop-off-location");
 const eDeliveryFeeDisplay = document.getElementById("delivery-fee-display");
@@ -29,6 +31,7 @@ let officeLocation = "28 Nguyễn Tri Phương, Phú Nhuận, thừa thiên hu�
 let deliveryLocation = "12 Trần Quốc Toản, phường Tây Lộc, Huế, Thừa Thiên Huế, Việt Nam";
 officeLocation = encodeURIComponent(officeLocation);
 let car;
+let customer;
 let data = {
     pickup_time: pickup_time,
     drop_off_time: drop_off_time,
@@ -40,9 +43,15 @@ let data = {
     total: eTotalDisplay.value,
     deposit: (+eTotalDisplay.value * 10 / 100).toFixed(1)
 };
+const urlAPICustomer = "/user/api/customers/1";
 
 async function getCurrentCar(urlAPICar) {
     let res = await fetch(urlAPICar);
+    return await res.json();
+}
+
+async function getCurrentCustom(urlAPICustomer) {
+    let res = await fetch(urlAPICustomer);
     return await res.json();
 }
 
@@ -88,6 +97,7 @@ window.onload = async () => {
     car = await getCurrentCar(urlAPICar);
     await renderRelatedCars();
     await calculateTotal()
+    customer = await getCurrentCustom(urlAPICustomer);
 }
 
 async function renderRelatedCars() {
@@ -196,15 +206,58 @@ rentNowButton.addEventListener("click", function () {
 });
 
 function showConfirm(data) {
-    eConfirm_pickup_time.innerText = formatDate(data.pickup_time);
-    eConfirm_drop_off_time.innerText = formatDate(data.drop_off_time);
-    eConfirm_pickup_location.innerText = truncateTextWithEllipsis(data.pickup_location, 50);
-    eConfirm_drop_off_location.innerText = truncateTextWithEllipsis(data.drop_off_location, 50);
+    let pickup_time = formatDate(data.pickup_time);
+    let drop_off_time = formatDate(data.drop_off_time);
+    let pickup_location = truncateTextWithEllipsis(data.pickup_location, 50);
+    let drop_off_location = truncateTextWithEllipsis(data.drop_off_location, 50);
 
-    eConfirm_rent_price.innerText = data.rent_price;
-    eConfirm_delivery_fee.innerText = data.delivery_fee;
-    eConfirm_deposit.innerText = (+data.total / 10).toFixed(1);
-    eConfirm_total.innerText = data.total;
+
+    let bodyHTML =
+        `
+    <div id="user-detail-container" class="row justify-content-between" style="width: 95%; margin: auto">
+                    <h5 class="col-12">Customer detail: </h5>
+                    <p class="col-6">Name: <span>${customer.name}</span></p>
+                    <p class="col-6">Phone: <span>${customer.numberPhone}</span></p>
+                    <p class="col-6">Email: <span>${customer.email}</span></p>
+                    <p class="col-6">ID Number: <span>${customer.idNumber}</span></p>
+                </div>
+                <hr style="background-color: #b4bdf1; width: 90%; margin: auto">
+                <div id="car-detail-container" class="row justify-content-between mt-3"
+                     style="width: 95%; margin: auto">
+                    <h5 class="col-12">Car detail: </h5>
+                    <p class="col-6">Name: <span ${car.name}</span></p>
+                    <p class="col-6">Agency: <span> ${car.agency}</span></p>
+                    <p class="col-6">Seats: <span >${car.seats}</span></p>
+                    <p class="col-6">Transmission: <span>${car.transmission === '' ? "Defaul" : car.transmission}</span></p>
+                </div>
+                <hr style="background-color: #b4bdf1; width: 90%; margin: auto">
+
+                <div id="rental-detail-container" class="row justify-content-between mt-3"
+                     style="width: 95%; margin: auto">
+                    <h5 class="col-12">Rental detail: </h5>
+                    <p class="col-6">Pickup Time: <span id="confirm-pickup-time">${pickup_time}</span></p>
+                    <p class="col-6">Drop-off Time: <span id="confirm-drop-off-time"> ${drop_off_time}</span></p>
+                    <p class="col-12">Pickup Location: <span id="confirm-pickup-location">${pickup_location}</span></p>
+                    <p class="col-12">Drop-off Location: <span id="confirm-drop-off-location">loc${drop_off_location}ation</span></p>
+                    <p class="col-6">Rent price: </p>
+                    <p class="col-6 text-right pr-5" id="confirm-rent-price">${data.rent_price} VND</p>
+                    <p class="col-6">Delivery Fee: </p>
+                    <p class="col-6 text-right pr-5" id="confirm-delivery-fee">${data.delivery_fee} VND</p>
+                    <p class="col-6 ">Total: </p>
+                    <p class="col-6 text-right pr-5" id="confirm-total">${data.total} VND</p>
+                    <p class="col-6 ">Deposit: </p>
+                    <p class="col-6 text-right pr-5" id="confirm-deposit">${data.deposit} VND</p>
+                    <p class="col-12">(Please scan the QR code below to make a deposit)</p>
+                    <div style="width: 25%; margin: auto">
+                        <img src="/assets/user/images/QR.jpg" alt="qr" style="width: 100%">
+                    </div>
+                    <label class="col-12 pt-3" style="color: black"> Enter your Trading code here:
+                        <input id="trade-code" type="text"  placeholder="xxxx-xxxx-xxxx">
+                    </label>
+
+                </div>
+    `
+    eConfirm_body.innerHTML = bodyHTML;
 }
 
 function formatCurrency(currency) {
@@ -281,7 +334,7 @@ async function createBill(data) {
     data = {
         customerName: "username",
         customerPhoneNumber: "1234565",
-        customerEmail: "abc@gmail.com",
+        customerEmail: "email@gmail.com",
         customerIdNumber: "1234677",
         carId: car.id,
         licensePlate: car.licensePlate,
@@ -291,9 +344,9 @@ async function createBill(data) {
         dropOffLocation: data.drop_off_location,
         rentPrice: data.rent_price,
         deliveryFee: data.delivery_fee,
-        totalPrice: data.totalPrice,
+        totalPrice: data.total,
         deposit: data.deposit,
-        tradeCode: eTrade_code.value,
+        tradeCode: document.getElementById("trade-code").value,
     }
     console.log(data);
     const res = await fetch('/user/api/cars', {
@@ -319,7 +372,7 @@ eDoneBtn.onclick = async () => {
 }
 
 function checkTradeCode() {
-    if (eTradeCode.value) {
+    if (document.getElementById("trade-code").value) {
         return false;
     }
 }

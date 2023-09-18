@@ -336,50 +336,7 @@ m67 -230 c27 -30 33 -44 33 -82 0 -84 -55 -139 -136 -136 -106 4 -162 125 -98
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div id="user-detail-container" class="row justify-content-between" style="width: 95%; margin: auto">
-                    <h5 class="col-12">Customer detail: </h5>
-                    <p class="col-6">Name: <span>Nguyen Van A</span></p>
-                    <p class="col-6">Phone: <span>123456789</span></p>
-                    <p class="col-6">Email: <span>email@gmail.com</span></p>
-                    <p class="col-6">ID Number: <span>123456789</span></p>
-                </div>
-                <hr style="background-color: #b4bdf1; width: 90%; margin: auto">
-                <div id="car-detail-container" class="row justify-content-between mt-3"
-                     style="width: 95%; margin: auto">
-                    <h5 class="col-12">Car detail: </h5>
-                    <p class="col-6">Name: <span th:text="${car.name}">car name</span></p>
-                    <p class="col-6">Agency: <span th:text="${car.agency}"> agency</span></p>
-                    <p class="col-6">Seats: <span th:text="${car.seats}">4-seats</span></p>
-                    <p class="col-6">Transmission: <span th:text="${car.transmission}?${car.transmission}:'' "></span></p>
-                </div>
-                <hr style="background-color: #b4bdf1; width: 90%; margin: auto">
-
-                <div id="rental-detail-container" class="row justify-content-between mt-3"
-                     style="width: 95%; margin: auto">
-                    <h5 class="col-12">Rental detail: </h5>
-                    <p class="col-6">Pickup Time: <span id="confirm-pickup-time">pick-up-time</span></p>
-                    <p class="col-6">Drop-off Time: <span id="confirm-drop-off-time"> time</span></p>
-                    <p class="col-12">Pickup Location: <span id="confirm-pickup-location">location</span></p>
-                    <p class="col-12">Drop-off Location: <span id="confirm-drop-off-location">location</span></p>
-                    <p class="col-6">Rent price: </p>
-                    <p class="col-6 text-right pr-5" id="confirm-rent-price">rent price</p>
-                    <p class="col-6">Delivery Fee: </p>
-                    <p class="col-6 text-right pr-5" id="confirm-delivery-fee">fee</p>
-                    <p class="col-6 ">Total: </p>
-                    <p class="col-6 text-right pr-5" id="confirm-total">total</p>
-                    <p class="col-6 ">Deposit: </p>
-                    <p class="col-6 text-right pr-5" id="confirm-deposit">deposit</p>
-                    <p class="col-12">(Please scan the QR code below to make a deposit)</p>
-                    <div style="width: 25%; margin: auto">
-                        <img src="/assets/user/images/QR.jpg" alt="qr" style="width: 100%">
-                    </div>
-                    <label class="col-12 pt-3" style="color: black"> Enter your Trading code here:
-                        <input id="trade-code" type="text"  placeholder="xxxx-xxxx-xxxx">
-                    </label>
-
-                </div>
-
+            <div class="modal-body" id="confirm-body">
 
             </div>
             <div class="modal-footer">
