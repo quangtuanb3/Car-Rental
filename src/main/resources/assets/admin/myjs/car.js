@@ -1,7 +1,7 @@
 const carForm = document.getElementById('carForm');
-const eCheckBoxSpecifications = document.getElementsByName('specifications');
+const eCheckBoxSpecifications = document.getElementsByClassName('valueOptions');
 const eCheckBoxFeatures = document.getElementsByName('features');
-const eCheckBoxSurcharges = document.getElementsByName('surcharges');
+// const eCheckBoxSurcharges = document.getElementsByName('surcharges');
 let carSelected = {};
 const formBody = document.getElementById('formBody');
 const tBody = document.getElementById('tBody');
@@ -9,15 +9,20 @@ const ePagination = document.getElementById('pagination')
 const eSearch = document.getElementById('search')
 const eHeaderPrice = document.getElementById('header-price')
 
+
+
+
 //car-model-details
 
 let eModalCarName = document.getElementById("modal-car-name");
 let eModalCarDes = document.getElementById("modal-car-description");
+let eModalCarStatus = document.getElementById("modal-car-status");
 let eModalPriceHours = document.getElementById("modal-car-priceHours");
 let eModalPriceDays = document.getElementById("modal-car-priceDays");
+let eModalPriceDeliverys = document.getElementById("modal-car-priceDeliverys");
 let eModalSpecification = document.getElementById("modal-car-specification");
 let eModalFeature = document.getElementById("modal-car-feature");
-let eModalSurcharge = document.getElementById("modal-car-surcharge");
+// let eModalSurcharge = document.getElementById("modal-car-surcharge");
 let eModalImage = document.getElementsByClassName("modal-car-image");
 let eModalAgency = document.getElementById("modal-car-agency");
 
@@ -26,32 +31,41 @@ let eModalAgency = document.getElementById("modal-car-agency");
 // Đoạn mã JavaScript để lấy giá trị từ các thẻ <td> và định dạng chúng thành tiền tệ VND
 const priceHoursElement = document.getElementById("modal-car-priceHours");
 const priceDaysElement = document.getElementById("modal-car-priceDays");
+const priceDeliverysElement = document.getElementById("modal-car-priceDeliverys");
 
 // Lấy giá trị từ các thẻ <td>
 const priceHoursValue = parseFloat(priceHoursElement.textContent.replace("$", ""));
 const priceDaysValue = parseFloat(priceDaysElement.textContent.replace("$", ""));
+const priceDeliverysValue = parseFloat(priceDeliverysElement.textContent.replace("$", ""));
+
 
 // Chuyển đổi và định dạng giá trị thành tiền tệ VND bằng hàm formatCurrency
 const formattedPriceHours = formatCurrency(priceHoursValue);
 const formattedPriceDays = formatCurrency(priceDaysValue);
+const formattedPriceDeliverys = formatCurrency(priceDeliverysValue);
 
 // Cập nhật giá trị đã định dạng vào các thẻ <td>
 priceHoursElement.textContent = formattedPriceHours;
 priceDaysElement.textContent = formattedPriceDays;
+priceDeliverysElement.textContent = formattedPriceDeliverys;
 
 let specifications;
 let features;
-let surcharges;
+// let surcharges;
 let agencies;
 let urlImages
 let cars = [];
+let status;
+async  function getStatus(){
+    const res = await  fetch("/api/cars/status")
+    return await res.json();
+}
 
 let pageable = {
     page: 1,
     sort: 'id,desc',
     search: ''
 }
-
 carForm.onsubmit = async (e) => {
     e.preventDefault();
     let data = getDataFromForm(carForm);
@@ -75,14 +89,13 @@ carForm.onsubmit = async (e) => {
         idFeatures: Array.from(eCheckBoxFeatures)
             .filter(e => e.checked)
             .map(e => e.value),
-        idSurcharges: Array.from(eCheckBoxSurcharges)
-            .filter(e => e.checked)
-            .map(e => e.value),
+        // idSurcharges: Array.from(eCheckBoxSurcharges)
+        //     .filter(e => e.checked)
+        //     .map(e => e.value),
         urlImages: data.urlImages.split(","),
         id: carSelected.id
 
     }
-    console.log(data);
 
     let message = "Created"
     if (carSelected.id) {
@@ -109,29 +122,15 @@ async function getSpecificationsSelectOption() {
     return await res.json();
 }
 
-// const ESpecificationType = {
-//     SEATS: 'Seats',
-//     FUEL: 'Fuel',
-//     GEAR: 'Gear'
-// };
 
-// async function getSpecificationsSelectOption() {
-//
-//     // const specifications = [ESpecificationType.SEATS, ESpecificationType.FUEL, ESpecificationType.GEAR];
-//
-//     // Chuyển danh sách specifications thành đối tượng JSON có cấu trúc { id: '...', name: '...' }
-//     const specificationsOptions = specifications.map(spec => ({ id: spec, name: spec }));
-//
-//     return specificationsOptions;
-// }
 async function getFeaturesSelectOption() {
     const res = await fetch('api/features');
     return await res.json();
 }
-async function getSurchargesSelectOption() {
-    const res = await fetch('api/surcharges');
-    return await res.json();
-}
+// async function getSurchargesSelectOption() {
+//     const res = await fetch('api/surcharges');
+//     return await res.json();
+// }
 
 async function getAgenciesSelectOption() {
     const res = await fetch('api/agencies');
@@ -145,11 +144,11 @@ async function getImagesSelectOption() {
 window.onload = async () => {
     specifications = await getSpecificationsSelectOption();
     features = await getFeaturesSelectOption();
-    surcharges = await getSurchargesSelectOption();
+    // surcharges = await getSurchargesSelectOption();
     agencies = await getAgenciesSelectOption();
     // urlImages = await getImagesSelectOption();
 
-
+    status = await getStatus();
     await renderTable();
     onLoadSort();
 
@@ -161,6 +160,7 @@ function getDataInput() {
     return [
         {
             label: 'Name',
+            classContainer: "col-6",
             name: 'name',
             value: carSelected.name,
             required: true,
@@ -169,14 +169,20 @@ function getDataInput() {
         },
         {
             label: 'Status',
+            classContainer: "col-6",
             name: 'status',
+            type: 'select',
             value: carSelected.status,
             required: true,
-            pattern: "^[A-Za-z ]{6,20}",
-            message: "Status must have minimum is 6 characters and maximum is 20 characters",
+            options: status.map(s => ({
+                value: s,
+                name: s
+            })),
+            message: "Select ",
         },
         {
             label: 'License Plate',
+            classContainer: "col-6",
             name: 'licensePlate',
             value: carSelected.licensePlate,
             required: true,
@@ -185,6 +191,7 @@ function getDataInput() {
         },
         {
             label: 'Agency',
+            classContainer: "col-6",
             name: 'agency',
             value: carSelected.agencyId,
             type: 'select',
@@ -194,6 +201,7 @@ function getDataInput() {
         },
         {
             label: 'Price Hours',
+            classContainer: "col-6",
             name: 'priceHours',
             value: carSelected.priceHours,
             pattern: "[1-9][0-9]{1,10}",
@@ -202,6 +210,7 @@ function getDataInput() {
         },
         {
             label: 'Price Days',
+            classContainer: "col-6",
             name: 'priceDays',
             value: carSelected.priceDays,
             pattern: "[1-9][0-9]{1,10}",
@@ -209,11 +218,21 @@ function getDataInput() {
             required: true
         },
         {
+            label: 'Price Deliverys',
+            classContainer: "col-6",
+            name: 'priceDelivery',
+            value: carSelected.priceDelivery,
+            pattern: "[1-9][0-9]{1,10}",
+            message: 'Price Deliverys Hours errors',
+            required: true
+        },
+        {
             label: 'Description',
+            classContainer: "col-6",
             name: 'description',
             value: carSelected.description,
             pattern: "^[A-Za-z ]{6,120}",
-            message: "Description must have minimum is 6 characters and maximum is 20 characters",
+            message: "Description must have minimum is 6 charactfers and maximum is 20 characters",
             required: true
         },
         {
@@ -221,7 +240,6 @@ function getDataInput() {
             name: 'urlImages',
             value: carSelected.urlImages,
             required: true,
-            // pattern: "^[A-Za-z ]{6,20}",
             // message: "Name must have minimum is 6 characters and maximum is 20 characters",
         },
 
@@ -237,15 +255,16 @@ async function findRoomDetailById(id) {
     const res = await fetch('/api/cars/detail/' + id);
     return await res.json();
 }
-
 async function showEdit(id) {
     $('#staticBackdropLabel').text('Edit Car');
     clearForm();
     carSelected = await findRoomById(id);
     carSelected.specificationIds.forEach(idSpecification => {
         for (let i = 0; i < eCheckBoxSpecifications.length; i++) {
+            console.log(+eCheckBoxSpecifications[i].value)
+            // console.log(+eCheckBoxSpecifications[i].value)
             if (idSpecification === +eCheckBoxSpecifications[i].value) {
-                eCheckBoxSpecifications[i].checked = true;
+                eCheckBoxSpecifications[i].selected = true;
             }
         }
     })
@@ -256,13 +275,15 @@ async function showEdit(id) {
             }
         }
     })
-    carSelected.surchargeIds.forEach(idSurcharge => {
-        for (let i = 0; i < eCheckBoxSurcharges.length; i++) {
-            if (idSurcharge === +eCheckBoxSurcharges[i].value) {
-                eCheckBoxSurcharges[i].checked = true;
-            }
-        }
-    })
+    // carSelected.surchargeIds.forEach(idSurcharge => {
+    //     for (let i = 0; i < eCheckBoxSurcharges.length; i++) {
+    //         if (idSurcharge === +eCheckBoxSurcharges[i].value) {
+    //             eCheckBoxSurcharges[i].checked = true;
+    //         }
+    //     }
+    // })
+
+
     renderForm(formBody, getDataInput());
 }
 
@@ -311,7 +332,6 @@ function renderTBody(items) {
 
 async function renderTable() {
     let url = `/api/cars?page=${pageable.page - 1 || 0}&sort=${pageable.sortCustom || 'id,desc'}&search=${pageable.search || ''}`;
-    console.log(url);
     const response = await fetch(url);
     // const pageable = await getRooms();
     // rooms = pageable.content;
@@ -397,21 +417,21 @@ const onSearch = (e) => {
 // }
 
 const onLoadSort = () => {
-    eHeaderPrice.onclick = () => {
-        // Xóa các biểu tượng sắp xếp trước đó trên tất cả các cột
-        const headerCells = document.querySelectorAll('th');
-        headerCells.forEach(cell => cell.classList.remove('sorted-asc', 'sorted-desc'));
-
-        let sort = 'price,desc';
-        if (pageable.sortCustom?.includes('price') && pageable.sortCustom?.includes('desc')) {
-            sort = 'price,asc';
-        }
-        pageable.sortCustom = sort;
-        renderTable();
-
-        // Thêm biểu tượng sắp xếp vào cột giá (Price)
-        eHeaderPrice.classList.add(sort === 'price,asc' ? 'sorted-asc' : 'sorted-desc');
-    };
+    // eHeaderPrice.onclick = () => {
+    //     // Xóa các biểu tượng sắp xếp trước đó trên tất cả các cột
+    //     const headerCells = document.querySelectorAll('th');
+    //     headerCells.forEach(cell => cell.classList.remove('sorted-asc', 'sorted-desc'));
+    //
+    //     let sort = 'price,desc';
+    //     if (pageable.sortCustom?.includes('price') && pageable.sortCustom?.includes('desc')) {
+    //         sort = 'price,asc';
+    //     }
+    //     pageable.sortCustom = sort;
+    //     renderTable();
+    //
+    //     // Thêm biểu tượng sắp xếp vào cột giá (Price)
+    //     eHeaderPrice.classList.add(sort === 'price,asc' ? 'sorted-asc' : 'sorted-desc');
+    // };
 }
 
 
@@ -498,20 +518,24 @@ async function showDetail(id){
 let carDetail = await findRoomDetailById(id)
     eModalCarName.innerText = carDetail.name;
     eModalCarDes.innerText = carDetail.description;
-    // eModalPriceHours.innerText = carDetail.priceHours;
-    // eModalPriceDays.innerText = carDetail.priceDays;
+    eModalCarStatus.innerText = carDetail.status;
+    eModalPriceHours.innerText = carDetail.priceHours;
+    eModalPriceDays.innerText = carDetail.priceDays;
+    eModalPriceDeliverys.innerText = carDetail.priceDelivery;
     eModalSpecification.innerText = carDetail.specificationNames.join(", ");
     eModalFeature.innerText = carDetail.featureNames.join(", ");
-    eModalSurcharge.innerText = carDetail.surchargeNames.join(", ");
+    // eModalSurcharge.innerText = carDetail.surchargeNames.join(", ");
     eModalAgency.innerText = carDetail.agencyName;
   carDetail.urlImages.forEach((imgUrl, index)=>{
       eModalImage[index].src=imgUrl;
   });
 
-    const formattedPriceHours = formatCurrency(carDetail.priceHours);
-    const formattedPriceDays = formatCurrency(carDetail.priceDays);
-    eModalPriceHours.innerText = formattedPriceHours;
-    eModalPriceDays.innerText = formattedPriceDays;
+    // const formattedPriceHours = formatCurrency(carDetail.priceHours);
+    // const formattedPriceDays = formatCurrency(carDetail.priceDays);
+    // const formattedPriceDeliverys = formatCurrency(carDetail.priceDeliveys);
+    // eModalPriceHours.innerText = carDetail.priceHours;
+    // eModalPriceDays.innerText = formattedPriceDays;
+    // eModalPriceDeliverys.innerText = formattedPriceDeliverys;
 }
 
 // Hàm cập nhật giá giờ theo định dạng tiền tệ VND

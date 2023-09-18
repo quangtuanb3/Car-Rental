@@ -25,7 +25,7 @@ function createSelect(props) {
 
     })
 
-    return `<div "${props.classContainer || ''}">
+    return `<div class="${props.classContainer || ''}">
                 <label class="${props.classLabel || ''} form-label">${props.label}</label>
                 <select class="input-custom form-control ${props.classSelect || ''}" 
                 type="${props.type || 'text'}" name="${props.name}" 
@@ -58,7 +58,6 @@ const onFocus = (formBody, index) => {
 
 
 function renderForm(formBody, inputs) {
-
     formBody.innerHTML = ""; //clear ô input cũ
     inputs.forEach((input) => {
         formBody.innerHTML += createFieldForm(input); //gen từng ô input mới

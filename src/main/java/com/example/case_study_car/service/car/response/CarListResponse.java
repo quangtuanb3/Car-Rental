@@ -27,6 +27,8 @@ public class CarListResponse {
 
     private BigDecimal priceDays;
 
+    private BigDecimal priceDelivery;
+
     private String description;
 
     private String agency;
@@ -37,5 +39,5 @@ public class CarListResponse {
 
     private String urlImages;
 
-    private String surcharges;
+//    private String surcharges;
 }

@@ -21,6 +21,8 @@ public class CarSaveRequest {
 
     private String priceDays;
 
+    private String priceDelivery;
+
     private String description;
 
     private SelectOptionRequest agency;
@@ -31,7 +33,7 @@ public class CarSaveRequest {
 
     private List<String> urlImages;
 
-    private List<String> idSurcharges;
+//    private List<String> idSurcharges;
 
 
 }
