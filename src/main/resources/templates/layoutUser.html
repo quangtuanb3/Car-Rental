@@ -27,6 +27,7 @@
         <link rel="stylesheet" href="/assets/user/css/jquery.timepicker.css">
 
 
+
         <link rel="stylesheet" href="/assets/user/css/flaticon.css">
         <link rel="stylesheet" href="/assets/user/css/icomoon.css">
         <link rel="stylesheet" href="/assets/user/css/style.css">
@@ -98,6 +99,11 @@
                                 <form action="#" class="request-form bg-dark-blue" id="search-car-form">
                                     <h2>Make your trip</h2>
                                     <div class="form-group">
+                                        <label for="key-search" class="label">Enter your keyword</label>
+                                        <input type="text" class="form-control" id="key-search"
+                                               placeholder="Search by name, type,...">
+                                    </div>
+                                    <div class="form-group">
                                         <label for="pickup-location" class="label">Pick-up location</label>
                                         <input type="text" class="form-control" id="pickup-location"
                                                placeholder="City, Airport, Station, etc">
@@ -114,7 +120,7 @@
                                                placeholder="Date">
                                     </div>
                                     <div class="form-group mr-2">
-                                        <label for="book_off_time" class="label">Drop-off date</label>
+                                        <label for="book_off_time" class="label">Drop-off time</label>
                                         <input type="datetime-local" class="form-control" id="book_off_time"
                                                placeholder="Date">
                                     </div>
@@ -183,7 +189,7 @@
                     <div class="item">
                         <div class="car-wrap rounded">
                             <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(images/car-1.jpg);">
+                                 style="background-image: url(/assets/user/images/car-1.jpg);">
                             </div>
                             <div class="text">
                                 <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
@@ -199,7 +205,7 @@
                     <div class="item">
                         <div class="car-wrap rounded  ">
                             <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(images/car-2.jpg);">
+                                 style="background-image: url(/assets/user/images/car-2.jpg);">
                             </div>
                             <div class="text">
                                 <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
@@ -215,7 +221,7 @@
                     <div class="item">
                         <div class="car-wrap rounded  ">
                             <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(images/car-3.jpg);">
+                                 style="background-image: url(/assets/user/images/car-3.jpg);">
                             </div>
                             <div class="text">
                                 <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
@@ -231,7 +237,7 @@
                     <div class="item">
                         <div class="car-wrap rounded  ">
                             <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(images/car-4.jpg);">
+                                 style="background-image: url(/assets/user/images/car-4.jpg);">
                             </div>
                             <div class="text">
                                 <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
@@ -359,7 +365,7 @@
                 <div class="carousel-testimony owl-carousel ftco-owl">
                     <div class="item">
                         <div class="testimony-wrap rounded text-center py-4 pb-5">
-                            <div class="user-img mb-2" style="background-image: url(images/person_1.jpg)">
+                            <div class="user-img mb-2" style="background-image: url(/assets/user/images/person_1.jpg)">
                             </div>
                             <div class="text pt-4">
                                 <p class="mb-4">Far far away, behind the word mountains, far from the countries
@@ -371,7 +377,7 @@
                     </div>
                     <div class="item">
                         <div class="testimony-wrap rounded text-center py-4 pb-5">
-                            <div class="user-img mb-2" style="background-image: url(images/person_2.jpg)">
+                            <div class="user-img mb-2" style="background-image: url(/assets/user/images/person_2.jpg)">
                             </div>
                             <div class="text pt-4">
                                 <p class="mb-4">Far far away, behind the word mountains, far from the countries
@@ -383,7 +389,7 @@
                     </div>
                     <div class="item">
                         <div class="testimony-wrap rounded text-center py-4 pb-5">
-                            <div class="user-img mb-2" style="background-image: url(images/person_3.jpg)">
+                            <div class="user-img mb-2" style="background-image: url(/assets/user/images/person_3.jpg)">
                             </div>
                             <div class="text pt-4">
                                 <p class="mb-4">Far far away, behind the word mountains, far from the countries
@@ -395,7 +401,7 @@
                     </div>
                     <div class="item">
                         <div class="testimony-wrap rounded text-center py-4 pb-5">
-                            <div class="user-img mb-2" style="background-image: url(images/person_1.jpg)">
+                            <div class="user-img mb-2" style="background-image: url(/assets/user/images/person_1.jpg)">
                             </div>
                             <div class="text pt-4">
                                 <p class="mb-4">Far far away, behind the word mountains, far from the countries
@@ -407,7 +413,7 @@
                     </div>
                     <div class="item">
                         <div class="testimony-wrap rounded text-center py-4 pb-5">
-                            <div class="user-img mb-2" style="background-image: url(images/person_1.jpg)">
+                            <div class="user-img mb-2" style="background-image: url(/assets/user/images/person_1.jpg)">
                             </div>
                             <div class="text pt-4">
                                 <p class="mb-4">Far far away, behind the word mountains, far from the countries
@@ -620,12 +626,17 @@
     <script src="/assets/user/js/jquery.animateNumber.min.js"></script>
     <script src="/assets/user/js/bootstrap-datepicker.js"></script>
     <script src="/assets/user/js/jquery.timepicker.min.js"></script>
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+
     <script src="/assets/user/js/scrollax.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
     <script src="/assets/user/js/google-map.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
     <script src="/assets/user/js/main.js"></script>
-    <script src="/assets/user/my-js/my-js.js"></script>
+
 </th:block>
 </body>
 </html>

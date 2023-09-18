@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,26 +27,38 @@ public class Bill {
 
     private String customerIdNumber;
 
-    private LocalDateTime dateReceived;
+    private LocalDateTime pickupTime;
 
     private String pickupLocation;
-    
+
     private String dropOffLocation;
 
-    private LocalDateTime expectedDateReturn;
+    private LocalDateTime expectedDropOffTime;
 
-    private LocalDateTime actualDateReturn;
+    private LocalDateTime actualDropOffTime;
+
+    private String deliveryFee;
+
+    private String totalPrice;
+
+    private BigDecimal rentPrice;
+
+    private BigDecimal deposit;
+
+    private BigDecimal excessDistanceFee;
+
+    private BigDecimal overtimeFee;
+
+    private BigDecimal cleaningFee;
+
+    private String tradeCode;
+
 
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "bill")
-    private List<BillCar> billCars;
-
-    @OneToMany(mappedBy = "bill")
-    private List<BillCarSurcharge> billCarSurcharges;
-
-
+    @ManyToOne()
+    private Car car;
 }
