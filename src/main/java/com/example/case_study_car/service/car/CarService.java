@@ -1,7 +1,6 @@
 package com.example.case_study_car.service.car;
 
 import com.example.case_study_car.domain.*;
-import com.example.case_study_car.domain.enumaration.ESpecificationType;
 import com.example.case_study_car.exception.CarNotFoundException;
 import com.example.case_study_car.repository.*;
 import com.example.case_study_car.service.car.request.CarSaveRequest;
@@ -31,16 +30,13 @@ public class CarService {
 
     private final CarFeatureRepository carFeatureRepository;
 
-    private final CarSurchargeRepository carSurchargeRepository;
 
     private final CarSpecificationRepository carSpecificationRepository;
 
     private final ImageRepository imageRepository;
 
 
-
-
-    public void create(CarSaveRequest request){
+    public void create(CarSaveRequest request) {
         var car = AppUtil.mapper.map(request, Car.class);
         car = carRepository.save(car);
 
@@ -54,11 +50,6 @@ public class CarService {
                 .getIdFeatures()
                 .stream()
                 .map(id -> new CarFeature(finalCar, new Feature(Long.valueOf(id))))
-                .collect(Collectors.toList()));
-        carSurchargeRepository.saveAll(request
-                .getIdSurcharges()
-                .stream()
-                .map(id -> new CarSurcharge(finalCar, new Surcharge(Long.valueOf(id))))
                 .collect(Collectors.toList()));
         imageRepository.saveAll(request
                 .getUrlImages()
@@ -80,10 +71,6 @@ public class CarService {
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getId())
                 .collect(Collectors.toList()));
-        result.setSurchargeIds(car
-                .getCarSurcharges()
-                .stream().map(carSurcharge -> carSurcharge.getSurcharge().getId())
-                .collect(Collectors.toList()));
         result.setUrlImages(car
                 .getImages()
                 .stream().map(Image::getUrl)
@@ -91,6 +78,7 @@ public class CarService {
 
         return result;
     }
+
     public CarShowDetailResponse findCarDetailById(Long id) {
         var car = carRepository.findById(id).orElse(new Car());
         var result = AppUtil.mapper.map(car, CarShowDetailResponse.class);
@@ -102,10 +90,6 @@ public class CarService {
         result.setFeatureNames(car
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getName())
-                .collect(Collectors.toList()));
-        result.setSurchargeNames(car
-                .getCarSurcharges()
-                .stream().map(carSurcharge -> carSurcharge.getSurcharge().getName())
                 .collect(Collectors.toList()));
         result.setUrlImages(car
                 .getImages()
@@ -125,9 +109,6 @@ public class CarService {
                     .collect(Collectors.joining(", ")));
             result.setFeatures(e.getCarFeatures()
                     .stream().map(f -> f.getFeature().getName())
-                    .collect(Collectors.joining(", ")));
-            result.setSurcharges(e.getCarSurcharges()
-                    .stream().map(u -> u.getSurcharge().getName())
                     .collect(Collectors.joining(", ")));
             result.setUrlImages(e.getImages()
                     .stream().map(Image::getUrl)
@@ -158,13 +139,12 @@ public class CarService {
 //        });
 //    }
 
-    public void update(CarSaveRequest request, Long id){
+    public void update(CarSaveRequest request, Long id) {
         var carDb = carRepository.findById(id).orElse(new Car());
         carDb.setAgency(new Agency());
         AppUtil.mapper.map(request, carDb);
         carSpecificationRepository.deleteAll(carDb.getCarSpecifications());
         carFeatureRepository.deleteAll(carDb.getCarFeatures());
-        carSurchargeRepository.deleteAll(carDb.getCarSurcharges());
         imageRepository.deleteAll(carDb.getImages());
 
 
@@ -180,11 +160,6 @@ public class CarService {
             carFeatures.add(new CarFeature(carDb, feature));
         }
 
-        var carSurcharges = new ArrayList<CarSurcharge>();
-        for (String idSurcharge : request.getIdSurcharges()) {
-            Surcharge surcharge = new Surcharge(Long.valueOf(idSurcharge));
-            carSurcharges.add(new CarSurcharge(carDb, surcharge));
-        }
 
         var images = new ArrayList<Image>();
         for (String idImage : request.getUrlImages()) {
@@ -196,7 +171,6 @@ public class CarService {
 
         carSpecificationRepository.saveAll(carSpecifications);
         carFeatureRepository.saveAll(carFeatures);
-        carSurchargeRepository.saveAll(carSurcharges);
         imageRepository.saveAll(images);
         carRepository.save(carDb);
     }
@@ -210,7 +184,6 @@ public class CarService {
             // Xóa tất cả các mối quan hệ với danh mục
             carSpecificationRepository.deleteAll(car.getCarSpecifications());
             carFeatureRepository.deleteAll(car.getCarFeatures());
-            carSurchargeRepository.deleteAll(car.getCarSurcharges());
             imageRepository.deleteAll(car.getImages());
 
 
@@ -257,9 +230,6 @@ public class CarService {
             result.setFeatures(e.getCarFeatures()
                     .stream().map(f -> f.getFeature().getName())
                     .collect(Collectors.joining(", ")));
-            result.setSurcharges(e.getCarSurcharges()
-                    .stream().map(u -> u.getSurcharge().getName())
-                    .collect(Collectors.joining(", ")));
             result.setUrlImages(e.getImages()
                     .stream().map(Image::getUrl)
                     .collect(Collectors.joining(", ")));
@@ -277,16 +247,17 @@ public class CarService {
                 .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
                 .build()).collect(Collectors.toList());
     }
-    public List<RelatedCarResponse> getRelatedCars(String agency, BigDecimal priceDay, String seat, Long id){
+
+    public List<RelatedCarResponse> getRelatedCars(String agency, BigDecimal priceDay, String seat, Long id) {
         return carRepository.getRelatedCars(agency, seat, priceDay, id)
                 .stream().map(car -> RelatedCarResponse.builder()
-                .id(car.getId())
-                .name(car.getName())
-                .description(car.getDescription())
-                .agency(car.getAgency().getName())
-                .priceDays(car.getPriceDays())
-                .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
-                .build()).collect(Collectors.toList());
+                        .id(car.getId())
+                        .name(car.getName())
+                        .description(car.getDescription())
+                        .agency(car.getAgency().getName())
+                        .priceDays(car.getPriceDays())
+                        .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
+                        .build()).collect(Collectors.toList());
     }
 
     public UserCarDetailResponse getCarDetailById(Long id) {
@@ -301,6 +272,22 @@ public class CarService {
                         .svg(carSpecification.getSpecification().getSvg())
                         .build())
                 .collect(Collectors.toList()));
+        result.setSeats(car.getCarSpecifications()
+                .stream()
+                .filter(carSpecification -> carSpecification.getSpecification()
+                        .getType().toString()
+                        .equals("SEAT"))
+                .findFirst()
+                .map(spec -> spec.getSpecification()
+                        .getName()).orElse(""));
+        result.setTransmission(car.getCarSpecifications()
+                .stream()
+                .filter(carSpecification -> carSpecification.getSpecification()
+                        .getType().toString()
+                        .equals("TRANSMISSION"))
+                .findFirst()
+                .map(spec -> spec.getSpecification()
+                        .getName()).orElse(""));
         result.setFeatures(car
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getName())

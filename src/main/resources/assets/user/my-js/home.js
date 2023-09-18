@@ -86,8 +86,6 @@ async function renderBestCars() {
 
 window.onload = async () => {
     await renderBestCars();
-
-
 }
 
 
