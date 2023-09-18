@@ -37,11 +37,4 @@ public class UserController {
         return view;
     }
 
-
-    @GetMapping("car-detail")
-    public ModelAndView detail() {
-        ModelAndView view = new ModelAndView("user/car-detail");
-        return view;
-    }
-
 }

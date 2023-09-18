@@ -1,6 +1,8 @@
 package com.example.case_study_car.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +12,8 @@ import java.math.BigDecimal;
 @Table(name = "bill_cars")
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class BillCar {
 
     @Id
@@ -18,7 +22,17 @@ public class BillCar {
 
     private String licensePlate;
 
-    private BigDecimal price;
+    private BigDecimal rentPrice;
+
+    private BigDecimal deliveryPrice;
+
+    private BigDecimal totalPrice;
+
+    private BigDecimal excessDistanceFee;
+
+    private BigDecimal overtimeFee;
+
+    private BigDecimal cleaningFee;
 
     @ManyToOne
     @JoinColumn(name = "car_id")

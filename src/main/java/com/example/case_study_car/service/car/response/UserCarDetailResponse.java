@@ -23,6 +23,12 @@ public class UserCarDetailResponse {
 
     private BigDecimal priceDays;
 
+    private BigDecimal priceDelivery;
+
+    private String seats;
+
+    private String transmission;
+
     private String description;
 
     private String agency;

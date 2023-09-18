@@ -38,9 +38,7 @@ public class CarService {
     private final ImageRepository imageRepository;
 
 
-
-
-    public void create(CarSaveRequest request){
+    public void create(CarSaveRequest request) {
         var car = AppUtil.mapper.map(request, Car.class);
         car = carRepository.save(car);
 
@@ -91,6 +89,7 @@ public class CarService {
 
         return result;
     }
+
     public CarShowDetailResponse findCarDetailById(Long id) {
         var car = carRepository.findById(id).orElse(new Car());
         var result = AppUtil.mapper.map(car, CarShowDetailResponse.class);
@@ -158,7 +157,7 @@ public class CarService {
 //        });
 //    }
 
-    public void update(CarSaveRequest request, Long id){
+    public void update(CarSaveRequest request, Long id) {
         var carDb = carRepository.findById(id).orElse(new Car());
         carDb.setAgency(new Agency());
         AppUtil.mapper.map(request, carDb);
@@ -277,16 +276,17 @@ public class CarService {
                 .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
                 .build()).collect(Collectors.toList());
     }
-    public List<RelatedCarResponse> getRelatedCars(String agency, BigDecimal priceDay, String seat, Long id){
+
+    public List<RelatedCarResponse> getRelatedCars(String agency, BigDecimal priceDay, String seat, Long id) {
         return carRepository.getRelatedCars(agency, seat, priceDay, id)
                 .stream().map(car -> RelatedCarResponse.builder()
-                .id(car.getId())
-                .name(car.getName())
-                .description(car.getDescription())
-                .agency(car.getAgency().getName())
-                .priceDays(car.getPriceDays())
-                .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
-                .build()).collect(Collectors.toList());
+                        .id(car.getId())
+                        .name(car.getName())
+                        .description(car.getDescription())
+                        .agency(car.getAgency().getName())
+                        .priceDays(car.getPriceDays())
+                        .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
+                        .build()).collect(Collectors.toList());
     }
 
     public UserCarDetailResponse getCarDetailById(Long id) {
@@ -301,6 +301,22 @@ public class CarService {
                         .svg(carSpecification.getSpecification().getSvg())
                         .build())
                 .collect(Collectors.toList()));
+        result.setSeats(car.getCarSpecifications()
+                .stream()
+                .filter(carSpecification -> carSpecification.getSpecification()
+                        .getType().toString()
+                        .equals("SEAT"))
+                .findFirst()
+                .map(spec -> spec.getSpecification()
+                        .getName()).orElse(""));
+        result.setTransmission(car.getCarSpecifications()
+                .stream()
+                .filter(carSpecification -> carSpecification.getSpecification()
+                        .getType().toString()
+                        .equals("TRANSMISSION"))
+                .findFirst()
+                .map(spec -> spec.getSpecification()
+                        .getName()).orElse(""));
         result.setFeatures(car
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getName())

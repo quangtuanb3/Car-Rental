@@ -31,6 +31,14 @@ public class Car {
 
     private BigDecimal priceDays;
 
+    private BigDecimal priceDelivery;
+
+    private BigDecimal excessDistanceFee;
+
+    private BigDecimal overtimeFee;
+
+    private BigDecimal cleaningFee;
+
     @Column(columnDefinition = "LONGTEXT")
     private String description;
 
@@ -47,7 +55,8 @@ public class Car {
     @OneToMany(mappedBy = "car")
     private List<CarFeature> carFeatures;
 
-    @OneToMany(mappedBy = "car")
-    private List<CarSurcharge> carSurcharges;
 
+    public Car(Long id) {
+        this.id = id;
+    }
 }
