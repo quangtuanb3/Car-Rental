@@ -15,3 +15,33 @@ th.sorted-asc::after {
 th.sorted-desc::after {
     content: " ▼";
 }
+
+.custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* Tạo hiệu ứng hover khi di chuột vào ô select */
+.custom-select:hover {
+    border-color: #999;
+}
+
+/* Tạo hiệu ứng focus khi ô select được chọn */
+.custom-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Tạo kiểu cho nhãn của ô select */
+.spec-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
