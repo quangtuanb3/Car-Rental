@@ -1,6 +1,7 @@
 package com.example.case_study_car.controller.rest;
 
 
+import com.example.case_study_car.domain.enumaration.ECarStatus;
 import com.example.case_study_car.service.car.CarService;
 import com.example.case_study_car.service.car.request.CarSaveRequest;
 import com.example.case_study_car.service.car.response.CarDetailResponse;
@@ -54,11 +55,16 @@ public class CarRestController {
         carService.update(request,id);
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/status")
+    public ResponseEntity<ECarStatus[]> getStatus() {
+        return new ResponseEntity<>(ECarStatus.values(), HttpStatus.OK);
+    }
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         carService.delete(id);
         return ResponseEntity.ok().build();
     }
+
 
 }

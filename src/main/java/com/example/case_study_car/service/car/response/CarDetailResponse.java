@@ -23,6 +23,8 @@ public class CarDetailResponse {
 
     private BigDecimal priceDays;
 
+    private BigDecimal priceDelivery;
+
     private String description;
 
     private Long agencyId;
@@ -33,7 +35,7 @@ public class CarDetailResponse {
 
     private List<String> urlImages;
 
-    private List<Long> surchargeIds;
+//    private List<Long> surchargeIds;
 
 
 }

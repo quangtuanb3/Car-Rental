@@ -1,6 +1,7 @@
 package com.example.case_study_car.service.car;
 
 import com.example.case_study_car.domain.*;
+import com.example.case_study_car.domain.enumaration.ECarStatus;
 import com.example.case_study_car.domain.enumaration.ESpecificationType;
 import com.example.case_study_car.exception.CarNotFoundException;
 import com.example.case_study_car.repository.*;
@@ -50,11 +51,11 @@ public class CarService {
                 .stream()
                 .map(id -> new CarFeature(finalCar, new Feature(Long.valueOf(id))))
                 .collect(Collectors.toList()));
-        carSurchargeRepository.saveAll(request
-                .getIdSurcharges()
-                .stream()
-                .map(id -> new CarSurcharge(finalCar, new Surcharge(Long.valueOf(id))))
-                .collect(Collectors.toList()));
+//        carSurchargeRepository.saveAll(request
+//                .getIdSurcharges()
+//                .stream()
+//                .map(id -> new CarSurcharge(finalCar, new Surcharge(Long.valueOf(id))))
+//                .collect(Collectors.toList()));
         imageRepository.saveAll(request
                 .getUrlImages()
                 .stream()
@@ -75,10 +76,10 @@ public class CarService {
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getId())
                 .collect(Collectors.toList()));
-        result.setSurchargeIds(car
-                .getCarSurcharges()
-                .stream().map(carSurcharge -> carSurcharge.getSurcharge().getId())
-                .collect(Collectors.toList()));
+//        result.setSurchargeIds(car
+//                .getCarSurcharges()
+//                .stream().map(carSurcharge -> carSurcharge.getSurcharge().getId())
+//                .collect(Collectors.toList()));
         result.setUrlImages(car
                 .getImages()
                 .stream().map(Image::getUrl)
@@ -98,10 +99,10 @@ public class CarService {
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getName())
                 .collect(Collectors.toList()));
-        result.setSurchargeNames(car
-                .getCarSurcharges()
-                .stream().map(carSurcharge -> carSurcharge.getSurcharge().getName())
-                .collect(Collectors.toList()));
+//        result.setSurchargeNames(car
+//                .getCarSurcharges()
+//                .stream().map(carSurcharge -> carSurcharge.getSurcharge().getName())
+//                .collect(Collectors.toList()));
         result.setUrlImages(car
                 .getImages()
                 .stream().map(Image::getUrl)
@@ -134,10 +135,11 @@ public class CarService {
     public void update(CarSaveRequest request, Long id){
         var carDb = carRepository.findById(id).orElse(new Car());
         carDb.setAgency(new Agency());
+
         AppUtil.mapper.map(request,carDb);
         carSpecificationRepository.deleteAll(carDb.getCarSpecifications());
         carFeatureRepository.deleteAll(carDb.getCarFeatures());
-        carSurchargeRepository.deleteAll(carDb.getCarSurcharges());
+//        carSurchargeRepository.deleteAll(carDb.getCarSurcharges());
         imageRepository.deleteAll(carDb.getImages());
 
 
@@ -153,11 +155,11 @@ public class CarService {
             carFeatures.add(new CarFeature(carDb, feature));
         }
 
-        var carSurcharges = new ArrayList<CarSurcharge>();
-        for (String idSurcharge : request.getIdSurcharges()) {
-            Surcharge surcharge = new Surcharge(Long.valueOf(idSurcharge));
-            carSurcharges.add(new CarSurcharge(carDb, surcharge));
-        }
+//        var carSurcharges = new ArrayList<CarSurcharge>();
+//        for (String idSurcharge : request.getIdSurcharges()) {
+//            Surcharge surcharge = new Surcharge(Long.valueOf(idSurcharge));
+//            carSurcharges.add(new CarSurcharge(carDb, surcharge));
+//        }
 
         var images = new ArrayList<Image>();
         for (String idImage : request.getUrlImages()) {
@@ -169,7 +171,7 @@ public class CarService {
 
         carSpecificationRepository.saveAll(carSpecifications);
         carFeatureRepository.saveAll(carFeatures);
-        carSurchargeRepository.saveAll(carSurcharges);
+//        carSurchargeRepository.saveAll(carSurcharges);
         imageRepository.saveAll(images);
         carRepository.save(carDb);
     }
@@ -183,11 +185,11 @@ public class CarService {
             // Xóa tất cả các mối quan hệ với danh mục
             carSpecificationRepository.deleteAll(car.getCarSpecifications());
             carFeatureRepository.deleteAll(car.getCarFeatures());
-            carSurchargeRepository.deleteAll(car.getCarSurcharges());
+//            carSurchargeRepository.deleteAll(car.getCarSurcharges());
             imageRepository.deleteAll(car.getImages());
 
 
-            // Sau đó xóa bộ room
+            // Sau đó xóa bộ car
             carRepository.deleteById(id);
 
         } else {
@@ -207,32 +209,17 @@ public class CarService {
             result.setLicensePlate(e.getLicensePlate());
             result.setPriceHours(e.getPriceHours());
             result.setPriceDays(e.getPriceDays());
+            result.setPriceDelivery(e.getPriceDelivery());
             result.setAgency(e.getAgency().getName());
             result.setSpecifications(e.getCarSpecifications()
                     .stream().map(s -> s.getSpecification().getName())
                     .collect(Collectors.joining(", ")));
-
-            // Lọc danh sách CarSpecification theo loại specificationType
-//            List<CarSpecification> filteredSpecifications = e.getCarSpecifications()
-//                    .stream()
-//                    .filter(carSpecification -> carSpecification.getSpecification().getType() == specificationType)
-//                    .collect(Collectors.toList());
-
-            // Lấy danh sách các Specification từ danh sách CarSpecification
-//            List<Specification> specifications = filteredSpecifications
-//                    .stream()
-//                    .map(CarSpecification::getSpecification)
-//                    .collect(Collectors.toList());
-
-//            result.setSpecifications(specifications);
-
-
             result.setFeatures(e.getCarFeatures()
                     .stream().map(f -> f.getFeature().getName())
                     .collect(Collectors.joining(", ")));
-            result.setSurcharges(e.getCarSurcharges()
-                    .stream().map(u -> u.getSurcharge().getName())
-                    .collect(Collectors.joining(", ")));
+//            result.setSurcharges(e.getCarSurcharges()
+//                    .stream().map(u -> u.getSurcharge().getName())
+//                    .collect(Collectors.joining(", ")));
             result.setUrlImages(e.getImages()
                     .stream().map(Image::getUrl)
                     .collect(Collectors.joining(", ")));

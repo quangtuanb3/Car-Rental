@@ -1,5 +1,6 @@
 package com.example.case_study_car.controller;
 
+import com.example.case_study_car.domain.enumaration.ECarStatus;
 import com.example.case_study_car.service.agency.AgencyService;
 import com.example.case_study_car.service.feature.FeatureService;
 import com.example.case_study_car.service.specification.SpecificationService;
@@ -26,7 +27,7 @@ public class AdminController {
         ModelAndView view = new ModelAndView("admin/index");
         view.addObject("specifications", specificationService.getSpecifications());
         view.addObject("agencies", agencyService.findAll());
-        view.addObject("surcharges", surchargeService.findAll());
+        view.addObject("status", ECarStatus.values());
         view.addObject("features", featureService.findAll());
 
         return view;

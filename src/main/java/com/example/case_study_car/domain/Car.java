@@ -31,6 +31,8 @@ public class Car {
 
     private BigDecimal priceDays;
 
+    private BigDecimal priceDelivery;
+
     @Column(columnDefinition = "LONGTEXT")
     private String description;
 
