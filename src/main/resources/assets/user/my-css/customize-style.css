@@ -168,3 +168,59 @@ hr {
 .toast {
     opacity: 0.9!important; /* Adjust the opacity value as needed */
 }
+
+.pagination-lg .page-link,
+.pagination-lg > li > a:not(.page-link) {
+    min-width: calc(
+            2.875rem + 0px
+    );
+}
+
+.pagination-lg > .page-item.first .page-link, .pagination-lg > .page-item.last .page-link, .pagination-lg > .page-item.next .page-link, .pagination-lg > .page-item.prev .page-link, .pagination-lg > .page-item.previous .page-link {
+    padding-top: 0.853rem;
+    padding-bottom: 0.853rem;
+}
+
+.pagination-sm .page-link,
+.pagination-sm > li > a:not(.page-link) {
+    min-width: calc(
+            1.5rem + 0px
+    );
+}
+.pagination-sm .page-link .tf-icon,
+.pagination-sm > li > a:not(.page-link) .tf-icon {
+    font-size: 0.9375rem;
+}
+
+.pagination-sm > .page-item.first .page-link, .pagination-sm > .page-item.last .page-link, .pagination-sm > .page-item.next .page-link, .pagination-sm > .page-item.prev .page-link, .pagination-sm > .page-item.previous .page-link {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}
+.page-item.first .page-link, .page-item.last .page-link, .page-item.next .page-link, .page-item.prev .page-link, .page-item.previous .page-link {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+.page-item.disabled .page-link {
+    border-color: #d9dee3;
+}
+.page-item.active .page-link {
+    margin: 0 0.1rem 0 0.3rem;
+}
+
+.page-link,
+.page-link > a {
+    border-radius: 0.375rem;
+    line-height: 1;
+    text-align: center;
+    min-width: calc(
+            2.1875rem + 0px
+    );
+}
+.page-link:focus,
+.page-link > a:focus {
+    color: #697a8d;
+}
+
+.page-link.btn-primary {
+    box-shadow: none !important;
+}

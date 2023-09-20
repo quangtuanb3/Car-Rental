@@ -21,6 +21,8 @@ import com.example.case_study_car.service.request.SelectOptionRequest;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -256,20 +258,19 @@ public class CarService {
         System.out.println(result);
         return result;
     }
-    public Page<CarListResponse> getCars(Pageable pageable, String search) {
+
+
+
+    public Page<BestCarResponse> searchAvailableCar(Pageable pageable, LocalDateTime pickup, LocalDateTime dropOff, String search) {
         search = "%" + search + "%";
-        return carRepository.searchEverything(search, pageable).map(e -> {
-            var result = AppUtil.mapper.map(e, CarListResponse.class);
-            result.setAgency(e.getAgency().getName());
-            result.setSpecifications(e.getCarSpecifications()
-                    .stream().map(s -> s.getSpecification().getName())
-                    .collect(Collectors.joining(", ")));
-            result.setFeatures(e.getCarFeatures()
-                    .stream().map(f -> f.getFeature().getName())
-                    .collect(Collectors.joining(", ")));
-//            result.setUrlImages(e.getImages()
-//                    .stream().map(Image::getUrl)
-//                    .collect(Collectors.joining(", ")));
+        return carRepository.searchAvailableCar(search, pickup, dropOff, pageable).map(car -> {
+            var result = AppUtil.mapper.map(car, BestCarResponse.class);
+            result.setAgency(car.getAgency().getName());
+            result.setUrlImages(car
+                    .getImages()
+                    .stream().map(image -> image.getFileUrl())
+                    .collect(Collectors.toList()));
+
             return result;
         });
     }
