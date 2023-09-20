@@ -1,24 +1,24 @@
 package com.example.case_study_car.domain;
-
-
 import com.example.case_study_car.domain.enumaration.ECarStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
 @Table(name = "cars")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     private String name;
 
@@ -57,7 +57,6 @@ public class Car {
 
     @OneToMany(mappedBy = "car")
     private List<Bill> bills;
-
 
     public Car(Long id) {
         this.id = id;

@@ -1,5 +1,4 @@
 package com.example.case_study_car.service.car.request;
-
 import com.example.case_study_car.service.request.SelectOptionRequest;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +30,9 @@ public class CarSaveRequest {
 
     private List<String> idFeatures;
 
-    private List<String> urlImages;
+    private List<SelectOptionRequest> files;
+
+//    private List<SelectOptionRequest> image;
 
 //    private List<String> idSurcharges;
 

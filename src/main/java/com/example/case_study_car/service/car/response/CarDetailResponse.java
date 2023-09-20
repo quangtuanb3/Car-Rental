@@ -1,5 +1,6 @@
 package com.example.case_study_car.service.car.response;
 
+import com.example.case_study_car.service.image.ImageResponse;
 import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,11 @@ public class CarDetailResponse {
     private List<Long> featureIds;
 
     private List<String> urlImages;
+
+    private ImageResponse image;
+
+    private List<String> images;
+
 
 //    private List<Long> surchargeIds;
 

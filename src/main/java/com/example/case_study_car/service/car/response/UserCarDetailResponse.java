@@ -39,4 +39,6 @@ public class UserCarDetailResponse {
 
     private List<String> urlImages;
 
+    private List<String> images;
+
 }

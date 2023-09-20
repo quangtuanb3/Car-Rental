@@ -1,15 +1,15 @@
 package com.example.case_study_car.service.car.response;
 
+import com.example.case_study_car.domain.Image;
+import com.example.case_study_car.service.request.SelectOptionRequest;
 import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -38,6 +38,10 @@ public class CarListResponse {
     private String features;
 
     private String urlImages;
+
+    private String image;
+
+    private List<String> images;
 
 //    private String surcharges;
 }
