@@ -1,8 +1,28 @@
-// const eSearchCarBtn = document.getElementById("search-car-btn");
-// const eSearchCarForm = document.getElementById("search-car-form");
+const eSearchCarBtn = document.getElementById("search-car-btn");
+const eSearchCarForm = document.getElementById("search-car-form");
 // const eShowDetail = document.getElementById("show-detail-btn");
 const eBestCarContainer = document.getElementById("best-car-container");
+let pageable = {
+    page: 1,
+    sort: 'id,desc',
+    search: '',
+    pickupTime: '',
+    dropOffTime: '',
+    pickupLocation: '',
+    dropOffLocation: '',
+}
+eSearchCarBtn.onclick = () => {
+    const form = new FormData(eSearchCarForm);
+    pageable.search = form.get("key-search");
+    pageable.pickupTime = form.get("pickup_time")
+    pageable.dropOffTime = form.get("drop_off_time")
+    pageable.pickupLocation = form.get("pickup_location")
+    pageable.dropOffLocation = form.get("drop_off_location")
+    let url = `/cars/available-cars?search=${pageable.search}&pickupTime=${pageable.pickupTime}&dropOffTime=${pageable.dropOffTime}&pickupLocation=${pageable.pickupLocation}&dropOffLocation=${pageable.dropOffLocation}`
+    console.log(url);
+    window.location.href = url;
 
+}
 
 function renderItems(result) {
     let divItems = '';
@@ -30,24 +50,24 @@ function renderItems(result) {
     eBestCarContainer.innerHTML = divItems;
 }
 
-const carousel = function() {
+const carousel = function () {
     $('.carousel-car').owlCarousel({
         center: true,
         loop: true,
         autoplay: true,
-        items:4,
+        items: 4,
         margin: 30,
         stagePadding: 0,
         nav: false,
         navText: ['<span class="ion-ios-arrow-back">', '<span class="ion-ios-arrow-forward">'],
-        responsive:{
-            0:{
+        responsive: {
+            0: {
                 items: 1
             },
-            600:{
+            600: {
                 items: 2
             },
-            1000:{
+            1000: {
                 items: 3
             }
         }
@@ -55,19 +75,19 @@ const carousel = function() {
     $('.carousel-testimony').owlCarousel({
         center: true,
         loop: true,
-        items:1,
+        items: 1,
         margin: 30,
         stagePadding: 0,
         nav: false,
         navText: ['<span class="ion-ios-arrow-back">', '<span class="ion-ios-arrow-forward">'],
-        responsive:{
-            0:{
+        responsive: {
+            0: {
                 items: 1
             },
-            600:{
+            600: {
                 items: 2
             },
-            1000:{
+            1000: {
                 items: 3
             }
         }
@@ -86,6 +106,56 @@ async function renderBestCars() {
 
 window.onload = async () => {
     await renderBestCars();
+    await handleLogBtn();
+    showMsg();
+
+
 }
 
+function showLogin() {
+    // $("#exampleModal").show()
+    $('#exampleModal').modal('show');
+}
+
+async function handleLogBtn() {
+    let customer = await getCurrentCustom();
+    console.log(customer);
+
+    const loginBtn = document.getElementById("log-btn");
+    if (customer.email === null) {
+        loginBtn.innerText = "Login";
+        loginBtn.href = "javascript:void(0)"; // Remove the "href" attribute
+        loginBtn.onclick = () => {
+            showLogin();
+        };
+    } else {
+        loginBtn.innerText = "Logout"; // Change the text for authenticated users
+        loginBtn.href = "/logout"; // Update the "href" attribute for logout
+        loginBtn.onclick = null; // Remove the click event handler
+    }
+}
+
+async function getCurrentCustom() {
+    let res = await fetch("user/api/customer-detail");
+    return await res.json();
+}
+
+function showMsg() {
+    // Check if a "message" query parameter exists in the URL
+    const message = getQueryParam("message");
+
+// Show the logout message if it exists
+    if (message === null) {
+        return;
+    } else if (message.includes("successfully")) {
+        toastr.success(message);
+    } else {
+        toastr.error(message);
+    }
+}
+
+function getQueryParam(key) {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    return urlSearchParams.get(key);
+}
 

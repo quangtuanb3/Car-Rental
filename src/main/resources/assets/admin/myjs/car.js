@@ -1,7 +1,6 @@
 const carForm = document.getElementById('carForm');
 const eCheckBoxSpecifications = document.getElementsByClassName('valueOptions');
 const eCheckBoxFeatures = document.getElementsByName('features');
-// const eCheckBoxSurcharges = document.getElementsByName('surcharges');
 let carSelected = {};
 const formBody = document.getElementById('formBody');
 const tBody = document.getElementById('tBody');

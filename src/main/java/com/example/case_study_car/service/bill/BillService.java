@@ -1,6 +1,7 @@
 package com.example.case_study_car.service.bill;
 
 import com.example.case_study_car.domain.*;
+import com.example.case_study_car.domain.enumaration.EBillStatus;
 import com.example.case_study_car.repository.BillRepository;
 import com.example.case_study_car.repository.CarRepository;
 import com.example.case_study_car.repository.CustomerRepository;
@@ -35,6 +36,7 @@ public class BillService {
         Bill bill = AppUtil.mapper.map(request, Bill.class);
         Car car = carRepository.findById(Long.valueOf(request.getCarId())).orElse(new Car());
         Customer customer = customerService.findByEmail(request.getCustomerEmail());
+        bill.setBillStatus(EBillStatus.DEPOSITED);
         bill.setCustomer(customer);
         bill.setCleaningFee(car.getCleaningFee());
         bill.setExcessDistanceFee(car.getExcessDistanceFee());
