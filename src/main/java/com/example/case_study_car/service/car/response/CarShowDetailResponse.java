@@ -34,11 +34,8 @@ public class CarShowDetailResponse {
 
     private List<String> featureNames;
 
-//    private List<String> urlImages;
+    private List<String> urlImages;
 
-    private ImageResponse image;
-
-    private List<String> images;
 
 //    private List<String> surchargeNames;
 }

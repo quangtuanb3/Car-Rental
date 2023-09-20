@@ -1,4 +1,5 @@
 package com.example.case_study_car.service.car;
+
 import com.example.case_study_car.domain.*;
 
 import com.example.case_study_car.exception.CarNotFoundException;
@@ -51,7 +52,7 @@ public class CarService {
         car = carRepository.save(car);
 
         var images = imageRepository.findAllById(request.getFiles().stream().map(SelectOptionRequest::getId).collect(Collectors.toList()));
-        for (var image: images) {
+        for (var image : images) {
             image.setCar(car);
         }
         imageRepository.saveAll(images);
@@ -68,6 +69,7 @@ public class CarService {
                 .map(id -> new CarFeature(finalCar, new Feature(Long.valueOf(id))))
                 .collect(Collectors.toList()));
     }
+
     public CarDetailResponse findById(Long id) {
         var car = carRepository.findById(id).orElse(new Car());
         var result = AppUtil.mapper.map(car, CarDetailResponse.class);
@@ -80,15 +82,15 @@ public class CarService {
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getId())
                 .collect(Collectors.toList()));
-
         List<String> images = car.getImages()
                 .stream()
                 .map(Image::getFileUrl)
                 .collect(Collectors.toList());
-        result.setImages(images);
+        result.setUrlImages(images);
 
         return result;
     }
+
     public CarShowDetailResponse findCarDetailById(Long id) {
         var car = carRepository.findById(id).orElse(new Car());
         var result = AppUtil.mapper.map(car, CarShowDetailResponse.class);
@@ -106,11 +108,12 @@ public class CarService {
                 .stream()
                 .map(Image::getFileUrl)
                 .collect(Collectors.toList());
-        result.setImages(images);
+        result.setUrlImages(images);
 
         System.out.println(result);
         return result;
     }
+
     public void update(CarSaveRequest request, Long id) {
         var carDb = carRepository.findById(id).orElse(new Car());
         carDb.setAgency(new Agency());
@@ -122,11 +125,12 @@ public class CarService {
             imageRepository.delete(image);
         }
 
+
         var images = imageRepository.findAllById(request.getFiles().stream().map(SelectOptionRequest::getId).collect(Collectors.toList()));
-        for (var image: images) {
+        for (var image : images) {
             image.setCar(carDb);
         }
-
+        imageRepository.saveAll(images);
 
         var carSpecifications = new ArrayList<CarSpecification>();
         for (String idSpecification : request.getIdSpecifications()) {
@@ -142,10 +146,11 @@ public class CarService {
 
         carSpecificationRepository.saveAll(carSpecifications);
         carFeatureRepository.saveAll(carFeatures);
-        imageRepository.saveAll(images);
+
 
         carRepository.save(carDb);
     }
+
     public void delete(Long id) {
         // Kiểm tra xem room có tồn tại trong cơ sở dữ liệu hay không
         Optional<Car> carOptional = carRepository.findById(id);
@@ -167,6 +172,7 @@ public class CarService {
             throw new CarNotFoundException("Xe không tồn tại với ID: " + id);
         }
     }
+
     public Page<CarListResponse> getAll(Pageable pageable, String search) {
         search = "%" + search + "%";
         return carRepository.searchEverything(search, pageable).map(e -> {
@@ -195,6 +201,7 @@ public class CarService {
             return result;
         });
     }
+
     public List<BestCarResponse> getBestCars() {
         return carRepository.getBestCars().stream().map(car -> BestCarResponse.builder()
                 .id(car.getId())
@@ -205,6 +212,7 @@ public class CarService {
 //                .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
                 .build()).collect(Collectors.toList());
     }
+
     public List<RelatedCarResponse> getRelatedCars(String agency, BigDecimal priceDay, String seat, Long id) {
         return carRepository.getRelatedCars(agency, seat, priceDay, id)
                 .stream().map(car -> RelatedCarResponse.builder()
@@ -216,6 +224,7 @@ public class CarService {
 //                        .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
                         .build()).collect(Collectors.toList());
     }
+
     public UserCarDetailResponse getCarDetailById(Long id) {
         var car = carRepository.findById(id).orElse(new Car());
         var result = AppUtil.mapper.map(car, UserCarDetailResponse.class);
@@ -258,7 +267,6 @@ public class CarService {
         System.out.println(result);
         return result;
     }
-
 
 
     public Page<BestCarResponse> searchAvailableCar(Pageable pageable, LocalDateTime pickup, LocalDateTime dropOff, String search) {

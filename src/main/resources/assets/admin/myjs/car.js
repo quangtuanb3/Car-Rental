@@ -6,7 +6,8 @@ const formBody = document.getElementById('formBody');
 const tBody = document.getElementById('tBody');
 const ePagination = document.getElementById('pagination')
 const eSearch = document.getElementById('search')
-const eHeaderPrice = document.getElementById('header-price')
+const eHeaderPrice = document.getElementById('header-price');
+const eDetail_modal_body = document.getElementById("detail-modal-body");
 
 //car-model-details
 
@@ -55,10 +56,12 @@ let agencies;
 let urlImages
 let cars = [];
 let status;
-async  function getStatus(){
-    const res = await  fetch("/api/cars/status")
+
+async function getStatus() {
+    const res = await fetch("/api/cars/status")
     return await res.json();
 }
+
 let idAvatar;
 let pageable = {
     page: 1,
@@ -77,13 +80,13 @@ carForm.onsubmit = async (e) => {
     // // Cập nhật giá trị hiển thị trong modal chi tiết xe
     // document.getElementById("priceHoursValue").textContent = formattedPriceHours;
     // document.getElementById("priceDaysValue").textContent = formattedPriceDays;
-   let specificationSelect =  getSpecificationSelects();
+    let specificationSelect = getSpecificationSelects();
     data = {
         ...data,
         agency: {
             id: data.agency
         },
-        idSpecifications: Object.entries(specificationSelect).map(e=>e[1]) ,
+        idSpecifications: Object.entries(specificationSelect).map(e => e[1]),
         idFeatures: Array.from(eCheckBoxFeatures)
             .filter(e => e.checked)
             .map(e => e.value),
@@ -154,6 +157,7 @@ async function getFeaturesSelectOption() {
     const res = await fetch('api/features');
     return await res.json();
 }
+
 // async function getSurchargesSelectOption() {
 //     const res = await fetch('api/surcharges');
 //     return await res.json();
@@ -163,6 +167,7 @@ async function getAgenciesSelectOption() {
     const res = await fetch('api/agencies');
     return await res.json();
 }
+
 async function getImagesSelectOption() {
     const res = await fetch('api/images');
     return await res.json();
@@ -283,6 +288,7 @@ async function findRoomById(id) {
     const res = await fetch('/api/cars/' + id);
     return await res.json();
 }
+
 async function findRoomDetailById(id) {
     const res = await fetch('/api/cars/detail/' + id);
     return await res.json();
@@ -294,13 +300,10 @@ async function getCars() {
 }
 
 function renderItemStr(item) {
-    const imagesHTML = item.images.map(imageUrl => `<img src="${imageUrl}" alt="" />`).join('');
+
     return `<tr>
                     <td>
                         ${item.id}
-                    </td>
-                    <td class="image-container">
-                        ${imagesHTML}
                     </td>
                     <td>
                         ${item.name}
@@ -329,8 +332,7 @@ function renderItemStr(item) {
 function renderTBody(items) {
     let str = '';
     items.forEach(e => {
-        const avatar = e.avatar;
-        str += renderItemStr(e, avatar);
+        str += renderItemStr(e);
     })
     tBody.innerHTML = str;
 }
@@ -352,6 +354,7 @@ async function renderTable() {
     renderTBody(result.content);
     addEventEditAndDelete();
 }
+
 const genderPagination = () => {
     ePagination.innerHTML = '';
     let str = '';
@@ -376,24 +379,24 @@ const genderPagination = () => {
 
     const ePages = ePagination.querySelectorAll('li'); // lấy hết li mà con của ePagination
     const ePrevious = ePages[0];
-    const eNext = ePages[ePages.length-1]
+    const eNext = ePages[ePages.length - 1]
 
     ePrevious.onclick = () => {
-        if(pageable.page === 1){
+        if (pageable.page === 1) {
             return;
         }
         pageable.page -= 1;
         renderTable();
     }
     eNext.onclick = () => {
-        if(pageable.page === pageable.totalPages){
+        if (pageable.page === pageable.totalPages) {
             return;
         }
         pageable.page += 1;
         renderTable();
     }
     for (let i = 1; i < ePages.length - 1; i++) {
-        if(i === pageable.page){
+        if (i === pageable.page) {
             continue;
         }
         ePages[i].onclick = () => {
@@ -470,6 +473,25 @@ function clearForm() {
     carSelected = {};
 }
 
+function showImgInForm(images) {
+    const imgEle = document.getElementById("images");
+    const imageOld = imgEle.querySelectorAll('img');
+    for (let i = 0; i < imageOld.length; i++) {
+        imgEle.removeChild(imageOld[i])
+    }
+    const avatarDefault = document.createElement('img');
+    avatarDefault.src = '/assets/inputicon.png';
+    avatarDefault.classList.add('avatar-preview');
+    imgEle.append(avatarDefault)
+    images.forEach((img, index) => {
+        let image = document.createElement('img');
+        image.src = img;
+        image.classList.add('avatar-preview');
+        imgEle.append(image)
+    })
+
+}
+
 function showCreate() {
     $('#staticBackdropLabel').text('Create Car');
     clearForm();
@@ -478,8 +500,9 @@ function showCreate() {
 
 async function showEdit(id) {
     $('#staticBackdropLabel').text('Edit Car');
-    clearForm();
     carSelected = await findRoomById(id);
+
+    showImgInForm(carSelected.urlImages)
 
     carSelected.specificationIds.forEach(idSpecification => {
         for (let i = 0; i < eCheckBoxSpecifications.length; i++) {
@@ -491,9 +514,7 @@ async function showEdit(id) {
         }
     })
     renderForm(formBody, getDataInput());
-    // document.getElementById("avatarCre").setAttribute("onchange", "previewImage(event);");
-    // document.getElementById("avatar-car").src = carSelected.image.url;
-    // document.getElementById("avatarCreated").value = carSelected.image.id;
+
 
     carSelected.featureIds.forEach(idFeature => {
         for (let i = 0; i < eCheckBoxFeatures.length; i++) {
@@ -543,7 +564,7 @@ async function createCar(data) {
 }
 
 async function editCar(data) {
-    const res = await fetch('/api/cars/'+ data.id, {
+    const res = await fetch('/api/cars/' + data.id, {
         method: 'PUT',
         body: JSON.stringify(data),
         headers: {
@@ -575,6 +596,7 @@ async function deleteCar(id) {
         }
     }
 }
+
 const sortButton = document.getElementById('sortButton');
 sortButton.addEventListener('click', () => {
     const sortDirection = document.getElementById('sortDirection').value;
@@ -583,8 +605,11 @@ sortButton.addEventListener('click', () => {
 });
 
 
-async function showDetail(id, avatar){
-let carDetail = await findRoomDetailById(id)
+async function showDetail(id) {
+    const carDetail = await findRoomDetailById(id);
+    document.getElementById("car-img-1").src = carDetail.urlImages[0];
+    document.getElementById("car-img-2").src = carDetail.urlImages[1];
+    document.getElementById("car-img-3").src = carDetail.urlImages[2];
     eModalCarName.innerText = carDetail.name;
     eModalCarDes.innerText = carDetail.description;
     eModalCarStatus.innerText = carDetail.status;
@@ -593,26 +618,14 @@ let carDetail = await findRoomDetailById(id)
     eModalPriceDeliverys.innerText = carDetail.priceDelivery;
     eModalSpecification.innerText = carDetail.specificationNames.join(", ");
     eModalFeature.innerText = carDetail.featureNames.join(", ");
-    // eModalSurcharge.innerText = carDetail.surchargeNames.join(", ");
     eModalAgency.innerText = carDetail.agencyName;
-  // carDetail.urlImages.forEach((imgUrl, index)=>{
-  //     eModalImage[index].src="${avatarURL}";
-  // });
-  //   eModalImage.src = carDetail.agencyName;
-
-
-    // const formattedPriceHours = formatCurrency(carDetail.priceHours);
-    // const formattedPriceDays = formatCurrency(carDetail.priceDays);
-    // const formattedPriceDeliverys = formatCurrency(carDetail.priceDeliveys);
-    // eModalPriceHours.innerText = carDetail.priceHours;
-    // eModalPriceDays.innerText = formattedPriceDays;
-    // eModalPriceDeliverys.innerText = formattedPriceDeliverys;
 }
 
 
 let idImages = [];
+
 async function previewImage(evt) {
-    if(evt.target.files.length === 0){
+    if (evt.target.files.length === 0) {
         return;
     }
     idImages = [];
@@ -670,7 +683,7 @@ async function previewImageFile(file) {
     reader.onload = function () {
         const imgEle = document.getElementById("images");
         const img = document.createElement('img');
-        img.src =reader.result;
+        img.src = reader.result;
         img.classList.add('avatar-preview');
         imgEle.append(img);
 
@@ -688,8 +701,6 @@ async function previewImageFile(file) {
 }
 
 
-
-
 function onRemoveImage(index) {
     idImages = idImages.filter((e, i) => i !== index);
     const imgEle = document.getElementById("file");
@@ -701,8 +712,9 @@ function onRemoveImage(index) {
 // Hàm cập nhật giá giờ theo định dạng tiền tệ VND
 // Hàm định dạng giá tiền tệ VND
 function formatCurrency(amount) {
-    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    return amount.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
 }
+
 function getSpecificationSelects() {
     // Lấy giá trị từ data cho các Specification (Seats, Fuel, Gear, ...)
     // const seatsValue = data.seats;
@@ -711,23 +723,23 @@ function getSpecificationSelects() {
     // const luggageValue = data.luggage;
 
     const seatsSelect = document.getElementById('seats');
-    let  seatsValue = seatsSelect.value ;
+    let seatsValue = seatsSelect.value;
 
     const fuelSelect = document.getElementById('fuel');
-    let fuelValue = fuelSelect.value ;
+    let fuelValue = fuelSelect.value;
 
     const transmissionSelect = document.getElementById('transmission');
-    let transmissionValue =  transmissionSelect.value;
+    let transmissionValue = transmissionSelect.value;
 
     const luggageSelect = document.getElementById('luggage');
-    let luggageValue =  luggageSelect.value;
+    let luggageValue = luggageSelect.value;
 
     return {
-      seatsValue,
-      fuelValue,
-      transmissionValue,
-      luggageValue
-  };
+        seatsValue,
+        fuelValue,
+        transmissionValue,
+        luggageValue
+    };
 }
 
 // 2 hàm để tự động Disable nút SaveChange khi tải ảnh lên
@@ -735,6 +747,7 @@ function disableSaveChangesButton() {
     const saveChangesButton = document.getElementById('saveChangesButton');
     saveChangesButton.disabled = true;
 }
+
 function enableSaveChangesButton() {
     const saveChangesButton = document.getElementById('saveChangesButton');
     saveChangesButton.disabled = false;
