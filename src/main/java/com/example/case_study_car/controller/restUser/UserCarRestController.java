@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -33,6 +34,7 @@ public class UserCarRestController {
     public ResponseEntity<List<BestCarResponse>> getBestCars() {
         return new ResponseEntity<>(carService.getBestCars(), HttpStatus.OK);
     }
+
 
     @GetMapping("/related-cars/{id}/{agency}/{seat}/{priceDay}")
     public ResponseEntity<List<RelatedCarResponse>> getRelatedCars(@PathVariable String agency, @PathVariable String seat, @PathVariable BigDecimal priceDay, @PathVariable Long id) {
@@ -52,8 +54,8 @@ public class UserCarRestController {
 //        return new ResponseEntity<>(roomService.findAll(pageable, start, end, search), HttpStatus.OK);
 //    }
 
-    @PostMapping
-    public void create(@RequestBody BillSaveRequest request){
+    @PostMapping("/rent")
+    public void create(@RequestBody BillSaveRequest request) {
         billService.create(request);
     }
 //
@@ -75,5 +77,13 @@ public class UserCarRestController {
 //        carService.delete(id);
 //        return ResponseEntity.ok().build();
 //    }
+
+    @GetMapping("/available-cars")
+    public ResponseEntity<Page<BestCarResponse>> getCars(@PageableDefault(size = 4) Pageable pageable,
+                                                         @RequestParam(defaultValue = "") String search,
+                                                         @RequestParam(defaultValue = "") LocalDateTime pickup,
+                                                         @RequestParam(defaultValue = "") LocalDateTime dropOff) {
+        return new ResponseEntity<>(carService.searchAvailableCar(pageable, pickup, dropOff, search), HttpStatus.OK);
+    }
 
 }

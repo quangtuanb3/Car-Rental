@@ -1,12 +1,5 @@
 const eSearchCarForm = document.getElementById("search-car-form");
-// const eConfirm_pickup_time = document.getElementById("confirm-pickup-time");
-// const eConfirm_drop_off_time = document.getElementById("confirm-drop-off-time");
-// const eConfirm_pickup_location = document.getElementById("confirm-pickup-location");
-// const eConfirm_drop_off_location = document.getElementById("confirm-drop-off-location");
-// const eConfirm_delivery_fee = document.getElementById("confirm-delivery-fee");
-// const eConfirm_total = document.getElementById("confirm-total");
-// const eConfirm_rent_price = document.getElementById("confirm-rent-price");
-// const eConfirm_deposit = document.getElementById("confirm-deposit");
+
 
 const eConfirm_body = document.getElementById("confirm-body");
 const ePickup_time = document.getElementById("pickup-time");
@@ -43,25 +36,17 @@ let data = {
     total: eTotalDisplay.value,
     deposit: (+eTotalDisplay.value * 10 / 100).toFixed(1)
 };
-const urlAPICustomer = "/user/api/customers/1";
 
 async function getCurrentCar(urlAPICar) {
     let res = await fetch(urlAPICar);
     return await res.json();
 }
 
-async function getCurrentCustom(urlAPICustomer) {
-    let res = await fetch(urlAPICustomer);
+async function getCurrentCustom() {
+    let res = await fetch("http://localhost:8080/user/api/customer-detail");
     return await res.json();
 }
 
-
-toastr.options = {
-    closeButton: true,
-    progressBar: true,
-    positionClass: 'toast-top-right',
-    timeOut: 2000
-};
 
 eRelatedCars = document.getElementById("related-car-container");
 
@@ -94,14 +79,15 @@ async function calculateTotal() {
 }
 
 window.onload = async () => {
+    await handleLogBtn();
     car = await getCurrentCar(urlAPICar);
     await renderRelatedCars();
     await calculateTotal()
-    customer = await getCurrentCustom(urlAPICustomer);
+    customer = await getCurrentCustom();
 }
 
 async function renderRelatedCars() {
-    let url = `/user/api/cars/related-cars/${car.id}/${car.agency}/${car.seats}/${car.priceDays}`;
+    let url = `/user/api/cars/related-cars/${car.id}/${car.agency}/${car.seats || '4-seats'}/${car.priceDays}`;
     console.log(url);
     const response = await fetch(url);
     const result = await response.json();
@@ -201,11 +187,16 @@ rentNowButton.addEventListener("click", function () {
     }
 
     showConfirm(data)
-    $('#exampleModalLong').modal('show');
+
 
 });
 
 function showConfirm(data) {
+    console.log(car);
+    if (customer.email === null) {
+        toastr.warning("Need to login first!");
+        return;
+    }
     let pickup_time = formatDate(data.pickup_time);
     let drop_off_time = formatDate(data.drop_off_time);
     let pickup_location = truncateTextWithEllipsis(data.pickup_location, 50);
@@ -225,10 +216,10 @@ function showConfirm(data) {
                 <div id="car-detail-container" class="row justify-content-between mt-3"
                      style="width: 95%; margin: auto">
                     <h5 class="col-12">Car detail: </h5>
-                    <p class="col-6">Name: <span ${car.name}</span></p>
+                    <p class="col-6">Name: <span> ${car.name}</span></p>
                     <p class="col-6">Agency: <span> ${car.agency}</span></p>
-                    <p class="col-6">Seats: <span >${car.seats}</span></p>
-                    <p class="col-6">Transmission: <span>${car.transmission === '' ? "Defaul" : car.transmission}</span></p>
+                    <p class="col-6">Seats: <span>${car.seats || '4-seats'}</span></p>
+                    <p class="col-6">Transmission: <span>${car.transmission === '' ? "AUTO" : car.transmission}</span></p>
                 </div>
                 <hr style="background-color: #b4bdf1; width: 90%; margin: auto">
 
@@ -258,6 +249,7 @@ function showConfirm(data) {
                 </div>
     `
     eConfirm_body.innerHTML = bodyHTML;
+    $('#exampleModalLong').modal('show');
 }
 
 function formatCurrency(currency) {
@@ -332,10 +324,10 @@ eDrop_off_time.onchange = async () => {
 
 async function createBill(data) {
     data = {
-        customerName: "username",
-        customerPhoneNumber: "1234565",
-        customerEmail: "email@gmail.com",
-        customerIdNumber: "1234677",
+        customerName: customer.name,
+        customerPhoneNumber: customer.numberPhone,
+        customerEmail: customer.email,
+        customerIdNumber: customer.idNumber,
         carId: car.id,
         licensePlate: car.licensePlate,
         pickupTime: data.pickup_time,
@@ -349,7 +341,7 @@ async function createBill(data) {
         tradeCode: document.getElementById("trade-code").value,
     }
     console.log(data);
-    const res = await fetch('/user/api/cars', {
+    const res = await fetch('/user/api/cars/rent', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -375,4 +367,45 @@ function checkTradeCode() {
     if (document.getElementById("trade-code").value) {
         return false;
     }
+}
+
+function showLogin() {
+    // $("#exampleModal").show()
+    $('#exampleModal').modal('show');
+}
+
+async function handleLogBtn() {
+    let customer = await getCurrentCustom();
+    console.log(customer);
+
+    const loginBtn = document.getElementById("log-btn");
+    if (customer.email === null) {
+        loginBtn.innerText = "Login";
+        loginBtn.href = "javascript:void(0)"; // Remove the "href" attribute
+        loginBtn.onclick = () => {
+            showLogin();
+        };
+    } else {
+        loginBtn.innerText = "Logout"; // Change the text for authenticated users
+        loginBtn.href = "/logout"; // Update the "href" attribute for logout
+        loginBtn.onclick = null; // Remove the click event handler
+    }
+}
+
+
+function showMsg() {
+    // Check if a "message" query parameter exists in the URL
+    const message = getQueryParam("message");
+
+// Show the logout message if it exists
+    if (message.includes("successfully")) {
+        toastr.success(message);
+    } else {
+        toastr.error(message);
+    }
+}
+
+function getQueryParam(key) {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    return urlSearchParams.get(key);
 }

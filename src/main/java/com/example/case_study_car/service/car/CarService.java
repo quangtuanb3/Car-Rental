@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -288,5 +290,18 @@ public class CarService {
                 .stream().map(Image::getUrl)
                 .collect(Collectors.toList()));
         return result;
+    }
+
+    public Page<BestCarResponse> searchAvailableCar(Pageable pageable, LocalDateTime pickup, LocalDateTime dropOff, String search) {
+        search = "%" + search + "%";
+        return carRepository.searchAvailableCar(search, pickup, dropOff, pageable).map(car -> {
+            var result = AppUtil.mapper.map(car, BestCarResponse.class);
+            result.setAgency(car.getAgency().getName());
+            result.setUrlImages(car
+                    .getImages()
+                    .stream().map(Image::getUrl)
+                    .collect(Collectors.toList()));
+            return result;
+        });
     }
 }
