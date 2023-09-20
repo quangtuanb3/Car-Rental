@@ -36,9 +36,6 @@ public class CarDetailResponse {
 
     private List<String> urlImages;
 
-    private ImageResponse image;
-
-    private List<String> images;
 
 
 //    private List<Long> surchargeIds;
