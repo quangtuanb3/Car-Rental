@@ -8,9 +8,6 @@ const ePagination = document.getElementById('pagination')
 const eSearch = document.getElementById('search')
 const eHeaderPrice = document.getElementById('header-price')
 
-
-
-
 //car-model-details
 
 let eModalCarName = document.getElementById("modal-car-name");
@@ -48,6 +45,9 @@ priceHoursElement.textContent = formattedPriceHours;
 priceDaysElement.textContent = formattedPriceDays;
 priceDeliverysElement.textContent = formattedPriceDeliverys;
 
+const BASE_URL_CLOUD_IMAGE = "https://res.cloudinary.com/dw3x98oui/image/upload";
+const BASE_SCALE_IMAGE = "c_limit,w_50,h_50,q_100";
+
 let specifications;
 let features;
 // let surcharges;
@@ -59,7 +59,7 @@ async  function getStatus(){
     const res = await  fetch("/api/cars/status")
     return await res.json();
 }
-
+let idAvatar;
 let pageable = {
     page: 1,
     sort: 'id,desc',
@@ -68,7 +68,6 @@ let pageable = {
 carForm.onsubmit = async (e) => {
     e.preventDefault();
     let data = getDataFromForm(carForm);
-
 
     //
     // // Định dạng giá trị thành tiền tệ VND
@@ -91,10 +90,27 @@ carForm.onsubmit = async (e) => {
         // idSurcharges: Array.from(eCheckBoxSurcharges)
         //     .filter(e => e.checked)
         //     .map(e => e.value),
-        urlImages: data.urlImages.split(","),
-        id: carSelected.id
-
+        // urlImages: data.urlImages.split(","),
+        id: carSelected.id,
+        files: idImages.map(e => {
+            return {
+                id: e
+            }
+        })
     }
+
+    // let formData = new FormData();
+    // formData.append("id", data.id);
+    // formData.append("name", data.name);
+    // formData.append("licensePlate", data.licensePlate);
+    // formData.append("description", data.description);
+    // formData.append("priceHours", data.priceHours);
+    // formData.append("priceDays", data.priceDays);
+    // formData.append("priceDelivery", data.priceDelivery);
+    // formData.append("status.id", data.status.id);
+    // formData.append("agency.id", data.agency.id);
+    // formData.append("idSpecifications", data.idSpecifications);
+    // formData.append("idFeatures", data.idFeatures);
 
     let message = "Created"
     if (carSelected.id) {
@@ -105,7 +121,7 @@ carForm.onsubmit = async (e) => {
     }
 
     alert(message);
-    renderTable();
+    await renderTable();
     $('#staticBackdrop').modal('hide');
 
 }
@@ -120,6 +136,18 @@ async function getSpecificationsSelectOption() {
     const res = await fetch('api/specifications');
     return await res.json();
 }
+
+// const seat = [];
+// const fuel = [];
+// async function getSpecificationsSelectOption() {
+//     const res = await fetch('api/specifications');
+//     const data =  await res.json();
+//     for (let item of data){
+//         if(item.type === 'SEAT') seat.push(item)
+//         if(item.type === 'FUEL') seat.push(item)
+//     }
+//     return data;
+// }
 
 
 async function getFeaturesSelectOption() {
@@ -235,16 +263,21 @@ function getDataInput() {
             required: true
         },
         {
-            label: 'Image',
-            name: 'urlImages',
-            value: carSelected.urlImages,
-            required: true,
+            // label: 'Image',
+            // name: 'urlImages',
+            // value: carSelected.urlImages,
+            // required: true,
             // message: "Name must have minimum is 6 characters and maximum is 20 characters",
+            // label: 'ID Avatar',
+            // name: 'avatar',
+            // id: 'avatarCreated',
+            // type: 'text', // Đổi type thành 'text'
+            // readonly: true, // Sử dụng readonly thay vì disable
+            // required: false
         },
 
     ];
 }
-
 
 async function findRoomById(id) {
     const res = await fetch('/api/cars/' + id);
@@ -254,48 +287,20 @@ async function findRoomDetailById(id) {
     const res = await fetch('/api/cars/detail/' + id);
     return await res.json();
 }
-async function showEdit(id) {
-    $('#staticBackdropLabel').text('Edit Car');
-    clearForm();
-    carSelected = await findRoomById(id);
-    carSelected.specificationIds.forEach(idSpecification => {
-        for (let i = 0; i < eCheckBoxSpecifications.length; i++) {
-            console.log(+eCheckBoxSpecifications[i].value)
-            // console.log(+eCheckBoxSpecifications[i].value)
-            if (idSpecification === +eCheckBoxSpecifications[i].value) {
-                eCheckBoxSpecifications[i].selected = true;
-            }
-        }
-    })
-    carSelected.featureIds.forEach(idFeature => {
-        for (let i = 0; i < eCheckBoxFeatures.length; i++) {
-            if (idFeature === +eCheckBoxFeatures[i].value) {
-                eCheckBoxFeatures[i].checked = true;
-            }
-        }
-    })
-    // carSelected.surchargeIds.forEach(idSurcharge => {
-    //     for (let i = 0; i < eCheckBoxSurcharges.length; i++) {
-    //         if (idSurcharge === +eCheckBoxSurcharges[i].value) {
-    //             eCheckBoxSurcharges[i].checked = true;
-    //         }
-    //     }
-    // })
-
-
-    renderForm(formBody, getDataInput());
-}
-
 
 async function getCars() {
     const res = await fetch('/api/cars');
     return await res.json();
 }
 
-function renderItemStr(item, index) {
+function renderItemStr(item) {
+    const imagesHTML = item.images.map(imageUrl => `<img src="${imageUrl}" alt="" />`).join('');
     return `<tr>
                     <td>
-                        ${index + 1}
+                        ${item.id}
+                    </td>
+                    <td class="image-container">
+                        ${imagesHTML}
                     </td>
                     <td>
                         ${item.name}
@@ -323,8 +328,9 @@ function renderItemStr(item, index) {
 
 function renderTBody(items) {
     let str = '';
-    items.forEach((e, i) => {
-        str += renderItemStr(e, i);
+    items.forEach(e => {
+        const avatar = e.avatar;
+        str += renderItemStr(e, avatar);
     })
     tBody.innerHTML = str;
 }
@@ -346,7 +352,6 @@ async function renderTable() {
     renderTBody(result.content);
     addEventEditAndDelete();
 }
-
 const genderPagination = () => {
     ePagination.innerHTML = '';
     let str = '';
@@ -403,7 +408,6 @@ const onSearch = (e) => {
     pageable.page = 1;
     renderTable();
 }
-
 // const onLoadSort = () => {
 //     eHeaderPrice.onclick = () => {
 //         let sort = 'price,desc'
@@ -414,7 +418,6 @@ const onSearch = (e) => {
 //         renderTable();
 //     }
 // }
-
 const onLoadSort = () => {
     // eHeaderPrice.onclick = () => {
     //     // Xóa các biểu tượng sắp xếp trước đó trên tất cả các cột
@@ -432,7 +435,6 @@ const onLoadSort = () => {
     //     eHeaderPrice.classList.add(sort === 'price,asc' ? 'sorted-asc' : 'sorted-desc');
     // };
 }
-
 
 const searchInput = document.querySelector('#search');
 
@@ -453,6 +455,17 @@ const addEventEditAndDelete = () => {
 }
 
 function clearForm() {
+    idImages = [];
+
+    const imgEle = document.getElementById("images");
+    const imageOld = imgEle.querySelectorAll('img');
+    for (let i = 0; i < imageOld.length; i++) {
+        imgEle.removeChild(imageOld[i])
+    }
+    const avatarDefault = document.createElement('img');
+    avatarDefault.src = '/assets/inputicon.png';
+    avatarDefault.classList.add('avatar-preview');
+    imgEle.append(avatarDefault)
     carForm.reset();
     carSelected = {};
 }
@@ -463,25 +476,82 @@ function showCreate() {
     renderForm(formBody, getDataInput())
 }
 
-async function editCar(data) {
-    const res = await fetch('/api/cars/' + data.id, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+async function showEdit(id) {
+    $('#staticBackdropLabel').text('Edit Car');
+    clearForm();
+    carSelected = await findRoomById(id);
+
+    carSelected.specificationIds.forEach(idSpecification => {
+        for (let i = 0; i < eCheckBoxSpecifications.length; i++) {
+            console.log(+eCheckBoxSpecifications[i].value)
+            // console.log(+eCheckBoxSpecifications[i].value)
+            if (idSpecification === +eCheckBoxSpecifications[i].value) {
+                eCheckBoxSpecifications[i].selected = true;
+            }
+        }
     })
+    renderForm(formBody, getDataInput());
+    // document.getElementById("avatarCre").setAttribute("onchange", "previewImage(event);");
+    // document.getElementById("avatar-car").src = carSelected.image.url;
+    // document.getElementById("avatarCreated").value = carSelected.image.id;
+
+    carSelected.featureIds.forEach(idFeature => {
+        for (let i = 0; i < eCheckBoxFeatures.length; i++) {
+            if (idFeature === +eCheckBoxFeatures[i].value) {
+                eCheckBoxFeatures[i].checked = true;
+            }
+        }
+    })
+    // carSelected.surchargeIds.forEach(idSurcharge => {
+    //     for (let i = 0; i < eCheckBoxSurcharges.length; i++) {
+    //         if (idSurcharge === +eCheckBoxSurcharges[i].value) {
+    //             eCheckBoxSurcharges[i].checked = true;
+    //         }
+    //     }
+    // })
+    renderForm(formBody, getDataInput());
 }
+
+// async function editCar(data) {
+//     const res = await fetch('/api/cars/' + data.id, {
+//         method: 'PUT',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(data)
+//     })
+// }
+//
+// async function createCar(data) {
+//     const res = await fetch('/api/cars', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(data)
+//     })
+// }
 
 async function createCar(data) {
     const res = await fetch('/api/cars', {
         method: 'POST',
+        body: JSON.stringify(data),
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
     })
 }
+
+async function editCar(data) {
+    const res = await fetch('/api/cars/'+ data.id, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}
+
 
 async function deleteCar(id) {
     const confirmed = confirm("Bạn có chắc chắn muốn xóa xe này?");
@@ -513,7 +583,7 @@ sortButton.addEventListener('click', () => {
 });
 
 
-async function showDetail(id){
+async function showDetail(id, avatar){
 let carDetail = await findRoomDetailById(id)
     eModalCarName.innerText = carDetail.name;
     eModalCarDes.innerText = carDetail.description;
@@ -525,9 +595,11 @@ let carDetail = await findRoomDetailById(id)
     eModalFeature.innerText = carDetail.featureNames.join(", ");
     // eModalSurcharge.innerText = carDetail.surchargeNames.join(", ");
     eModalAgency.innerText = carDetail.agencyName;
-  carDetail.urlImages.forEach((imgUrl, index)=>{
-      eModalImage[index].src=imgUrl;
-  });
+  // carDetail.urlImages.forEach((imgUrl, index)=>{
+  //     eModalImage[index].src="${avatarURL}";
+  // });
+  //   eModalImage.src = carDetail.agencyName;
+
 
     // const formattedPriceHours = formatCurrency(carDetail.priceHours);
     // const formattedPriceDays = formatCurrency(carDetail.priceDays);
@@ -537,13 +609,100 @@ let carDetail = await findRoomDetailById(id)
     // eModalPriceDeliverys.innerText = formattedPriceDeliverys;
 }
 
-// Hàm cập nhật giá giờ theo định dạng tiền tệ VND
 
+let idImages = [];
+async function previewImage(evt) {
+    if(evt.target.files.length === 0){
+        return;
+    }
+    idImages = [];
+
+    const imgEle = document.getElementById("images");
+    const imageOld = imgEle.querySelectorAll('img');
+    for (let i = 0; i < imageOld.length; i++) {
+        imgEle.removeChild(imageOld[i])
+    }
+
+    // When the image is loaded, update the img element's src
+    const files = evt.target.files
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        await previewImageFile(file, i);
+
+        if (file) {
+            disableSaveChangesButton();
+            // Create a new FormData object and append the selected file
+            const formData = new FormData();
+            formData.append("avatar", file);
+            formData.append("fileType", "image");
+            try {
+                // Make a POST request to upload the image
+                const response = await fetch("/api/image", {
+                    method: "POST",
+                    body: formData,
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result) {
+                        const id = result.id;
+                        idImages.push(id);
+
+                    } else {
+                        console.error('Image ID not found in the response.');
+                    }
+                } else {
+                    // Handle non-OK response (e.g., show an error message)
+                    console.error('Failed to upload image:', response.statusText);
+                }
+            } catch (error) {
+                // Handle network or other errors
+                console.error('An error occurred:', error);
+            }
+            enableSaveChangesButton();
+        }
+    }
+    console.log(idImages)
+}
+
+async function previewImageFile(file) {
+    const reader = new FileReader();
+    reader.onload = function () {
+        const imgEle = document.getElementById("images");
+        const img = document.createElement('img');
+        img.src =reader.result;
+        img.classList.add('avatar-preview');
+        imgEle.append(img);
+
+        // imgEle.ap.innerHTML = `
+        //          <img class="avatar-preview" src="${urlImage}">
+        //             <span class="icon-preview-delete">
+        //               <i class="fa-solid fa-delete-left" onclick="onRemoveImage(index)"></i>
+        //            </span>
+        //     `;
+        // imgEle.append(spanAPItemContainer)
+
+    };
+    reader.readAsDataURL(file);
+
+}
+
+
+
+
+function onRemoveImage(index) {
+    idImages = idImages.filter((e, i) => i !== index);
+    const imgEle = document.getElementById("file");
+    const imageOld = imgEle.querySelectorAll('img');
+    imgEle.removeChild(imageOld[index]);
+}
+
+
+// Hàm cập nhật giá giờ theo định dạng tiền tệ VND
 // Hàm định dạng giá tiền tệ VND
 function formatCurrency(amount) {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 }
-
 function getSpecificationSelects() {
     // Lấy giá trị từ data cho các Specification (Seats, Fuel, Gear, ...)
     // const seatsValue = data.seats;
@@ -571,3 +730,12 @@ function getSpecificationSelects() {
   };
 }
 
+// 2 hàm để tự động Disable nút SaveChange khi tải ảnh lên
+function disableSaveChangesButton() {
+    const saveChangesButton = document.getElementById('saveChangesButton');
+    saveChangesButton.disabled = true;
+}
+function enableSaveChangesButton() {
+    const saveChangesButton = document.getElementById('saveChangesButton');
+    saveChangesButton.disabled = false;
+}

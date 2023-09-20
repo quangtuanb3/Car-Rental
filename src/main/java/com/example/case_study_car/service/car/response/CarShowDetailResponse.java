@@ -1,5 +1,6 @@
 package com.example.case_study_car.service.car.response;
 
+import com.example.case_study_car.service.image.ImageResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,7 +34,11 @@ public class CarShowDetailResponse {
 
     private List<String> featureNames;
 
-    private List<String> urlImages;
+//    private List<String> urlImages;
+
+    private ImageResponse image;
+
+    private List<String> images;
 
 //    private List<String> surchargeNames;
 }

@@ -1,14 +1,14 @@
-
-
 function createInput(props) {
     console.log(props)
     return `<div class="${props.classContainer || ''}">
                 <label class="${props.classLabel || ''} form-label">${props.label}</label>
+                <input id="${props.id || ''}" class="input-custom form-control ${props.classInput || ''}" 
                 <input class="input-custom form-control ${props.classInput || ''}" 
                 type="${props.type || 'text'}" name="${props.name}"
                 ${props.pattern ? `pattern="${props.pattern}"` : ""} 
                 value="${props.value || ''}"
-                ${props.required ? 'required' : ''} 
+                ${props.required ? 'required' : ''}
+                ${props.readonly ? 'readonly' : ''}  
                 />
                 <span class="error form-text ${props.classError}">${props.message}</span>
             </div>`
@@ -45,11 +45,6 @@ function createFieldForm(props) {
     }
     return createInput(props);
 }
-
-
-
-
-
 
 const onFocus = (formBody, index) => {
     const inputsForm = formBody.querySelectorAll('.input-custom')
@@ -90,8 +85,6 @@ function validateInput(inputProp, inputElement, index) {
     const error = document.getElementsByClassName('error')[index];
     const value = inputElement.value.trim();
 
-
-
     if (inputElement.required && value === '') {
         error.innerHTML = messageRequired || 'This field is required!';
         return;
@@ -114,7 +107,7 @@ const inputs = [
         label: "Username",
         name: "username",
         pattern: "^[A-Za-z ]{6,20}",
-        message: "Username must have minimun is 6 charaters and maximun is 20 charaters",
+        message: "Username must have minimun is 6 charaters and maximum is 20 charaters",
         require: false,
         value: ""
     },
@@ -154,4 +147,14 @@ function onChangeSelect2(selector, value){
     const element = $(selector);
     element.val(value);
     element.change();
+}
+async function myFetch(props) {
+    const {url, data, method} = props;
+    return await fetch(url, {
+        method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
 }
