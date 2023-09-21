@@ -125,7 +125,6 @@ public class CarService {
             imageRepository.delete(image);
         }
 
-
         var images = imageRepository.findAllById(request.getFiles().stream().map(SelectOptionRequest::getId).collect(Collectors.toList()));
         for (var image : images) {
             image.setCar(carDb);
@@ -257,17 +256,13 @@ public class CarService {
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getName())
                 .collect(Collectors.toList()));
-
         result.setUrlImages(
                 car.getImages().stream()
                         .map(Image::getFileUrl)  // Lấy ra URL của mỗi ảnh
-                        .collect(Collectors.toList())  // Tạo thành một danh sách
-        );
+                        .collect(Collectors.toList()));  // Tạo thành một danh sách
 
-        System.out.println(result);
         return result;
     }
-
 
     public Page<BestCarResponse> searchAvailableCar(Pageable pageable, LocalDateTime pickup, LocalDateTime dropOff, String search) {
         search = "%" + search + "%";
@@ -283,6 +278,30 @@ public class CarService {
         });
     }
 
+
+    public List<UserPricingResponse> getCarPricing() {
+        return carRepository.findAll().stream().map(car -> {
+
+            var result = new UserPricingResponse();
+
+            result.setId(car.getId());
+            result.setName(car.getName());
+            result.setLicensePlate(car.getLicensePlate());
+            result.setPriceHours(car.getPriceHours());
+            result.setPriceDays(car.getPriceDays());
+            result.setPriceDelivery(car.getPriceDelivery());
+            result.setDescription(car.getDescription());
+            result.setAgency(car.getAgency().getName());
+
+            List<String> imageUrls = car.getImages().stream()
+                    .map(Image::getFileUrl)
+                    .collect(Collectors.toList());
+            result.setUrlImages(imageUrls);
+
+            System.out.println(result);
+            return result;
+        }).collect(Collectors.toList());
+    }
     public Boolean iskAvailable(Long id, LocalDateTime pickup, LocalDateTime dropOff) {
         return carRepository.isAvailable(id, pickup, dropOff);
     }
