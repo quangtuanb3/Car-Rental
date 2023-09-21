@@ -1,6 +1,4 @@
 package com.example.case_study_car.controller;
-
-
 import com.example.case_study_car.domain.Car;
 import com.example.case_study_car.domain.UserLogin;
 import com.example.case_study_car.service.car.response.UserCarDetailResponse;
@@ -25,24 +23,11 @@ import java.time.LocalDateTime;
 public class UserController {
     private final CarService carService;
 
-    @GetMapping("/cars")
-    public ModelAndView car() {
-        ModelAndView view = new ModelAndView("user/car");
-        return view;
-    }
 
-//    @GetMapping
-//    public ModelAndView index() {
-//        ModelAndView view = new ModelAndView("user/index");
-//
-//        return view;
-//    }
 
-    @GetMapping()
-    public ModelAndView Home(@RequestParam(required = false) String message) {
+    @GetMapping
+    public ModelAndView index() {
         ModelAndView view = new ModelAndView("user/index");
-        view.addObject("message", message);
-
         return view;
     }
 
@@ -54,9 +39,16 @@ public class UserController {
         return view;
     }
 
+    @GetMapping("/cars")
+    public ModelAndView car() {
+        ModelAndView view = new ModelAndView("user/car");
+        return view;
+    }
+
     @GetMapping("pricing")
     public ModelAndView pricing() {
         ModelAndView view = new ModelAndView("user/pricing");
+        view.addObject("cars", carService.getCarPricing());
         return view;
     }
 
@@ -70,11 +62,10 @@ public class UserController {
         return new ModelAndView("user/car");
 
     }
-
-    @PostMapping("/login")
-    public String login(@ModelAttribute UserLogin userLogin) {
-        System.out.println(userLogin.toString());
-        return "user/index";
+    @GetMapping("/user/login")
+    public ModelAndView login() {
+        ModelAndView view = new ModelAndView("user/login");
+        return view;
     }
 
 }

@@ -1,6 +1,4 @@
 package com.example.case_study_car.security.controller;
-
-
 import com.example.case_study_car.security.auth.AuthService;
 import com.example.case_study_car.security.auth.request.RegisterRequest;
 import jakarta.validation.Valid;
@@ -38,11 +36,12 @@ public class AuthController {
                                BindingResult result,
                                Model model) {
         authService.checkEmail(request, result);
+        model.addAttribute("user",request);
         if (result.hasErrors()) {
             return "/user/register";
         }
         authService.register(request);
-        return "redirect:/register?success";
+        return "redirect:/user/login";
     }
 
 }

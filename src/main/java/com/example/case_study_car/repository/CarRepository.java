@@ -65,7 +65,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
                                  @Param("dropOffTime") LocalDateTime dropOffTime,
                                  Pageable pageable);
 
-
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END " +
             "FROM Car c " +
             "WHERE c.id = :id " +

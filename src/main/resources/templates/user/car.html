@@ -32,80 +32,9 @@
         <div class="col-8">
             <div class="container mb-2">
                 <div class="row" id="cars-container">
-                    <div class="col-md-6">
-                        <div class="car-wrap rounded ftco-animate">
-                            <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(assets/user/images/car-1.jpg);">
-                            </div>
-                            <div class="text">
-                                <h2 class="mb-0"><a href="car-detail.html">Mercedes Grand Sedan</a></h2>
-                                <div class="d-flex mb-3">
-                                    <span class="cat">Chevrolet</span>
-                                    <p class="price ml-auto">$500 <span>/day</span></p>
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                    <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
-                                        now</a> <a href="car-detail.html"
-                                                   class="btn btn-secondary py-2 ml-1">Details</a>
-                                    </p>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="car-wrap rounded ftco-animate">
-                            <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(/assets/user/images/car-2.jpg);">
-                            </div>
-                            <div class="text">
-                                <h2 class="mb-0"><a href="car-detail.html">Range Rover</a></h2>
-                                <div class="d-flex mb-3">
-                                    <span class="cat">Subaru</span>
-                                    <p class="price ml-auto">$500 <span>/day</span></p>
-                                </div>
-                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
-                                    now</a> <a href="car-detail.html" class="btn btn-secondary py-2 ml-1">Details</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="car-wrap rounded ftco-animate">
-                            <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(/assets/user/images/car-4.jpg);">
-                            </div>
-                            <div class="text">
-                                <h2 class="mb-0"><a href="car-detail.html">Mercedes Grand Sedan</a></h2>
-                                <div class="d-flex mb-3">
-                                    <span class="cat">Cheverolet</span>
-                                    <p class="price ml-auto">$500 <span>/day</span></p>
-                                </div>
-                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
-                                    now</a> <a href="car-detail.html" class="btn btn-secondary py-2 ml-1">Details</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="car-wrap rounded ftco-animate">
-                            <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(/assets/user/images/car-5.jpg);">
-                            </div>
-                            <div class="text">
-                                <h2 class="mb-0"><a href="car-detail.html">Range Rover</a></h2>
-                                <div class="d-flex mb-3">
-                                    <span class="cat">Subaru</span>
-                                    <p class="price ml-auto">$500 <span>/day</span></p>
-                                </div>
-                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
-                                    now</a> <a href="car-detail.html" class="btn btn-secondary py-2 ml-1">Details</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
+
                 <div class="d-flex justify-content-end mt-3">
                     <nav aria-label="...">
                         <ul class="pagination" id="pagination">
@@ -116,9 +45,9 @@
             </div>
         </div>
     </div>
-
 </section>
-<th:block th:replace="~{layoutUser.html:: loginForm}"></th:block>
+
+<th:block th:replace="~{layoutUser:: loginForm}"></th:block>
 <footer class="ftco-footer ftco-bg-dark ftco-section">
     <div class="container">
         <div class="row mb-5">
@@ -199,7 +128,9 @@
 </div>
 
 
-<th:block th:replace="layoutUser::myScript"></th:block>
+<th:block th:replace="~{layoutUser::myScript}"></th:block>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     document.getElementById("menu-car").classList.add("active");
     document.getElementById("menu-home").classList.remove("active");

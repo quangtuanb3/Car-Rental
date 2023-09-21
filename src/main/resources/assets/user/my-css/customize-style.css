@@ -224,3 +224,6 @@ hr {
 .page-link.btn-primary {
     box-shadow: none !important;
 }
+.car-image{
+    padding: 5px 0!important;
+}

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{layoutAdmin.html :: header}"></th:block>
+
+<div class="container">
+
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-md-8"></div> <!-- Cột trống để căn chỉnh sang trái -->
+            <div class="col-md-4 ml-auto">
+                <div class="row">
+                    <div class="col-md-6">
+                        <select id="sortDirection" class="form-select">
+                            <option value="asc">Price Ascending</option>
+                            <option value="desc">Price Descending</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-primary" id="sortButton">Sort</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--     Modal-->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="billForm">
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--    Modal-BillDetail-->
+    <div class="modal fade" id="detail-bill-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detail-modal-title">Bill Detail</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <h3 id="modal-bill-customerName" class="mt-3 text-center">Customer Name</h3>
+                    <p id="modal-bill-customerEmail" class="mt-3 text-center">Description Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit.</p>
+                    <table class="table table-bordered mt-3">
+                        <tbody>
+                        <tr>
+                            <th scope="row"><strong>Status</strong></th>
+                            <td id="modal-bill-billStatus"><strong><span id="status-enum-value"></span></strong></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><strong>Pickup Time</strong></th>
+                            <td id="modal-bill-pickup-time"><strong>$XX.XX</strong></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><strong>Drop Off Time</strong></th>
+                            <td id="modal-bill-drop-off-time"><strong>$XXX.XX</strong></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><strong>Pickup Location</strong></th>
+                            <td id="modal-bill-pickup-location"><strong>$XXX.XX</strong></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><strong>Drop Off Location</strong></th>
+                            <td id="modal-bill-drop-off-location"><strong>$XXX.XX</strong></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><strong>Deposit</strong></th>
+                            <td id="modal-bill-deposit"><strong>$XX.XX</strong></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><strong>Rent Price</strong></th>
+                            <td id="modal-bill-rentPrice"><strong>$XX.XX</strong></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><strong>License Plate</strong></th>
+                            <td id="modal-bill-licensePlate"><strong>Lorem ipsum dolor sit amet, consectetur adipiscing
+                                elit.</strong></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><strong>Total Price</strong></th>
+                            <td id="modal-bill-totalPrice"><strong>$XX.XX</strong></td>
+                        </tr>
+                        <!--                        <tr>-->
+                        <!--                            <th scope="row"><strong>Key Features</strong></th>-->
+                        <!--                            <td id="modal-car-feature"><strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</strong></td>-->
+                        <!--                        </tr>-->
+                        <!--                        <tr>-->
+                        <!--                            <th scope="row"><strong>Agency</strong></th>-->
+                        <!--                            <td id="modal-car-agency"><strong>XYZ Rental</strong></td>-->
+                        <!--                        </tr>-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <h5 class="card-header">Table Bill</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Customer Name</th>
+                    <th>Customer PhoneNumber</th>
+                    <th>Customer Email</th>
+                    <th>Customer IdNumber</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0" id="tBody">
+
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <nav aria-label="...">
+                    <ul class="pagination" id="pagination">
+
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{layoutAdmin.html :: footer}"></th:block>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/assets/admin/myjs/bill.js"></script>
+
+
+</html>

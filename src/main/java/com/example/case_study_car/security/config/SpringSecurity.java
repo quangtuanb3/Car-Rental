@@ -63,7 +63,6 @@ public class SpringSecurity {
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
                                 .successHandler(customAuthenticationSuccessHandler())
-
                                 .permitAll()
 
                 )

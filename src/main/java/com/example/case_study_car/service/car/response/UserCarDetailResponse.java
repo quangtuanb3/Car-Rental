@@ -1,5 +1,4 @@
 package com.example.case_study_car.service.car.response;
-
 import com.example.case_study_car.domain.Specification;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,17 +1,13 @@
 package com.example.case_study_car.service.car.response;
-
-import com.example.case_study_car.service.image.ImageResponse;
+import com.example.case_study_car.domain.Specification;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.util.List;
 
-
 @Data
 @NoArgsConstructor
-public class CarShowDetailResponse {
-
+public class UserPricingResponse {
     private Long id;
 
     private String name;
@@ -26,19 +22,19 @@ public class CarShowDetailResponse {
 
     private BigDecimal priceDelivery;
 
-    private BigDecimal excessDistanceFee;
+    private String seats;
 
-    private BigDecimal overtimeFee;
-
-    private BigDecimal cleaningFee;
+    private String transmission;
 
     private String description;
 
-    private String agencyName;
+    private String agency;
 
-    private List<String> specificationNames;
+    private List<Specification> specifications;
 
-    private List<String> featureNames;
+    private List<String> features;
 
     private List<String> urlImages;
+
+
 }

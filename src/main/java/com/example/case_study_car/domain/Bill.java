@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,8 +28,6 @@ public class Bill {
     private String customerEmail;
 
     private String customerIdNumber;
-
-    private EBillStatus billStatus;
 
     private LocalDateTime pickupTime;
 
@@ -56,7 +55,11 @@ public class Bill {
 
     private String tradeCode;
 
-    private  String licensePlate;
+    private String licensePlate;
+
+    @Enumerated(value = EnumType.STRING)
+    private EBillStatus billStatus;
+
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -64,4 +67,6 @@ public class Bill {
 
     @ManyToOne()
     private Car car;
+
+
 }
