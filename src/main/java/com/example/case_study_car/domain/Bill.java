@@ -60,6 +60,7 @@ public class Bill {
     @Enumerated(value = EnumType.STRING)
     private EBillStatus billStatus;
 
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;

@@ -69,3 +69,15 @@ th.sorted-desc::after {
 .notify span{font-size: 15px; color: blue;}
 
 
+.avatar-preview{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-right: 1em;
+}
+
+.image-container img {
+    max-width: 100px; /* Đặt kích thước tối đa cho chiều ngang */
+    max-height: 100px; /* Đặt kích thước tối đa cho chiều cao */
+}
+

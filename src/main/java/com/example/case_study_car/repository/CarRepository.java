@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,11 +49,28 @@ public interface CarRepository extends JpaRepository<Car, Long> {
                              @Param("priceDays") BigDecimal priceDays,
                              @Param("id") Long id);
 
+    @Query("SELECT c FROM Car c " +
+            "WHERE " +
+            "(c.name LIKE :search OR " +
+            "c.description LIKE :search OR " +
+            "c.agency.name LIKE :search " +
+            " OR EXISTS (SELECT 1 FROM CarSpecification cs WHERE cs.car = c AND cs.specification.name LIKE :search)" +
+            " OR EXISTS (SELECT 1 FROM CarFeature cf WHERE cf.car = c AND cf.feature.name LIKE :search))" +
+            " AND NOT EXISTS (SELECT 1 FROM Bill b WHERE b.car = c " +
+            "AND (:pickupTime BETWEEN b.pickupTime AND b.expectedDropOffTime " +
+            "OR :dropOffTime BETWEEN b.pickupTime AND b.expectedDropOffTime))"
+    )
+    Page<Car> searchAvailableCar(@Param("search") String search,
+                                 @Param("pickupTime") LocalDateTime pickupTime,
+                                 @Param("dropOffTime") LocalDateTime dropOffTime,
+                                 Pageable pageable);
 
-
-    @Query("SELECT c FROM Car c")
-    Page<Car> findAllCarsWithPagination(Pageable pageable);
-
-
-
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END " +
+            "FROM Car c " +
+            "WHERE c.id = :id " +
+            "AND NOT EXISTS (SELECT 1 FROM Bill b WHERE b.car = c " +
+            "AND (:pickup BETWEEN b.pickupTime AND b.expectedDropOffTime " +
+            "OR :dropOff BETWEEN b.pickupTime AND b.expectedDropOffTime))"
+    )
+    Boolean isAvailable(Long id, LocalDateTime pickup, LocalDateTime dropOff);
 }

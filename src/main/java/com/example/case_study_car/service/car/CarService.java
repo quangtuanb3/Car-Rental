@@ -1,7 +1,6 @@
 package com.example.case_study_car.service.car;
 
 import com.example.case_study_car.domain.*;
-
 import com.example.case_study_car.exception.CarNotFoundException;
 import com.example.case_study_car.repository.*;
 import com.example.case_study_car.service.car.request.CarSaveRequest;
@@ -10,13 +9,16 @@ import com.example.case_study_car.service.car.response.CarDetailResponse;
 import com.example.case_study_car.service.car.response.CarListResponse;
 import com.example.case_study_car.service.car.response.CarShowDetailResponse;
 import com.example.case_study_car.service.response.SelectOptionResponse;
+import com.example.case_study_car.service.image.ImageService;
 import com.example.case_study_car.util.AppUtil;
+import com.example.case_study_car.util.UploadUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+import com.example.case_study_car.service.request.SelectOptionRequest;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,15 +32,24 @@ public class CarService {
 
     private final CarFeatureRepository carFeatureRepository;
 
-
     private final CarSpecificationRepository carSpecificationRepository;
 
     private final ImageRepository imageRepository;
 
+    private final ImageService uploadService;
+
+    private final UploadUtil uploadUtil;
 
     public void create(CarSaveRequest request) {
+        //api cho thằng specifications để vẽ ra trang manage car
         var car = AppUtil.mapper.map(request, Car.class);
         car = carRepository.save(car);
+
+        var images = imageRepository.findAllById(request.getFiles().stream().map(SelectOptionRequest::getId).collect(Collectors.toList()));
+        for (var image : images) {
+            image.setCar(car);
+        }
+        imageRepository.saveAll(images);
 
         Car finalCar = car;
         carSpecificationRepository.saveAll(request
@@ -51,13 +62,6 @@ public class CarService {
                 .stream()
                 .map(id -> new CarFeature(finalCar, new Feature(Long.valueOf(id))))
                 .collect(Collectors.toList()));
-
-        imageRepository.saveAll(request
-                .getUrlImages()
-                .stream()
-                .map(url -> new Image(url, finalCar))
-                .collect(Collectors.toList()));
-
     }
 
     public CarDetailResponse findById(Long id) {
@@ -72,11 +76,11 @@ public class CarService {
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getId())
                 .collect(Collectors.toList()));
-
-        result.setUrlImages(car
-                .getImages()
-                .stream().map(Image::getUrl)
-                .collect(Collectors.toList()));
+        List<String> images = car.getImages()
+                .stream()
+                .map(Image::getFileUrl)
+                .collect(Collectors.toList());
+        result.setUrlImages(images);
 
         return result;
     }
@@ -94,63 +98,32 @@ public class CarService {
                 .stream().map(carFeature -> carFeature.getFeature().getName())
                 .collect(Collectors.toList()));
 
-        result.setUrlImages(car
-                .getImages()
-                .stream().map(Image::getUrl)
-                .collect(Collectors.toList()));
+        List<String> images = car.getImages()
+                .stream()
+                .map(Image::getFileUrl)
+                .collect(Collectors.toList());
+        result.setUrlImages(images);
+
+        System.out.println(result);
         return result;
     }
-
-
-    public Page<CarListResponse> getCars(Pageable pageable, String search) {
-        search = "%" + search + "%";
-        return carRepository.searchEverything(search, pageable).map(e -> {
-            var result = AppUtil.mapper.map(e, CarListResponse.class);
-            result.setAgency(e.getAgency().getName());
-            result.setSpecifications(e.getCarSpecifications()
-                    .stream().map(s -> s.getSpecification().getName())
-                    .collect(Collectors.joining(", ")));
-            result.setFeatures(e.getCarFeatures()
-                    .stream().map(f -> f.getFeature().getName())
-                    .collect(Collectors.joining(", ")));
-            result.setUrlImages(e.getImages()
-                    .stream().map(Image::getUrl)
-                    .collect(Collectors.joining(", ")));
-            return result;
-        });
-    }
-
-
-//    public Page<CarListResponse> getCars(Pageable pageable, String search){
-//        search = "%" + search + "%";
-//        return carRepository.searchEverything(search ,pageable).map(e -> {
-//            var result = AppUtil.mapper.map(e, CarListResponse.class);
-//            result.setAgency(e.getAgency().getName());
-//            result.setSpecifications(e.getCarSpecifications()
-//                    .stream().map(s -> s.getSpecification().getName())
-//                    .collect(Collectors.joining(", ")));
-//            result.setFeatures(e.getCarFeatures()
-//                    .stream().map(f -> f.getFeature().getName())
-//                    .collect(Collectors.joining(", ")));
-//            result.setSurcharges(e.getCarSurcharges()
-//                    .stream().map(u -> u.getSurcharge().getName())
-//                    .collect(Collectors.joining(", ")));
-//            result.setUrlImages(e.getImages()
-//                    .stream().map(Image::getUrl)
-//                    .collect(Collectors.joining(", ")));
-//            return result;
-//        });
-//    }
 
     public void update(CarSaveRequest request, Long id) {
         var carDb = carRepository.findById(id).orElse(new Car());
         carDb.setAgency(new Agency());
-
         AppUtil.mapper.map(request, carDb);
         carSpecificationRepository.deleteAll(carDb.getCarSpecifications());
         carFeatureRepository.deleteAll(carDb.getCarFeatures());
 
-        imageRepository.deleteAll(carDb.getImages());
+        for (Image image : carDb.getImages()) {
+            imageRepository.delete(image);
+        }
+
+        var images = imageRepository.findAllById(request.getFiles().stream().map(SelectOptionRequest::getId).collect(Collectors.toList()));
+        for (var image : images) {
+            image.setCar(carDb);
+        }
+        imageRepository.saveAll(images);
 
         var carSpecifications = new ArrayList<CarSpecification>();
         for (String idSpecification : request.getIdSpecifications()) {
@@ -164,19 +137,10 @@ public class CarService {
             carFeatures.add(new CarFeature(carDb, feature));
         }
 
-
-        var images = new ArrayList<Image>();
-        for (String idImage : request.getUrlImages()) {
-            Image image = new Image(); // Tạo một đối tượng Image mới
-            image.setUrl(idImage); // Gán URL cho đối tượng Image
-            image.setCar(carDb); // Gán Car cho đối tượng Image
-            images.add(image);
-        }
-
         carSpecificationRepository.saveAll(carSpecifications);
         carFeatureRepository.saveAll(carFeatures);
 
-        imageRepository.saveAll(images);
+
         carRepository.save(carDb);
     }
 
@@ -189,11 +153,11 @@ public class CarService {
             // Xóa tất cả các mối quan hệ với danh mục
             carSpecificationRepository.deleteAll(car.getCarSpecifications());
             carFeatureRepository.deleteAll(car.getCarFeatures());
-
-            imageRepository.deleteAll(car.getImages());
-
-
-            // Sau đó xóa bộ car
+            // Tạo vòng lặp xóa từng ảnh 1
+            for (Image image : car.getImages()) {
+                imageRepository.delete(image);
+            }
+            // Sau đó xóa toàn bộ car
             carRepository.deleteById(id);
 
         } else {
@@ -218,15 +182,17 @@ public class CarService {
             result.setOvertimeFee(e.getOvertimeFee());
             result.setCleaningFee(e.getCleaningFee());
             result.setAgency(e.getAgency().getName());
+//            result.setImage(e.getImages().get(0).getFileUrl());
+            result.setImages(
+                    e.getImages().stream()
+                            .map(Image::getFileUrl)  // Lấy ra URL của mỗi ảnh
+                            .collect(Collectors.toList())  // Tạo thành một danh sách
+            );
             result.setSpecifications(e.getCarSpecifications()
                     .stream().map(s -> s.getSpecification().getName())
                     .collect(Collectors.joining(", ")));
             result.setFeatures(e.getCarFeatures()
                     .stream().map(f -> f.getFeature().getName())
-                    .collect(Collectors.joining(", ")));
-
-            result.setUrlImages(e.getImages()
-                    .stream().map(Image::getUrl)
                     .collect(Collectors.joining(", ")));
             return result;
         });
@@ -239,7 +205,7 @@ public class CarService {
                 .description(car.getDescription())
                 .agency(car.getAgency().getName())
                 .priceDays(car.getPriceDays())
-                .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
+                .urlImages(car.getImages().stream().map(Image::getFileUrl).collect(Collectors.toList()))
                 .build()).collect(Collectors.toList());
     }
 
@@ -251,7 +217,7 @@ public class CarService {
                         .description(car.getDescription())
                         .agency(car.getAgency().getName())
                         .priceDays(car.getPriceDays())
-                        .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
+                        .urlImages(car.getImages().stream().map(Image::getFileUrl).collect(Collectors.toList()))
                         .build()).collect(Collectors.toList());
     }
 
@@ -287,23 +253,23 @@ public class CarService {
                 .getCarFeatures()
                 .stream().map(carFeature -> carFeature.getFeature().getName())
                 .collect(Collectors.toList()));
-        result.setUrlImages(car
-                .getImages()
-                .stream().map(Image::getUrl)
-                .collect(Collectors.toList()));
+        result.setUrlImages(
+                car.getImages().stream()
+                        .map(Image::getFileUrl)  // Lấy ra URL của mỗi ảnh
+                        .collect(Collectors.toList()));  // Tạo thành một danh sách
+
         return result;
     }
 
-    public Page<CarPaginationResponse> getCarPagination(Pageable pageable) {
-        return carRepository.findAllCarsWithPagination(pageable).map(e -> {
-            var result = new CarPaginationResponse();
-            result.setName(e.getName());
-            result.setId(e.getId());
-            result.setDescription(e.getDescription());
-            result.setPriceDays(e.getPriceDays());
-            result.setUrlImages(e.getImages()
-                    .stream().map(Image::getUrl)
-                    .collect(Collectors.joining(", ")));
+    public Page<BestCarResponse> searchAvailableCar(Pageable pageable, LocalDateTime pickup, LocalDateTime dropOff, String search) {
+        search = "%" + search + "%";
+        return carRepository.searchAvailableCar(search, pickup, dropOff, pageable).map(car -> {
+            var result = AppUtil.mapper.map(car, BestCarResponse.class);
+            result.setAgency(car.getAgency().getName());
+            result.setUrlImages(car
+                    .getImages()
+                    .stream().map(Image::getFileUrl)
+                    .collect(Collectors.toList()));
             return result;
         });
     }
@@ -312,5 +278,32 @@ public class CarService {
         return carRepository.findAll().stream()
                 .map(car -> new SelectOptionResponse(car.getId().toString(), car.getName()))
                 .collect(Collectors.toList());
+    }
+
+    public List<UserPricingResponse> getCarPricing() {
+        return carRepository.findAll().stream().map(car -> {
+
+            var result = new UserPricingResponse();
+
+            result.setId(car.getId());
+            result.setName(car.getName());
+            result.setLicensePlate(car.getLicensePlate());
+            result.setPriceHours(car.getPriceHours());
+            result.setPriceDays(car.getPriceDays());
+            result.setPriceDelivery(car.getPriceDelivery());
+            result.setDescription(car.getDescription());
+            result.setAgency(car.getAgency().getName());
+
+            List<String> imageUrls = car.getImages().stream()
+                    .map(Image::getFileUrl)
+                    .collect(Collectors.toList());
+            result.setUrlImages(imageUrls);
+
+            System.out.println(result);
+            return result;
+        }).collect(Collectors.toList());
+    }
+    public Boolean iskAvailable(Long id, LocalDateTime pickup, LocalDateTime dropOff) {
+        return carRepository.isAvailable(id, pickup, dropOff);
     }
 }

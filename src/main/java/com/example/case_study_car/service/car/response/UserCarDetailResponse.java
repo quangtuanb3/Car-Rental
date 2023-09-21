@@ -1,5 +1,4 @@
 package com.example.case_study_car.service.car.response;
-
 import com.example.case_study_car.domain.Specification;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +24,12 @@ public class UserCarDetailResponse {
 
     private BigDecimal priceDelivery;
 
+    private BigDecimal excessDistanceFee;
+
+    private BigDecimal overtimeFee;
+
+    private BigDecimal cleaningFee;
+
     private String seats;
 
     private String transmission;
@@ -38,5 +43,7 @@ public class UserCarDetailResponse {
     private List<String> features;
 
     private List<String> urlImages;
+
+    private List<String> images;
 
 }

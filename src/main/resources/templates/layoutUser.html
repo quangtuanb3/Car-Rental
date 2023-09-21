@@ -27,7 +27,6 @@
         <link rel="stylesheet" href="/assets/user/css/jquery.timepicker.css">
 
 
-
         <link rel="stylesheet" href="/assets/user/css/flaticon.css">
         <link rel="stylesheet" href="/assets/user/css/icomoon.css">
         <link rel="stylesheet" href="/assets/user/css/style.css">
@@ -41,7 +40,7 @@
 <th:block th:fragment="my-navbar">
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
-            <a class="navbar-brand" href="user/index.html">Car<span>Rental</span></a>
+            <a class="navbar-brand" href="/">Car<span>Rental</span></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
                     aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
@@ -53,9 +52,10 @@
                     <li class="nav-item"><a href="#" class="nav-link">About</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Services</a></li>
                     <li class="nav-item" id="menu-pricing"><a href="/pricing" class="nav-link">Pricing</a></li>
-                    <li class="nav-item" id="menu-car"><a href="/car" class="nav-link">Cars</a></li>
+                    <li class="nav-item" id="menu-car"><a href="/cars" class="nav-link">Cars</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+                    <li class="nav-item"><a href="/register" class="nav-link">Register</a></li>
+                    <li class="nav-item"><a href="javascript:void(0)" class="nav-link" id="log-btn">Login</a></li>
                 </ul>
             </div>
         </div>
@@ -100,28 +100,32 @@
                                     <h2>Make your trip</h2>
                                     <div class="form-group">
                                         <label for="key-search" class="label">Enter your keyword</label>
-                                        <input type="text" class="form-control" id="key-search"
+                                        <input type="text" class="form-control" id="key-search" name="key-search"
                                                placeholder="Search by name, type,...">
                                     </div>
                                     <div class="form-group">
-                                        <label for="pickup-location" class="label">Pick-up location</label>
-                                        <input type="text" class="form-control" id="pickup-location"
+                                        <label for="pickup_location" class="label">Pick-up location</label>
+                                        <input type="text" class="form-control" id="pickup_location"
+                                               name="pickup_location"
                                                placeholder="City, Airport, Station, etc">
                                     </div>
                                     <div class="form-group">
-                                        <label for="drop-off-location" class="label">Drop-off location</label>
-                                        <input type="text" class="form-control" id="drop-off-location"
+                                        <label for="drop_off_location" class="label">Drop-off location</label>
+                                        <input type="text" class="form-control" id="drop_off_location"
+                                               name="drop_off_location"
                                                placeholder="City, Airport, Station, etc">
                                     </div>
 
                                     <div class="form-group mr-2">
-                                        <label for="book_pick_time" class="label">Pick-up time</label>
-                                        <input type="datetime-local" class="form-control" id="book_pick_time"
+                                        <label for="pickup_time" class="label">Pick-up time</label>
+                                        <input type="datetime-local" class="form-control" id="pickup_time"
+                                               name="pickup_time"
                                                placeholder="Date">
                                     </div>
                                     <div class="form-group mr-2">
-                                        <label for="book_off_time" class="label">Drop-off time</label>
-                                        <input type="datetime-local" class="form-control" id="book_off_time"
+                                        <label for="drop_off_time" class="label">Drop-off time</label>
+                                        <input type="datetime-local" class="form-control" id="drop_off_time"
+                                               name="drop_off_time"
                                                placeholder="Date">
                                     </div>
                                     <div class="form-group">
@@ -165,7 +169,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p><a href="/car" class="btn btn-primary py-3 px-4">Reserve Your Perfect Car</a></p>
+                                <p><a href="/cars" class="btn btn-primary py-3 px-4">Reserve Your Perfect Car</a></p>
                             </div>
                         </div>
                     </div>
@@ -530,6 +534,79 @@
     </div>
 </section>
 
+<th:block th:fragment="loginForm">
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-12">
+                        <div th:if="${param.error}">
+                            <div class="alert alert-danger">Invalid Email or Password</div>
+                        </div>
+                        <div th:if="${param.logout}">
+                            <div class="alert alert-success"> You have been logged out.</div>
+                        </div>
+
+                        <div class=" container">
+                            <div>
+                                <form
+                                        method="post"
+                                        role="form"
+                                        th:action="@{/login}"
+                                        class="form-horizontal"
+                                >
+                                    <div class="form-group mb-3">
+                                        <label class="control-label"> Email</label>
+                                        <input
+                                                type="text"
+                                                id="username"
+                                                name="username"
+                                                class="form-control"
+                                                placeholder="Enter email address"
+                                                value="aaa@gmail.com"
+                                        />
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label class="control-label"> Password</label>
+                                        <input
+                                                type="password"
+                                                id="password"
+                                                name="password"
+                                                class="form-control"
+                                                placeholder="Enter password"
+                                                value="123"
+                                        />
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <span> Not registered ?
+                                <a th:href="@{/register}">Register/Signup here</a>
+                            </span>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Login</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</th:block>
+
 <th:block th:fragment="myFooter">
     <footer class="ftco-footer ftco-bg-dark ftco-section">
         <div class="container">
@@ -627,16 +704,38 @@
     <script src="/assets/user/js/bootstrap-datepicker.js"></script>
     <script src="/assets/user/js/jquery.timepicker.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
     <script src="/assets/user/js/scrollax.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-    <script src="/assets/user/js/google-map.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
     <script src="/assets/user/js/main.js"></script>
+<script>
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        positionClass: 'toast-top-right',
+        timeOut: 1000
+    };
+</script>
+    <script>
+        var socket = new SockJS('/ws');
+        var stompClient = Stomp.over(socket);
 
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            // stompClient.subscribe('/message/public', function (notification) {
+            //     // Handle received notifications
+            //     var message = JSON.parse(notification.body);
+            //     alert('Received Notification: ' + message.content);
+            // });
+        });
+    </script>
 </th:block>
 </body>
 </html>

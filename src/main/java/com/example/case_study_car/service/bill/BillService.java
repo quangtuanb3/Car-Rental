@@ -2,7 +2,6 @@ package com.example.case_study_car.service.bill;
 
 import com.example.case_study_car.domain.*;
 import com.example.case_study_car.domain.enumaration.EBillStatus;
-import com.example.case_study_car.exception.BillNotFoundException;
 import com.example.case_study_car.repository.BillRepository;
 import com.example.case_study_car.repository.CarRepository;
 import com.example.case_study_car.repository.CustomerRepository;
@@ -10,11 +9,6 @@ import com.example.case_study_car.service.bill.request.BillSaveRequest;
 import com.example.case_study_car.service.bill.response.BillDetailResponse;
 import com.example.case_study_car.service.bill.response.BillListResponse;
 import com.example.case_study_car.service.bill.response.BillShowDetailResponse;
-import com.example.case_study_car.service.car.request.CarSaveRequest;
-import com.example.case_study_car.service.car.response.CarDetailResponse;
-import com.example.case_study_car.service.car.response.CarListResponse;
-import com.example.case_study_car.service.car.response.CarPaginationResponse;
-import com.example.case_study_car.service.car.response.CarShowDetailResponse;
 import com.example.case_study_car.service.customer.CustomerService;
 import com.example.case_study_car.service.response.SelectOptionResponse;
 import com.example.case_study_car.util.AppUtil;
@@ -22,11 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -47,21 +37,18 @@ public class BillService {
                 .collect(Collectors.toList());
     }
 
-//    public List<Bill> getAllBills() {
-//        return billRepository.findAll();
-//    }
-
     public void create(BillSaveRequest request) {
         Bill bill = AppUtil.mapper.map(request, Bill.class);
         Car car = carRepository.findById(Long.valueOf(request.getCarId())).orElse(new Car());
         Customer customer = customerService.findByEmail(request.getCustomerEmail());
+        bill.setBillStatus(EBillStatus.DEPOSITED);
         bill.setCustomer(customer);
         bill.setCleaningFee(car.getCleaningFee());
         bill.setExcessDistanceFee(car.getExcessDistanceFee());
         bill.setOvertimeFee(car.getOvertimeFee());
         bill.setCar(car);
-       var save =  billRepository.save(bill);
-        System.out.println(save);
+        billRepository.save(bill);
+
     }
 
     public BillDetailResponse findById(Long id) {
@@ -129,11 +116,6 @@ public class BillService {
 
     }
 
-//    public void changeStatus(Long id, EBillStatus status){
-//        var bill = getBillById(id);
-//        bill.setBillStatus(status);
-//        billRepository.save(bill);
-//    }
     public void changeStatus(Long id, EBillStatus status) {
         Bill bill = getBillById(id);
         if (bill != null) {
@@ -143,7 +125,6 @@ public class BillService {
             throw new RuntimeException("Bill not found with id: " + id);
         }
     }
-
 
     public Bill getBillById(Long id) {
         return billRepository.findById(id).orElse(null);

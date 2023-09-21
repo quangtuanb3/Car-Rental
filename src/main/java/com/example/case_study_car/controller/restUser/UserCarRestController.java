@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -31,6 +32,7 @@ public class UserCarRestController {
         return new ResponseEntity<>(carService.getBestCars(), HttpStatus.OK);
     }
 
+
     @GetMapping("/related-cars/{id}/{agency}/{seat}/{priceDay}")
     public ResponseEntity<List<RelatedCarResponse>> getRelatedCars(@PathVariable String agency, @PathVariable String seat, @PathVariable BigDecimal priceDay, @PathVariable Long id) {
         return new ResponseEntity<>(carService.getRelatedCars(agency, priceDay, seat, id), HttpStatus.OK);
@@ -41,42 +43,27 @@ public class UserCarRestController {
         return new ResponseEntity<>(carService.getCarDetailById(Long.valueOf(id)), HttpStatus.OK);
 
     }
-//    @GetMapping()
-//    public ResponseEntity<Page<CarListResponse>> list(@PageableDefault(size = 5) Pageable pageable,
-//                                                      @RequestParam(defaultValue = "") String search,
-//                                                      @RequestParam(defaultValue = "2023-01-01") LocalDate start,
-//                                                      @RequestParam(defaultValue = "2999-01-01") LocalDate end) {
-//        return new ResponseEntity<>(roomService.findAll(pageable, start, end, search), HttpStatus.OK);
-//    }
 
-    @PostMapping
-    public void create(@RequestBody BillSaveRequest request){
+
+    @PostMapping("/rent")
+    public void create(@RequestBody BillSaveRequest request) {
         billService.create(request);
     }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<CarDetailResponse> findById(@PathVariable Long id){
-//        return new ResponseEntity<>(carService.findById(id), HttpStatus.OK);
-//    }
-//
 
-//
-//    @PutMapping("{id}")
-//    public ResponseEntity<?> updateCar(@RequestBody CarSaveRequest request, @PathVariable Long id){
-//        carService.update(request,id);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @DeleteMapping("{id}")
-//    public ResponseEntity<?> delete(@PathVariable Long id) {
-//        carService.delete(id);
-//        return ResponseEntity.ok().build();
-//    }
+    @GetMapping("/available-cars")
+    public ResponseEntity<Page<BestCarResponse>> getCars(@PageableDefault(size = 4) Pageable pageable,
+                                                         @RequestParam(defaultValue = "") String search,
+                                                         @RequestParam(defaultValue = "") LocalDateTime pickup,
+                                                         @RequestParam(defaultValue = "") LocalDateTime dropOff) {
+        return new ResponseEntity<>(carService.searchAvailableCar(pageable, pickup, dropOff, search), HttpStatus.OK);
+    }
 
-    @GetMapping
-    public ResponseEntity<Page<CarPaginationResponse>> getCarsPagination(@PageableDefault(size = 5) Pageable pageable
-                                                               ) {
-        return new ResponseEntity<>(carService.getCarPagination(pageable), HttpStatus.OK);
+    @GetMapping("/check-available")
+    public ResponseEntity<Boolean> checkAvailable(
+            @RequestParam(defaultValue = "") Long id,
+            @RequestParam(defaultValue = "") LocalDateTime pickupTime,
+            @RequestParam(defaultValue = "") LocalDateTime dropOffTime) {
+        return new ResponseEntity<>(carService.iskAvailable(id, pickupTime, dropOffTime), HttpStatus.OK);
     }
 
 }
