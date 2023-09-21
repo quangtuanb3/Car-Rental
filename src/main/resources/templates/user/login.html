@@ -110,12 +110,7 @@
             <div class="col-md-12 d-flex featured-top">
                 <div class="col-md-3"></div>
                     <div class="col-md-6 d-flex align-items-center">
-                        <div th:if="${param.error}">
-                            <div class="alert alert-danger">Invalid Email or Password</div>
-                        </div>
-                        <div th:if="${param.logout}">
-                            <div class="alert alert-success"> You have been logged out.</div>
-                        </div>
+
                         <th:block th:fragment="form-search">
                             <form
                                     th:action="@{/login}"
@@ -126,6 +121,12 @@
                                     style="width: 100%"
                             >
                                 <h2>Login Form</h2>
+                                <div th:if="${param.error}">
+                                    <div class="alert alert-danger">Invalid Email or Password</div>
+                                </div>
+                                <div th:if="${param.logout}">
+                                    <div class="alert alert-success"> You have been logged out.</div>
+                                </div>
                                 <div class="form-group">
                                     <label for="username" class="label">Email</label>
                                     <input
@@ -162,45 +163,6 @@
     </div>
 </section>
 
-<section class="ftco-counter ftco-section img bg-light" id="section-counter">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap  ">
-                <div class="block-18">
-                    <div class="text text-border d-flex align-items-center">
-                        <strong class="number" data-number="60">0</strong>
-                        <span>Year <br>Experienced</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap  ">
-                <div class="block-18">
-                    <div class="text text-border d-flex align-items-center">
-                        <strong class="number" data-number="1090">0</strong>
-                        <span>Total <br>Cars</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap  ">
-                <div class="block-18">
-                    <div class="text text-border d-flex align-items-center">
-                        <strong class="number" data-number="2590">0</strong>
-                        <span>Happy <br>Customers</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap  ">
-                <div class="block-18">
-                    <div class="text d-flex align-items-center">
-                        <strong class="number" data-number="67">0</strong>
-                        <span>Total <br>Branches</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <th:block th:replace="~{layoutLogin.html:: loginForm}"></th:block>
 <th:block th:replace="~{layoutLogin.html:: myFooter}"></th:block>

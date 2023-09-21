@@ -11,20 +11,21 @@ const eHeaderPrice = document.getElementById('header-price')
 let customers;
 
 
-
 //bill-model-details
 
 let eModalBillCustomerName = document.getElementById("modal-bill-customerName");
 let eModalBillEmail = document.getElementById("modal-bill-customerEmail");
 let eModalBillStatus = document.getElementById("modal-bill-billStatus");
-let eModalBillDeliveryFee = document.getElementById("modal-bill-deliveryFee");
-let eModalCleaningFee = document.getElementById("modal-bill-cleaningFee");
-let eModalOvertimeFee = document.getElementById("modal-bill-overtimeFee");
+
+let eModalBillPickupTime = document.getElementById("modal-bill-pickup-time");
+let eModalBillDropOffTime = document.getElementById("modal-bill-drop-off-time");
+let eModalBillPickupLocation = document.getElementById("modal-bill-pickup-location");
+let eModalBillDropOfLocation = document.getElementById("modal-bill-drop-off-location");
+
 let eModalDeposit = document.getElementById("modal-bill-deposit");
 let eModalRentPrice = document.getElementById("modal-bill-rentPrice");
 let eModalTotalPrice = document.getElementById("modal-bill-totalPrice");
 let eModalLicensePlate = document.getElementById("modal-bill-licensePlate");
-
 
 
 //modal-car-populate price Hours và Day:
@@ -52,8 +53,9 @@ let eModalLicensePlate = document.getElementById("modal-bill-licensePlate");
 
 
 let billStatus;
-async  function getBillStatus(){
-    const res = await  fetch("/api/bills/bill-status")
+
+async function getBillStatus() {
+    const res = await fetch("/api/bills/bill-status")
     return await res.json();
 }
 
@@ -67,13 +69,10 @@ billForm.onsubmit = async (e) => {
     let data = getDataFromForm(billForm);
 
 
-
     // Định dạng giá trị thành tiền tệ VND
 
 
     // Cập nhật giá trị hiển thị trong modal chi tiết xe
-
-
 
 
     data = {
@@ -106,9 +105,6 @@ async function getCustomersSelectOption() {
 }
 
 
-
-
-
 window.onload = async () => {
     await loadBills();
     customers = await getCustomersSelectOption();
@@ -122,11 +118,11 @@ window.onload = async () => {
 }
 
 
-
 async function findBillById(id) {
     const res = await fetch('/api/bills/' + id);
     return await res.json();
 }
+
 async function findBillDetailById(id) {
     const res = await fetch('/api/bills/detail/' + id);
     return await res.json();
@@ -151,15 +147,11 @@ const onSearch = (e) => {
 }
 
 
-
-
-
 const searchInput = document.querySelector('#search');
 
 searchInput.addEventListener('search', () => {
     onSearch(event)
 });
-
 
 
 function clearForm() {
@@ -168,15 +160,18 @@ function clearForm() {
 }
 
 
-
-async function showBillDetail(id){
+async function showBillDetail(id) {
     let billDetail = await findBillDetailById(id)
     eModalBillCustomerName.innerText = billDetail.customerName;
     eModalBillEmail.innerText = billDetail.customerEmail;
     eModalBillStatus.innerText = billDetail.billStatus;
-    eModalBillDeliveryFee.innerText = billDetail.deliveryFee;
-    eModalCleaningFee.innerText = billDetail.cleaningFee;
-    eModalOvertimeFee.innerText = billDetail.overtimeFee;
+
+    eModalBillPickupTime.innerText = billDetail.pickupTime;
+    eModalBillDropOffTime.innerText = billDetail.expectedDropOffTime;
+    eModalBillPickupLocation.innerText = billDetail.pickupLocation;
+    eModalBillDropOfLocation.innerText = billDetail.dropOffLocation;
+
+
     eModalDeposit.innerText = billDetail.deposit;
     eModalRentPrice.innerText = billDetail.rentPrice;
     eModalLicensePlate.innerText = billDetail.licensePlate;
@@ -197,7 +192,7 @@ async function showBillDetail(id){
 
 
 function formatCurrency(amount) {
-    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    return amount.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
 }
 
 

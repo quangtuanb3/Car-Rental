@@ -65,15 +65,12 @@ public class AuthService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not Exist"));
         var role = new ArrayList<SimpleGrantedAuthority>();
         role.add(new SimpleGrantedAuthority(user.getRole().toString()));
-        boolean isVerified = EAccountStatus.VERIFIED.equals(user.getStatus());
-        boolean isLocked = EAccountStatus.BLOCK.equals(user.getStatus());
+//        boolean isVerified = EAccountStatus.VERIFIED.equals(user.getStatus());
+//        boolean isLocked = EAccountStatus.BLOCK.equals(user.getStatus());
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), role);
     }
 
-    public void logout() throws UsernameNotFoundException {
-        var role = new ArrayList<SimpleGrantedAuthority>();
-        new org.springframework.security.core.userdetails.User("", "", role);
-    }
+
 
 
     // để làm 1. kiểm tra xem user có tồn tại trong hệ thông hay không và tìm bằng 3 field Username Email PhoneNumber

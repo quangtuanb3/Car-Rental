@@ -46,11 +46,11 @@ th.sorted-desc::after {
 }
 
 
- .RESERVING {
-     background: yellow; /* Màu nền là màu vàng */
+ .CANCEL {
+     background: #701f01; /* Màu nền là màu vàng */
      border: yellow; /* Màu viền là màu vàng */
      font-weight: bold; /* Độ đậm chữ */
-     color: black; /* Màu chữ là màu đen */
+     color: #ececec; /* Màu chữ là màu đen */
  }
 .DEPOSITED{
     background: aquamarine;

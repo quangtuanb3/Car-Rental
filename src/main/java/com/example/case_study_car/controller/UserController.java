@@ -1,5 +1,6 @@
 package com.example.case_study_car.controller;
 import com.example.case_study_car.domain.Car;
+import com.example.case_study_car.domain.UserLogin;
 import com.example.case_study_car.service.car.response.UserCarDetailResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -17,10 +18,12 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDateTime;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("")
 @AllArgsConstructor
 public class UserController {
     private final CarService carService;
+
+
 
     @GetMapping
     public ModelAndView index() {
@@ -58,6 +61,11 @@ public class UserController {
     ) {
         return new ModelAndView("user/car");
 
+    }
+    @GetMapping("/user/login")
+    public ModelAndView login() {
+        ModelAndView view = new ModelAndView("user/login");
+        return view;
     }
 
 }

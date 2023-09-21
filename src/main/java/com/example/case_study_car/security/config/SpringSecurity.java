@@ -7,11 +7,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -31,15 +39,16 @@ public class SpringSecurity {
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/user/**").permitAll()
-                                .requestMatchers("/ws").permitAll()
+                                .requestMatchers("/ws/**").permitAll()
                                 .requestMatchers("/socket").permitAll()
                                 .requestMatchers("/admin/public").permitAll()
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/pricing").permitAll()
                                 .requestMatchers("/cars").permitAll()
+                                .requestMatchers("/login").permitAll()
                                 .requestMatchers("/car-detail/**").permitAll()
-                                .requestMatchers("/home").hasAnyRole("ADMIN")
+                                .requestMatchers("/home").hasAnyRole("ADMIN", "USER")
                                 .requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/user/api/cars/rent").hasAnyRole("USER")
                                 .requestMatchers("/user/api/customers/**").permitAll()
@@ -48,17 +57,20 @@ public class SpringSecurity {
                                 .requestMatchers("/user/api/cars/related-cars/**").permitAll()
                                 .anyRequest().authenticated()
 
-                ).formLogin(
+                )
+                .formLogin(
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/?message=Login successfully")
+                                .successHandler(customAuthenticationSuccessHandler())
                                 .permitAll()
-                ).logout(
+
+                )
+                .logout(
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
-                                .logoutSuccessUrl("/?message=Logout successfully")
+                                .logoutSuccessUrl("/?message=Logout%20successfully")
                 );
         return http.build();
     }
@@ -68,5 +80,14 @@ public class SpringSecurity {
         auth
                 .userDetailsService(userDetailsService) // config để biết class này dùng để check user login
                 .passwordEncoder(passwordEncoder()); // loại mã hóa password
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
+
+        successHandler.setDefaultTargetUrl("/?message=Login%20successfully"); // Set the default target URL
+        successHandler.setAlwaysUseDefaultTargetUrl(false); // Ensure the default target URL is always used
+        return successHandler;
     }
 }
