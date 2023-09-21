@@ -66,4 +66,12 @@ public interface CarRepository extends JpaRepository<Car, Long> {
                                  Pageable pageable);
 
 
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END " +
+            "FROM Car c " +
+            "WHERE c.id = :id " +
+            "AND NOT EXISTS (SELECT 1 FROM Bill b WHERE b.car = c " +
+            "AND (:pickup BETWEEN b.pickupTime AND b.expectedDropOffTime " +
+            "OR :dropOff BETWEEN b.pickupTime AND b.expectedDropOffTime))"
+    )
+    Boolean isAvailable(Long id, LocalDateTime pickup, LocalDateTime dropOff);
 }

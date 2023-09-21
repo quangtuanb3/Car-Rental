@@ -209,7 +209,7 @@ public class CarService {
                 .description(car.getDescription())
                 .agency(car.getAgency().getName())
                 .priceDays(car.getPriceDays())
-//                .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
+                .urlImages(car.getImages().stream().map(Image::getFileUrl).collect(Collectors.toList()))
                 .build()).collect(Collectors.toList());
     }
 
@@ -221,7 +221,7 @@ public class CarService {
                         .description(car.getDescription())
                         .agency(car.getAgency().getName())
                         .priceDays(car.getPriceDays())
-//                        .urlImages(car.getImages().stream().map(Image::getUrl).collect(Collectors.toList()))
+                        .urlImages(car.getImages().stream().map(Image::getFileUrl).collect(Collectors.toList()))
                         .build()).collect(Collectors.toList());
     }
 
@@ -258,7 +258,7 @@ public class CarService {
                 .stream().map(carFeature -> carFeature.getFeature().getName())
                 .collect(Collectors.toList()));
 
-        result.setImages(
+        result.setUrlImages(
                 car.getImages().stream()
                         .map(Image::getFileUrl)  // Lấy ra URL của mỗi ảnh
                         .collect(Collectors.toList())  // Tạo thành một danh sách
@@ -276,10 +276,14 @@ public class CarService {
             result.setAgency(car.getAgency().getName());
             result.setUrlImages(car
                     .getImages()
-                    .stream().map(image -> image.getFileUrl())
+                    .stream().map(Image::getFileUrl)
                     .collect(Collectors.toList()));
 
             return result;
         });
+    }
+
+    public Boolean iskAvailable(Long id, LocalDateTime pickup, LocalDateTime dropOff) {
+        return carRepository.isAvailable(id, pickup, dropOff);
     }
 }

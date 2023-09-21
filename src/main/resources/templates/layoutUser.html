@@ -704,13 +704,15 @@
     <script src="/assets/user/js/bootstrap-datepicker.js"></script>
     <script src="/assets/user/js/jquery.timepicker.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
     <script src="/assets/user/js/scrollax.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-    <script src="/assets/user/js/google-map.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
     <script src="/assets/user/js/main.js"></script>
 <script>
@@ -721,6 +723,19 @@
         timeOut: 1000
     };
 </script>
+    <script>
+        var socket = new SockJS('/ws');
+        var stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            // stompClient.subscribe('/message/public', function (notification) {
+            //     // Handle received notifications
+            //     var message = JSON.parse(notification.body);
+            //     alert('Received Notification: ' + message.content);
+            // });
+        });
+    </script>
 </th:block>
 </body>
 </html>
