@@ -1,8 +1,14 @@
 const eCarsContainer = document.getElementById("cars-container");
 const ePagination = document.getElementById('pagination');
 const eSearchForm = document.getElementById("search-car-form");
+
 // const eSearchCarBtn = document.getElementById("search-car-btn");
 
+// const eKeySearch = document.getElementById("key-search");
+// const ePickupTime = document.getElementById("pickup-time");
+// const eDropOfTime = document.getElementById("drop_off_time");
+// const ePickupLocation = document.getElementById("pickup_location");
+// const eDropOffLocation = document.getElementById("drop-off-location");
 // Create a function to build the API URL with query parameters
 const urlParams = new URLSearchParams(window.location.href.split('?')[1]);
 
@@ -12,6 +18,8 @@ const pickupTime = urlParams.get("pickupTime");
 const dropOffTime = urlParams.get("dropOffTime");
 const pickupLocation = urlParams.get("pickupLocation");
 const dropOffLocation = urlParams.get("dropOffLocation");
+
+
 
 let pageable = {
     page: 1,
@@ -121,7 +129,6 @@ async function renderAvailableCars() {
 
 window.onload = async () => {
     await handleLogBtn();
-    await handleLogBtn();
     renderSearchForm();
     handleSearchCar();
     await renderAvailableCars();
@@ -198,7 +205,6 @@ function handleSearchCar() {
     // eSearchCarBtn.onclick = () => {
     //     alert('OK')
     // }
-
     eSearchCarBtn.onclick = async () => {
         // let form = new FormData(eSearchCarForm);
         let form = new FormData(eSearchForm);
@@ -210,6 +216,7 @@ function handleSearchCar() {
         let url = `/cars/available-cars?search=${pageable.search}&pickupTime=${pageable.pickupTime}&dropOffTime=${pageable.dropOffTime}&pickupLocation=${pageable.pickupLocation}&dropOffLocation=${pageable.dropOffLocation}`
         console.log("search btn:  ")
         console.log(url);
+        localStorage.setItem('pageable', JSON.stringify(pageable));
         await renderAvailableCars();
     }
 }

@@ -1,6 +1,7 @@
+// const socket = new SockJS('/ws');
+// const stompClient = Stomp.over(socket);
+
 const eSearchCarForm = document.getElementById("search-car-form");
-
-
 const eConfirm_body = document.getElementById("confirm-body");
 const ePickup_time = document.getElementById("pickup-time");
 const eDrop_off_time = document.getElementById("drop-off-time");
@@ -14,6 +15,7 @@ const eDeliveryFeeDisplay = document.getElementById("delivery-fee-display");
 const eTotalDisplay = document.getElementById("total-display");
 const eTradeCode = document.getElementById("trade-code");
 const eDoneBtn = document.getElementById("done-btn");
+
 const formData = new FormData(eSearchCarForm);
 let pickup_time = formData.get("pickup-time");
 let drop_off_time = formData.get("drop-off-time");
@@ -78,7 +80,19 @@ async function calculateTotal() {
 
 }
 
+function renderDataInFormSearch() {
+    pageable = JSON.parse(localStorage.getItem('pageable'));
+    if (pageable) {
+        ePickup_time.value = pageable.pickupTime;
+        eDrop_off_time.value = pageable.dropOffTime;
+        ePickUpLocation.value = pageable.pickupLocation;
+        eDropOffLocation.value = pageable.dropOffLocation;
+    }
+
+}
+
 window.onload = async () => {
+    renderDataInFormSearch();
     await handleLogBtn();
     car = await getCurrentCar(urlAPICar);
     await renderRelatedCars();
@@ -171,18 +185,29 @@ function createMapQuestURL(location1, location2) {
     return `https://www.mapquestapi.com/directions/v2/route?key=tHhcvtGjlPCJsOE1HBmjKwL7u1j5wV1V&from=${location1}&to=${location2}`;
 }
 
-rentNowButton.addEventListener("click", function () {
+rentNowButton.addEventListener("click", async function () {
 
     const currentTime = new Date();
 
     // Validate pickup time and drop-off time
-    if (pickup_time <= currentTime) {
+    const pickup = document.getElementById("pickup-time").value;
+    const dropOff = document.getElementById("drop-off-time").value;
+    if (pickup === '' || dropOff === '') {
+        toastr.error("Invalid rental time");
+        return;
+    }
+    if (new Date(pickup) <= currentTime) {
         toastr.error("Invalid Pickup time");
         return;
     }
 
-    if (drop_off_time <= pickup_time) {
+    if (new Date(dropOff) <= pickup_time) {
         toastr.error("Invalid drop-off time");
+        return;
+    }
+    const isCarAvailable = await checkCarIfAvailable();
+    if (!isCarAvailable) {
+        toastr.warning("Car is not available this time");
         return;
     }
 
@@ -316,10 +341,39 @@ function calculateRentPrice() {
 }
 
 ePickup_time.onchange = async () => {
+    const isCarAvailable = await checkCarIfAvailable();
+    if (!isCarAvailable) {
+        toastr.warning("Car is not available this time");
+        return;
+    }
     await calculateTotal();
 }
 eDrop_off_time.onchange = async () => {
+    const isCarAvailable = await checkCarIfAvailable();
+    if (!isCarAvailable) {
+        toastr.warning("Car is not available this time");
+        return;
+    }
     await calculateTotal();
+}
+
+async function checkCarIfAvailable() {
+    const pickup = document.getElementById("pickup-time").value;
+    const dropOff = document.getElementById("drop-off-time").value;
+    const carId = car.id;
+    const apiCheckAvailable = `http://localhost:8080/user/api/cars/check-available?id=${carId || ""}&pickupTime=${pickup || ""}&dropOffTime=${dropOff || ""}`
+    const response = await fetch(apiCheckAvailable);
+    return await response.json();
+}
+
+function sendRentalNotification() {
+    const time = Date.now();
+
+    var rentalMessage = customer.name + " rented a car at " + formatDate(time);
+    stompClient.send("/app/message",{},
+        JSON.stringify({
+            'content': rentalMessage
+        }));
 }
 
 async function createBill(data) {
@@ -350,6 +404,7 @@ async function createBill(data) {
     })
     if (res.ok) {
         toastr.success("Completed!")
+        sendRentalNotification();
         $('#exampleModalLong').modal('hide');
     } else {
         toastr.error("Something went wrong!")
@@ -359,13 +414,16 @@ async function createBill(data) {
 }
 
 eDoneBtn.onclick = async () => {
-    if (checkTradeCode()) return;
+    if (!isEnteredTradeCode()) {
+        toastr.error("Please enter trade code!")
+        return;
+    }
     await createBill(data);
 }
 
-function checkTradeCode() {
+function isEnteredTradeCode() {
     if (document.getElementById("trade-code").value) {
-        return false;
+        return true;
     }
 }
 
@@ -409,3 +467,4 @@ function getQueryParam(key) {
     const urlSearchParams = new URLSearchParams(window.location.search);
     return urlSearchParams.get(key);
 }
+

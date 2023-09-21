@@ -113,7 +113,6 @@ window.onload = async () => {
 }
 
 function showLogin() {
-    // $("#exampleModal").show()
     $('#exampleModal').modal('show');
 }
 

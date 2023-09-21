@@ -637,14 +637,6 @@
     </div>
     <!-- / Layout wrapper -->
 
-    <div class="buy-now">
-        <a
-                href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
-                target="_blank"
-                class="btn btn-danger btn-buy-now"
-        >Upgrade to Pro</a
-        >
-    </div>
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
@@ -662,11 +654,32 @@
     <!-- Main JS -->
     <script src="../assets/admin/js/main.js"></script>
 
+<!--    socket-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<!--    toastr-->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <!-- Page JS -->
     <script src="../assets/admin/js/dashboards-analytics.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script>
+        var socket = new SockJS('/ws');
+        var stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/app/message', function (notification) {
+                // Handle received notifications
+                var message = JSON.parse(notification.body);
+                alert('Received Notification: ' + message.content);
+            });
+        });
+    </script>
     <script src="../assets/admin/myjs/base.js"></script>
     </body>
 </th:block>   <!-- / Content -->

@@ -24,6 +24,12 @@ public class UserCarDetailResponse {
 
     private BigDecimal priceDelivery;
 
+    private BigDecimal excessDistanceFee;
+
+    private BigDecimal overtimeFee;
+
+    private BigDecimal cleaningFee;
+
     private String seats;
 
     private String transmission;
