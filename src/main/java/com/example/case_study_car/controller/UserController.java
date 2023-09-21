@@ -1,6 +1,4 @@
 package com.example.case_study_car.controller;
-
-
 import com.example.case_study_car.domain.Car;
 import com.example.case_study_car.service.car.response.UserCarDetailResponse;
 import jakarta.servlet.http.HttpServletRequest;
