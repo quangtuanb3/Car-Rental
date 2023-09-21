@@ -1,5 +1,6 @@
 package com.example.case_study_car.service.bill;
 
+import com.example.case_study_car.Socket.Notification;
 import com.example.case_study_car.domain.*;
 import com.example.case_study_car.domain.enumaration.EBillStatus;
 import com.example.case_study_car.repository.BillRepository;
@@ -42,7 +43,7 @@ public class BillService {
         bill.setExcessDistanceFee(car.getExcessDistanceFee());
         bill.setOvertimeFee(car.getOvertimeFee());
         bill.setCar(car);
-       var save =  billRepository.save(bill);
-        System.out.println(save);
+        billRepository.save(bill);
+
     }
 }

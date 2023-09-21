@@ -86,4 +86,11 @@ public class UserCarRestController {
         return new ResponseEntity<>(carService.searchAvailableCar(pageable, pickup, dropOff, search), HttpStatus.OK);
     }
 
+    @GetMapping("/check-available")
+    public ResponseEntity<Boolean> checkAvailable(
+            @RequestParam(defaultValue = "") Long id,
+            @RequestParam(defaultValue = "") LocalDateTime pickupTime,
+            @RequestParam(defaultValue = "") LocalDateTime dropOffTime) {
+        return new ResponseEntity<>(carService.iskAvailable(id, pickupTime, dropOffTime), HttpStatus.OK);
+    }
 }

@@ -31,17 +31,21 @@ public class SpringSecurity {
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/user/**").permitAll()
+                                .requestMatchers("/ws").permitAll()
+                                .requestMatchers("/socket").permitAll()
+                                .requestMatchers("/admin/public").permitAll()
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/").permitAll()
+                                .requestMatchers("/pricing").permitAll()
                                 .requestMatchers("/cars").permitAll()
                                 .requestMatchers("/car-detail/**").permitAll()
                                 .requestMatchers("/home").hasAnyRole("ADMIN")
                                 .requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/user/api/cars/rent").hasAnyRole("USER")
                                 .requestMatchers("/user/api/customers/**").permitAll()
+                                .requestMatchers("/user/api/cars/check-available").permitAll()
                                 .requestMatchers("/assets/**").permitAll()
                                 .requestMatchers("/user/api/cars/related-cars/**").permitAll()
-
                                 .anyRequest().authenticated()
 
                 ).formLogin(
