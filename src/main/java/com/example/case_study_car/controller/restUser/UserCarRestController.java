@@ -4,10 +4,7 @@ package com.example.case_study_car.controller.restUser;
 import com.example.case_study_car.service.bill.BillService;
 import com.example.case_study_car.service.bill.request.BillSaveRequest;
 import com.example.case_study_car.service.car.CarService;
-import com.example.case_study_car.service.car.response.BestCarResponse;
-import com.example.case_study_car.service.car.response.CarListResponse;
-import com.example.case_study_car.service.car.response.RelatedCarResponse;
-import com.example.case_study_car.service.car.response.UserCarDetailResponse;
+import com.example.case_study_car.service.car.response.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,37 +43,12 @@ public class UserCarRestController {
         return new ResponseEntity<>(carService.getCarDetailById(Long.valueOf(id)), HttpStatus.OK);
 
     }
-//    @GetMapping()
-//    public ResponseEntity<Page<CarListResponse>> list(@PageableDefault(size = 5) Pageable pageable,
-//                                                      @RequestParam(defaultValue = "") String search,
-//                                                      @RequestParam(defaultValue = "2023-01-01") LocalDate start,
-//                                                      @RequestParam(defaultValue = "2999-01-01") LocalDate end) {
-//        return new ResponseEntity<>(roomService.findAll(pageable, start, end, search), HttpStatus.OK);
-//    }
+
 
     @PostMapping("/rent")
     public void create(@RequestBody BillSaveRequest request) {
         billService.create(request);
     }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<CarDetailResponse> findById(@PathVariable Long id){
-//        return new ResponseEntity<>(carService.findById(id), HttpStatus.OK);
-//    }
-//
-
-//
-//    @PutMapping("{id}")
-//    public ResponseEntity<?> updateCar(@RequestBody CarSaveRequest request, @PathVariable Long id){
-//        carService.update(request,id);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @DeleteMapping("{id}")
-//    public ResponseEntity<?> delete(@PathVariable Long id) {
-//        carService.delete(id);
-//        return ResponseEntity.ok().build();
-//    }
 
     @GetMapping("/available-cars")
     public ResponseEntity<Page<BestCarResponse>> getCars(@PageableDefault(size = 4) Pageable pageable,
@@ -93,4 +65,5 @@ public class UserCarRestController {
             @RequestParam(defaultValue = "") LocalDateTime dropOffTime) {
         return new ResponseEntity<>(carService.iskAvailable(id, pickupTime, dropOffTime), HttpStatus.OK);
     }
+
 }

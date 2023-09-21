@@ -22,36 +22,16 @@ let eModalFeature = document.getElementById("modal-car-feature");
 // let eModalSurcharge = document.getElementById("modal-car-surcharge");
 let eModalImage = document.getElementsByClassName("modal-car-image");
 let eModalAgency = document.getElementById("modal-car-agency");
+let eModalExcessDistanceFee = document.getElementById("modal-car-excessDistanceFee");
+let eModalOvertimeFee = document.getElementById("modal-car-overtimeFee");
+let eModalCleaningFee = document.getElementById("modal-car-cleaningFee");
 
-//modal-car-populate price Hours và Day:
-
-// Đoạn mã JavaScript để lấy giá trị từ các thẻ <td> và định dạng chúng thành tiền tệ VND
-const priceHoursElement = document.getElementById("modal-car-priceHours");
-const priceDaysElement = document.getElementById("modal-car-priceDays");
-const priceDeliverysElement = document.getElementById("modal-car-priceDeliverys");
-
-// Lấy giá trị từ các thẻ <td>
-const priceHoursValue = parseFloat(priceHoursElement.textContent.replace("$", ""));
-const priceDaysValue = parseFloat(priceDaysElement.textContent.replace("$", ""));
-const priceDeliverysValue = parseFloat(priceDeliverysElement.textContent.replace("$", ""));
-
-
-// Chuyển đổi và định dạng giá trị thành tiền tệ VND bằng hàm formatCurrency
-const formattedPriceHours = formatCurrency(priceHoursValue);
-const formattedPriceDays = formatCurrency(priceDaysValue);
-const formattedPriceDeliverys = formatCurrency(priceDeliverysValue);
-
-// Cập nhật giá trị đã định dạng vào các thẻ <td>
-priceHoursElement.textContent = formattedPriceHours;
-priceDaysElement.textContent = formattedPriceDays;
-priceDeliverysElement.textContent = formattedPriceDeliverys;
 
 const BASE_URL_CLOUD_IMAGE = "https://res.cloudinary.com/dw3x98oui/image/upload";
 const BASE_SCALE_IMAGE = "c_limit,w_50,h_50,q_100";
 
 let specifications;
 let features;
-// let surcharges;
 let agencies;
 let urlImages
 let cars = [];
@@ -72,15 +52,8 @@ carForm.onsubmit = async (e) => {
     e.preventDefault();
     let data = getDataFromForm(carForm);
 
-    //
-    // // Định dạng giá trị thành tiền tệ VND
-    // const formattedPriceHours = formatCurrency(priceHoursValue);x`
-    // const formattedPriceDays = formatCurrency(priceDaysValue);
-    //
-    // // Cập nhật giá trị hiển thị trong modal chi tiết xe
-    // document.getElementById("priceHoursValue").textContent = formattedPriceHours;
-    // document.getElementById("priceDaysValue").textContent = formattedPriceDays;
     let specificationSelect = getSpecificationSelects();
+
     data = {
         ...data,
         agency: {
@@ -90,10 +63,6 @@ carForm.onsubmit = async (e) => {
         idFeatures: Array.from(eCheckBoxFeatures)
             .filter(e => e.checked)
             .map(e => e.value),
-        // idSurcharges: Array.from(eCheckBoxSurcharges)
-        //     .filter(e => e.checked)
-        //     .map(e => e.value),
-        // urlImages: data.urlImages.split(","),
         id: carSelected.id,
         files: idImages.map(e => {
             return {
@@ -101,19 +70,6 @@ carForm.onsubmit = async (e) => {
             }
         })
     }
-
-    // let formData = new FormData();
-    // formData.append("id", data.id);
-    // formData.append("name", data.name);
-    // formData.append("licensePlate", data.licensePlate);
-    // formData.append("description", data.description);
-    // formData.append("priceHours", data.priceHours);
-    // formData.append("priceDays", data.priceDays);
-    // formData.append("priceDelivery", data.priceDelivery);
-    // formData.append("status.id", data.status.id);
-    // formData.append("agency.id", data.agency.id);
-    // formData.append("idSpecifications", data.idSpecifications);
-    // formData.append("idFeatures", data.idFeatures);
 
     let message = "Created"
     if (carSelected.id) {
@@ -140,28 +96,10 @@ async function getSpecificationsSelectOption() {
     return await res.json();
 }
 
-// const seat = [];
-// const fuel = [];
-// async function getSpecificationsSelectOption() {
-//     const res = await fetch('api/specifications');
-//     const data =  await res.json();
-//     for (let item of data){
-//         if(item.type === 'SEAT') seat.push(item)
-//         if(item.type === 'FUEL') seat.push(item)
-//     }
-//     return data;
-// }
-
-
 async function getFeaturesSelectOption() {
     const res = await fetch('api/features');
     return await res.json();
 }
-
-// async function getSurchargesSelectOption() {
-//     const res = await fetch('api/surcharges');
-//     return await res.json();
-// }
 
 async function getAgenciesSelectOption() {
     const res = await fetch('api/agencies');
@@ -176,13 +114,12 @@ async function getImagesSelectOption() {
 window.onload = async () => {
     specifications = await getSpecificationsSelectOption();
     features = await getFeaturesSelectOption();
-    // surcharges = await getSurchargesSelectOption();
     agencies = await getAgenciesSelectOption();
     // urlImages = await getImagesSelectOption();
 
     status = await getStatus();
     await renderTable();
-    onLoadSort();
+
 
     renderForm(formBody, getDataInput());
 }
@@ -192,7 +129,7 @@ function getDataInput() {
     return [
         {
             label: 'Name',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'name',
             value: carSelected.name,
             required: true,
@@ -201,7 +138,7 @@ function getDataInput() {
         },
         {
             label: 'Status',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'status',
             type: 'select',
             value: carSelected.status,
@@ -214,7 +151,7 @@ function getDataInput() {
         },
         {
             label: 'License Plate',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'licensePlate',
             value: carSelected.licensePlate,
             required: true,
@@ -223,7 +160,7 @@ function getDataInput() {
         },
         {
             label: 'Agency',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'agency',
             value: carSelected.agencyId,
             type: 'select',
@@ -233,7 +170,7 @@ function getDataInput() {
         },
         {
             label: 'Price Hours',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'priceHours',
             value: carSelected.priceHours,
             pattern: "[1-9][0-9]{1,10}",
@@ -242,7 +179,7 @@ function getDataInput() {
         },
         {
             label: 'Price Days',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'priceDays',
             value: carSelected.priceDays,
             pattern: "[1-9][0-9]{1,10}",
@@ -251,7 +188,7 @@ function getDataInput() {
         },
         {
             label: 'Price Deliverys',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'priceDelivery',
             value: carSelected.priceDelivery,
             pattern: "[1-9][0-9]{1,10}",
@@ -259,28 +196,41 @@ function getDataInput() {
             required: true
         },
         {
+            label: 'Excess Distance Fee',
+            classContainer: "col-6 mt-3",
+            name: 'excessDistanceFee',
+            value: carSelected.excessDistanceFee,
+            required: true,
+            pattern: "^[A-Za-z ]{6,20}",
+            message: "Name must have minimum is 6 characters and maximum is 20 characters",
+        },
+        {
+            label: 'Overtime Fee',
+            classContainer: "col-6 mt-3",
+            name: 'overtimeFee',
+            value: carSelected.overtimeFee,
+            required: true,
+            pattern: "^[A-Za-z ]{6,20}",
+            message: "Name must have minimum is 6 characters and maximum is 20 characters",
+        },
+        {
+            label: 'Cleaning Fee',
+            classContainer: "col-6 mt-3",
+            name: 'cleaningFee',
+            value: carSelected.cleaningFee,
+            required: true,
+            pattern: "^[A-Za-z ]{6,20}",
+            message: "Name must have minimum is 6 characters and maximum is 20 characters",
+        },
+        {
             label: 'Description',
-            classContainer: "col-6",
+            classContainer: "col-12 mt-3",
             name: 'description',
             value: carSelected.description,
             pattern: "^[A-Za-z ]{6,120}",
             message: "Description must have minimum is 6 charactfers and maximum is 20 characters",
             required: true
         },
-        {
-            // label: 'Image',
-            // name: 'urlImages',
-            // value: carSelected.urlImages,
-            // required: true,
-            // message: "Name must have minimum is 6 characters and maximum is 20 characters",
-            // label: 'ID Avatar',
-            // name: 'avatar',
-            // id: 'avatarCreated',
-            // type: 'text', // Đổi type thành 'text'
-            // readonly: true, // Sử dụng readonly thay vì disable
-            // required: false
-        },
-
     ];
 }
 
@@ -340,10 +290,6 @@ function renderTBody(items) {
 async function renderTable() {
     let url = `/api/cars?page=${pageable.page - 1 || 0}&sort=${pageable.sortCustom || 'id,desc'}&search=${pageable.search || ''}`;
     const response = await fetch(url);
-    // const pageable = await getRooms();
-    // rooms = pageable.content;
-    // renderTBody(rooms);
-
 
     const result = await response.json();
     pageable = {
@@ -411,39 +357,6 @@ const onSearch = (e) => {
     pageable.page = 1;
     renderTable();
 }
-// const onLoadSort = () => {
-//     eHeaderPrice.onclick = () => {
-//         let sort = 'price,desc'
-//         if(pageable.sortCustom?.includes('price') &&  pageable.sortCustom?.includes('desc')){
-//             sort = 'price,asc';
-//         }
-//         pageable.sortCustom = sort;
-//         renderTable();
-//     }
-// }
-const onLoadSort = () => {
-    // eHeaderPrice.onclick = () => {
-    //     // Xóa các biểu tượng sắp xếp trước đó trên tất cả các cột
-    //     const headerCells = document.querySelectorAll('th');
-    //     headerCells.forEach(cell => cell.classList.remove('sorted-asc', 'sorted-desc'));
-    //
-    //     let sort = 'price,desc';
-    //     if (pageable.sortCustom?.includes('price') && pageable.sortCustom?.includes('desc')) {
-    //         sort = 'price,asc';
-    //     }
-    //     pageable.sortCustom = sort;
-    //     renderTable();
-    //
-    //     // Thêm biểu tượng sắp xếp vào cột giá (Price)
-    //     eHeaderPrice.classList.add(sort === 'price,asc' ? 'sorted-asc' : 'sorted-desc');
-    // };
-}
-
-const searchInput = document.querySelector('#search');
-
-searchInput.addEventListener('search', () => {
-    onSearch(event)
-});
 
 const addEventEditAndDelete = () => {
     const eEdits = tBody.querySelectorAll('.edit');
@@ -523,35 +436,9 @@ async function showEdit(id) {
             }
         }
     })
-    // carSelected.surchargeIds.forEach(idSurcharge => {
-    //     for (let i = 0; i < eCheckBoxSurcharges.length; i++) {
-    //         if (idSurcharge === +eCheckBoxSurcharges[i].value) {
-    //             eCheckBoxSurcharges[i].checked = true;
-    //         }
-    //     }
-    // })
+
     renderForm(formBody, getDataInput());
 }
-
-// async function editCar(data) {
-//     const res = await fetch('/api/cars/' + data.id, {
-//         method: 'PUT',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(data)
-//     })
-// }
-//
-// async function createCar(data) {
-//     const res = await fetch('/api/cars', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(data)
-//     })
-// }
 
 async function createCar(data) {
     const res = await fetch('/api/cars', {
@@ -619,6 +506,13 @@ async function showDetail(id) {
     eModalSpecification.innerText = carDetail.specificationNames.join(", ");
     eModalFeature.innerText = carDetail.featureNames.join(", ");
     eModalAgency.innerText = carDetail.agencyName;
+
+  carDetail.urlImages.forEach((imgUrl, index)=> {
+      eModalImage[index].src = imgUrl;
+      eModalExcessDistanceFee.innerText = carDetail.excessDistanceFee;
+      eModalOvertimeFee.innerText = carDetail.overtimeFee;
+      eModalCleaningFee.innerText = carDetail.cleaningFee;
+  })
 }
 
 
@@ -687,14 +581,6 @@ async function previewImageFile(file) {
         img.classList.add('avatar-preview');
         imgEle.append(img);
 
-        // imgEle.ap.innerHTML = `
-        //          <img class="avatar-preview" src="${urlImage}">
-        //             <span class="icon-preview-delete">
-        //               <i class="fa-solid fa-delete-left" onclick="onRemoveImage(index)"></i>
-        //            </span>
-        //     `;
-        // imgEle.append(spanAPItemContainer)
-
     };
     reader.readAsDataURL(file);
 
@@ -716,11 +602,6 @@ function formatCurrency(amount) {
 }
 
 function getSpecificationSelects() {
-    // Lấy giá trị từ data cho các Specification (Seats, Fuel, Gear, ...)
-    // const seatsValue = data.seats;
-    // const fuelValue = data.fuel;
-    // const transmissionValue = data.transmission
-    // const luggageValue = data.luggage;
 
     const seatsSelect = document.getElementById('seats');
     let seatsValue = seatsSelect.value;

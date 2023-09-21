@@ -29,6 +29,12 @@ public class CarListResponse {
 
     private BigDecimal priceDelivery;
 
+    private BigDecimal excessDistanceFee;
+
+    private BigDecimal overtimeFee;
+
+    private BigDecimal cleaningFee;
+
     private String description;
 
     private String agency;

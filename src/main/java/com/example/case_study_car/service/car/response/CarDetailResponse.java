@@ -28,6 +28,12 @@ public class CarDetailResponse {
 
     private String description;
 
+    private BigDecimal excessDistanceFee;
+
+    private BigDecimal overtimeFee;
+
+    private BigDecimal cleaningFee;
+
     private Long agencyId;
 
     private List<Long> specificationIds;

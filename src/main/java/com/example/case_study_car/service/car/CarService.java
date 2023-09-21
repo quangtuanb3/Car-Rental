@@ -1,7 +1,6 @@
 package com.example.case_study_car.service.car;
 
 import com.example.case_study_car.domain.*;
-
 import com.example.case_study_car.exception.CarNotFoundException;
 import com.example.case_study_car.repository.*;
 import com.example.case_study_car.service.car.request.CarSaveRequest;
@@ -9,7 +8,7 @@ import com.example.case_study_car.service.car.response.*;
 import com.example.case_study_car.service.car.response.CarDetailResponse;
 import com.example.case_study_car.service.car.response.CarListResponse;
 import com.example.case_study_car.service.car.response.CarShowDetailResponse;
-import com.example.case_study_car.service.image.ImageResponse;
+import com.example.case_study_car.service.response.SelectOptionResponse;
 import com.example.case_study_car.service.image.ImageService;
 import com.example.case_study_car.util.AppUtil;
 import com.example.case_study_car.util.UploadUtil;
@@ -17,16 +16,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import com.example.case_study_car.service.request.SelectOptionRequest;
-
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -184,6 +178,9 @@ public class CarService {
             result.setPriceHours(e.getPriceHours());
             result.setPriceDays(e.getPriceDays());
             result.setPriceDelivery(e.getPriceDelivery());
+            result.setExcessDistanceFee(e.getExcessDistanceFee());
+            result.setOvertimeFee(e.getOvertimeFee());
+            result.setCleaningFee(e.getCleaningFee());
             result.setAgency(e.getAgency().getName());
 //            result.setImage(e.getImages().get(0).getFileUrl());
             result.setImages(
@@ -273,9 +270,14 @@ public class CarService {
                     .getImages()
                     .stream().map(Image::getFileUrl)
                     .collect(Collectors.toList()));
-
             return result;
         });
+    }
+
+    public List<SelectOptionResponse> findAll() {
+        return carRepository.findAll().stream()
+                .map(car -> new SelectOptionResponse(car.getId().toString(), car.getName()))
+                .collect(Collectors.toList());
     }
 
     public List<UserPricingResponse> getCarPricing() {

@@ -24,6 +24,12 @@ public class CarSaveRequest {
 
     private String description;
 
+    private String excessDistanceFee;
+
+    private String overtimeFee;
+
+    private String cleaningFee;
+
     private SelectOptionRequest agency;
 
     private List<String> idSpecifications;
