@@ -109,7 +109,7 @@
         <div class="row no-gutters">
             <div class="col-md-12 d-flex featured-top">
                 <div class="col-md-3"></div>
-                    <div class="col-md-6 d-flex align-items-center">
+                    <div class="col-md-6 d-flex align-items-center form-box login">
                         <div th:if="${param.error}">
                             <div class="alert alert-danger">Invalid Email or Password</div>
                         </div>
@@ -128,23 +128,31 @@
                                 <h2>Login Form</h2>
                                 <div class="form-group">
                                     <label for="username" class="label">Email</label>
-                                    <input
-                                            type="text"
-                                            class="form-control"
-                                            id="username"
-                                            name="username"
-                                            placeholder="Enter Email Address"
-                                    />
+                                    <div class = "input-icon-container">
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="username"
+                                                name="username"
+                                                placeholder="Enter Email Address"
+                                        />
+                                        <i class="fa-solid fa-envelope input-icon"></i>
+                                    </div>
+
                                 </div>
                                 <div class="form-group">
                                     <label for="password" class="label">Password</label>
-                                    <input
-                                            type="password"
-                                            class="form-control"
-                                            id="password"
-                                            name="password"
-                                            placeholder="Enter Password"
-                                    />
+                                    <div class = "input-icon-container">
+                                        <input
+                                                type="password"
+                                                class="form-control"
+                                                id="password"
+                                                name="password"
+                                                placeholder="Enter Password"
+                                        />
+                                        <i class="fa-solid fa-lock input-icon"></i>
+                                    </div>
+
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" id="login-btn" class="btn btn-secondary py-3 px-4">
