@@ -2,6 +2,7 @@ package com.example.case_study_car.controller;
 
 
 import com.example.case_study_car.domain.Car;
+import com.example.case_study_car.domain.UserLogin;
 import com.example.case_study_car.service.car.response.UserCarDetailResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDateTime;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("")
 @AllArgsConstructor
 public class UserController {
     private final CarService carService;
@@ -30,9 +31,17 @@ public class UserController {
         return view;
     }
 
-    @GetMapping
-    public ModelAndView index() {
+//    @GetMapping
+//    public ModelAndView index() {
+//        ModelAndView view = new ModelAndView("user/index");
+//
+//        return view;
+//    }
+
+    @GetMapping()
+    public ModelAndView Home(@RequestParam(required = false) String message) {
         ModelAndView view = new ModelAndView("user/index");
+        view.addObject("message", message);
 
         return view;
     }
@@ -60,6 +69,12 @@ public class UserController {
     ) {
         return new ModelAndView("user/car");
 
+    }
+
+    @PostMapping("/login")
+    public String login(@ModelAttribute UserLogin userLogin) {
+        System.out.println(userLogin.toString());
+        return "user/index";
     }
 
 }
