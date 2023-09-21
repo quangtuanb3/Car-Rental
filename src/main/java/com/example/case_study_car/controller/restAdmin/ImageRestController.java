@@ -22,22 +22,6 @@ public class ImageRestController {
 
     private final ImageService imageService;
 
-//    @GetMapping
-//    public List<SelectOptionResponse> getSelectOption(){
-//        return imageRepository.findAll().stream().map(image -> new SelectOptionResponse(image.getId().toString(), image.getUrl())).collect(Collectors.toList());
-//    }
-
-//    @PostMapping
-//    public ResponseEntity<ImageResponse> uploadImage(@RequestParam("avatar") MultipartFile avatar) {
-//        try {
-//            ImageResponse image = carService.saveAvatar(avatar);
-//            return ResponseEntity.ok(image);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ImageResponse());
-//        }
-//    }
-
     @PostMapping
     public Image upload(@RequestParam("avatar") MultipartFile avatar) throws IOException {
         return imageService.saveAvatar(avatar);

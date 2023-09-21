@@ -46,9 +46,14 @@ public class AuthService implements UserDetailsService {
 
     public boolean checkEmail(RegisterRequest request, BindingResult result) {
         boolean check = false;
-        if (userRepository.existsByEmailIgnoreCase(request.getEmail())) {
-            result.reject("email", null,
+        if (customerRepository.existsByEmailIgnoreCase(request.getEmail())) {
+            result.rejectValue("email", "email",
                     "There is already an account registered with the same email");
+            check = true;
+        }
+        if (customerRepository.existsByNumberPhone(request.getNumberPhone())) {
+            result.rejectValue("numberPhone", "numberPhone",
+                    "There is already an account registered with the same phone number");
             check = true;
         }
         return check;

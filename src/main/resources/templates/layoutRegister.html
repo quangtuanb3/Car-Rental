@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <th:block th:fragment="header-link">
         <title>Car Rental</title>
@@ -33,7 +32,6 @@
         <link rel="stylesheet" href="/assets/user/my-css/customize-style.css">
 
     </th:block>
-
 </head>
 
 <body>
@@ -54,7 +52,7 @@
                     <li class="nav-item" id="menu-pricing"><a href="/pricing" class="nav-link">Pricing</a></li>
                     <li class="nav-item" id="menu-car"><a href="/cars" class="nav-link">Cars</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
-                    <li class="nav-item"><a href="/register" class="nav-link">Register</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
                     <li class="nav-item"><a href="javascript:void(0)" class="nav-link" id="log-btn">Login</a></li>
                 </ul>
             </div>
@@ -67,13 +65,12 @@
          data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="container">
-            <div class="row no-gutters slider-text justify-content-start align-items-center justify-content-center">
+            <div class="row no-gutters slider-text justify-content-start justify-content-center" >
                 <div class="col-lg-8 ">
-                    <div class="text w-100 text-center mb-md-5 pb-md-5">
-                        <h1 class="mb-4">Fast &amp; Easy Way To Rent A Car</h1>
-                        <p style="font-size: 18px;">A small river named Duden flows by their place and supplies it with
-                            the necessary regelialia. It is a paradisematic country, in which roasted parts</p>
-                        <a href="https://vimeo.com/45830194"
+                    <div class="text w-100 text-center mb-md-5 pb-md-5" style="margin-top: 100px">
+                        <h1 class="mb-4">Register & Drive With Us Today!</h1>
+                        <p style="font-size: 18px;">Signing up is a breeze! Simply create an account, and you're ready to explore our wide selection of vehicles and make a reservation in just a few clicks.</p>
+                        <a href="https://www.youtube.com/watch?v=kIyILpyVWzU"
                            class="icon-wrap popup-vimeo d-flex align-items-center mt-4 justify-content-center">
                             <div class="icon d-flex align-items-center justify-content-center">
                                 <span class="ion-ios-play"></span>
@@ -88,261 +85,6 @@
         </div>
     </div>
 </th:block>
-<th:block th:fragment="form-search-container">
-    <section class="ftco-section ftco-no-pt bg-light">
-        <div class="container">
-            <div class="row no-gutters">
-                <div class="col-md-12 featured-top">
-                    <div class="row no-gutters">
-                        <div class="col-md-4 d-flex align-items-center">
-                            <th:block th:fragment="form-search">
-                                <form action="#" class="request-form bg-dark-blue" id="search-car-form">
-                                    <h2>Make your trip</h2>
-                                    <div class="form-group">
-                                        <label for="key-search" class="label">Enter your keyword</label>
-                                        <input type="text" class="form-control" id="key-search" name="key-search"
-                                               placeholder="Search by name, type,...">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="pickup_location" class="label">Pick-up location</label>
-                                        <input type="text" class="form-control" id="pickup_location"
-                                               name="pickup_location"
-                                               placeholder="City, Airport, Station, etc">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="drop_off_location" class="label">Drop-off location</label>
-                                        <input type="text" class="form-control" id="drop_off_location"
-                                               name="drop_off_location"
-                                               placeholder="City, Airport, Station, etc">
-                                    </div>
-
-                                    <div class="form-group mr-2">
-                                        <label for="pickup_time" class="label">Pick-up time</label>
-                                        <input type="datetime-local" class="form-control" id="pickup_time"
-                                               name="pickup_time"
-                                               placeholder="Date">
-                                    </div>
-                                    <div class="form-group mr-2">
-                                        <label for="drop_off_time" class="label">Drop-off time</label>
-                                        <input type="datetime-local" class="form-control" id="drop_off_time"
-                                               name="drop_off_time"
-                                               placeholder="Date">
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="button" id="search-car-btn" class="btn btn-secondary py-3 px-4">
-                                            Check Available
-                                        </button>
-                                    </div>
-                                </form>
-                            </th:block>
-
-                        </div>
-                        <div class="col-md-8 d-flex align-items-center">
-                            <div class="services-wrap rounded-right w-100">
-                                <h3 class="heading-section mb-4">Better Way to Rent Your Perfect Cars</h3>
-                                <div class="row d-flex mb-4">
-                                    <div class="col-md-4 d-flex align-self-stretch ">
-                                        <div class="services w-100 text-center">
-                                            <div class="icon d-flex align-items-center justify-content-center"><span
-                                                    class="flaticon-route"></span></div>
-                                            <div class="text w-100">
-                                                <h3 class="heading mb-2">Choose Your Pickup Location</h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 d-flex align-self-stretch ">
-                                        <div class="services w-100 text-center">
-                                            <div class="icon d-flex align-items-center justify-content-center"><span
-                                                    class="flaticon-handshake"></span></div>
-                                            <div class="text w-100">
-                                                <h3 class="heading mb-2">Select the Best Deal</h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 d-flex align-self-stretch ">
-                                        <div class="services w-100 text-center">
-                                            <div class="icon d-flex align-items-center justify-content-center"><span
-                                                    class="flaticon-rent"></span></div>
-                                            <div class="text w-100">
-                                                <h3 class="heading mb-2">Reserve Your Rental Car</h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p><a href="/cars" class="btn btn-primary py-3 px-4">Reserve Your Perfect Car</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </section>
-</th:block>
-
-
-<section class="ftco-section ftco-no-pt bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12 heading-section text-center  mb-5">
-                <span class="subheading">What we offer</span>
-                <h2 class="mb-2">Feeatured Vehicles</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="carousel-car owl-carousel">
-                    <div class="item">
-                        <div class="car-wrap rounded">
-                            <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(/assets/user/images/car-1.jpg);">
-                            </div>
-                            <div class="text">
-                                <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
-                                <div class="d-flex mb-3">
-                                    <span class="cat">Cheverolet</span>
-                                    <p class="price ml-auto">$500 <span>/day</span></p>
-                                </div>
-                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
-                                    now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="car-wrap rounded  ">
-                            <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(/assets/user/images/car-2.jpg);">
-                            </div>
-                            <div class="text">
-                                <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
-                                <div class="d-flex mb-3">
-                                    <span class="cat">Cheverolet</span>
-                                    <p class="price ml-auto">$500 <span>/day</span></p>
-                                </div>
-                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
-                                    now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="car-wrap rounded  ">
-                            <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(/assets/user/images/car-3.jpg);">
-                            </div>
-                            <div class="text">
-                                <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
-                                <div class="d-flex mb-3">
-                                    <span class="cat">Cheverolet</span>
-                                    <p class="price ml-auto">$500 <span>/day</span></p>
-                                </div>
-                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
-                                    now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="car-wrap rounded  ">
-                            <div class="img rounded d-flex align-items-end"
-                                 style="background-image: url(/assets/user/images/car-4.jpg);">
-                            </div>
-                            <div class="text">
-                                <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
-                                <div class="d-flex mb-3">
-                                    <span class="cat">Cheverolet</span>
-                                    <p class="price ml-auto">$500 <span>/day</span></p>
-                                </div>
-                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
-                                    now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="ftco-section ftco-about">
-    <div class="container">
-        <div class="row no-gutters">
-            <div class="col-md-6 p-md-5 img img-2 d-flex justify-content-center align-items-center"
-                 style="background-image: url('/assets/user/images/about.jpg');">
-            </div>
-            <div class="col-md-6 wrap-about  ">
-                <div class="heading-section heading-section-white pl-md-5">
-                    <span class="subheading">About us</span>
-                    <h2 class="mb-4">Welcome to Carbook</h2>
-
-                    <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.
-                        It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-                    <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it
-                        would have been rewritten a thousand times and everything that was left from its origin
-                        would be the word "and" and the Little Blind Text should turn around and return to its own,
-                        safe country. A small river named Duden flows by their place and supplies it with the
-                        necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly
-                        into your mouth.</p>
-                    <p><a href="#" class="btn btn-primary py-3 px-4">Search Vehicle</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="ftco-section">
-    <div class="container">
-        <div class="row justify-content-center mb-5">
-            <div class="col-md-7 text-center heading-section  ">
-                <span class="subheading">Services</span>
-                <h2 class="mb-3">Our Latest Services</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <div class="services services-2 w-100 text-center">
-                    <div class="icon d-flex align-items-center justify-content-center"><span
-                            class="flaticon-wedding-car"></span></div>
-                    <div class="text w-100">
-                        <h3 class="heading mb-2">Wedding Ceremony</h3>
-                        <p>A small river named Duden flows by their place and supplies it with the necessary
-                            regelialia.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="services services-2 w-100 text-center">
-                    <div class="icon d-flex align-items-center justify-content-center"><span
-                            class="flaticon-transportation"></span></div>
-                    <div class="text w-100">
-                        <h3 class="heading mb-2">City Transfer</h3>
-                        <p>A small river named Duden flows by their place and supplies it with the necessary
-                            regelialia.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="services services-2 w-100 text-center">
-                    <div class="icon d-flex align-items-center justify-content-center"><span
-                            class="flaticon-car"></span></div>
-                    <div class="text w-100">
-                        <h3 class="heading mb-2">Airport Transfer</h3>
-                        <p>A small river named Duden flows by their place and supplies it with the necessary
-                            regelialia.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="services services-2 w-100 text-center">
-                    <div class="icon d-flex align-items-center justify-content-center"><span
-                            class="flaticon-transportation"></span></div>
-                    <div class="text w-100">
-                        <h3 class="heading mb-2">Whole City Tour</h3>
-                        <p>A small river named Duden flows by their place and supplies it with the necessary
-                            regelialia.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <section class="ftco-section ftco-intro" style="background-image: url('/assets/user/images/bg_3.jpg');">
     <div class="overlay"></div>
     <div class="container">
@@ -535,76 +277,76 @@
 </section>
 
 <th:block th:fragment="loginForm">
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Login</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-12">
-                        <div th:if="${param.error}">
-                            <div class="alert alert-danger">Invalid Email or Password</div>
-                        </div>
-                        <div th:if="${param.logout}">
-                            <div class="alert alert-success"> You have been logged out.</div>
-                        </div>
+<!--    &lt;!&ndash; Modal &ndash;&gt;-->
+<!--    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"-->
+<!--         aria-hidden="true">-->
+<!--        <div class="modal-dialog" role="document">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h5 class="modal-title" id="exampleModalLabel">Login</h5>-->
+<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                        <span aria-hidden="true">&times;</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <div class="col-12">-->
+<!--                        <div th:if="${param.error}">-->
+<!--                            <div class="alert alert-danger">Invalid Email or Password</div>-->
+<!--                        </div>-->
+<!--                        <div th:if="${param.logout}">-->
+<!--                            <div class="alert alert-success"> You have been logged out.</div>-->
+<!--                        </div>-->
 
-                        <div class=" container">
-                            <div>
-                                <form
-                                        method="post"
-                                        role="form"
-                                        th:action="@{/login}"
-                                        class="form-horizontal"
-                                >
-                                    <div class="form-group mb-3">
-                                        <label class="control-label"> Email</label>
-                                        <input
-                                                type="text"
-                                                id="username"
-                                                name="username"
-                                                class="form-control"
-                                                placeholder="Enter email address"
-                                                value="aaa@gmail.com"
-                                        />
-                                    </div>
+<!--                        <div class=" container">-->
+<!--                            <div>-->
+<!--                                <form-->
+<!--                                        method="post"-->
+<!--                                        role="form"-->
+<!--                                        th:action="@{/login}"-->
+<!--                                        class="form-horizontal"-->
+<!--                                >-->
+<!--                                    <div class="form-group mb-3">-->
+<!--                                        <label class="control-label"> Email</label>-->
+<!--                                        <input-->
+<!--                                                type="text"-->
+<!--                                                id="username"-->
+<!--                                                name="username"-->
+<!--                                                class="form-control"-->
+<!--                                                placeholder="Enter email address"-->
+<!--                                                value="aaa@gmail.com"-->
+<!--                                        />-->
+<!--                                    </div>-->
 
-                                    <div class="form-group mb-3">
-                                        <label class="control-label"> Password</label>
-                                        <input
-                                                type="password"
-                                                id="password"
-                                                name="password"
-                                                class="form-control"
-                                                placeholder="Enter password"
-                                                value="123"
-                                        />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <span> Not registered ?
-                                <a th:href="@{/register}">Register/Signup here</a>
-                            </span>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                                        </button>
-                                        <button type="submit" class="btn btn-primary">Login</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!--                                    <div class="form-group mb-3">-->
+<!--                                        <label class="control-label"> Password</label>-->
+<!--                                        <input-->
+<!--                                                type="password"-->
+<!--                                                id="password"-->
+<!--                                                name="password"-->
+<!--                                                class="form-control"-->
+<!--                                                placeholder="Enter password"-->
+<!--                                                value="123"-->
+<!--                                        />-->
+<!--                                    </div>-->
+<!--                                    <div class="form-group mb-3">-->
+<!--                                        <span> Not registered ?-->
+<!--                                <a th:href="@{/register}">Register/Signup here</a>-->
+<!--                            </span>-->
+<!--                                    </div>-->
+<!--                                    <div class="modal-footer">-->
+<!--                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close-->
+<!--                                        </button>-->
+<!--                                        <button type="submit" class="btn btn-primary">Login</button>-->
+<!--                                    </div>-->
+<!--                                </form>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-            </div>
-        </div>
-    </div>
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </th:block>
 
 <th:block th:fragment="myFooter">

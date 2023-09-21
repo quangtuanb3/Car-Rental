@@ -25,16 +25,9 @@ import java.time.LocalDateTime;
 public class UserController {
     private final CarService carService;
 
-    @GetMapping("/cars")
-    public ModelAndView car() {
-        ModelAndView view = new ModelAndView("user/car");
-        return view;
-    }
-
     @GetMapping
     public ModelAndView index() {
         ModelAndView view = new ModelAndView("user/index");
-
         return view;
     }
 
@@ -45,9 +38,16 @@ public class UserController {
         return view;
     }
 
+    @GetMapping("/cars")
+    public ModelAndView car() {
+        ModelAndView view = new ModelAndView("user/car");
+        return view;
+    }
+
     @GetMapping("pricing")
     public ModelAndView pricing() {
         ModelAndView view = new ModelAndView("user/pricing");
+        view.addObject("cars", carService.getCarPricing());
         return view;
     }
 
