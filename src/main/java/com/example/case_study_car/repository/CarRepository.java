@@ -49,4 +49,10 @@ public interface CarRepository extends JpaRepository<Car, Long> {
                              @Param("id") Long id);
 
 
+
+    @Query("SELECT c FROM Car c")
+    Page<Car> findAllCarsWithPagination(Pageable pageable);
+
+
+
 }

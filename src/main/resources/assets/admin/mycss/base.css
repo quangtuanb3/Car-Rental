@@ -45,3 +45,27 @@ th.sorted-desc::after {
     margin-right: 10px;
 }
 
+
+ .RESERVING {
+     background: yellow; /* Màu nền là màu vàng */
+     border: yellow; /* Màu viền là màu vàng */
+     font-weight: bold; /* Độ đậm chữ */
+     color: black; /* Màu chữ là màu đen */
+ }
+.DEPOSITED{
+    background: aquamarine;
+    border: aquamarine;
+    font-weight: bold;
+}
+
+.PAID{
+    background: darkslateblue;
+    border: darkslateblue;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+
+.notify span{font-size: 15px; color: blue;}
+
+

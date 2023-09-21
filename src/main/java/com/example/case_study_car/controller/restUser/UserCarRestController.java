@@ -4,10 +4,7 @@ package com.example.case_study_car.controller.restUser;
 import com.example.case_study_car.service.bill.BillService;
 import com.example.case_study_car.service.bill.request.BillSaveRequest;
 import com.example.case_study_car.service.car.CarService;
-import com.example.case_study_car.service.car.response.BestCarResponse;
-import com.example.case_study_car.service.car.response.CarListResponse;
-import com.example.case_study_car.service.car.response.RelatedCarResponse;
-import com.example.case_study_car.service.car.response.UserCarDetailResponse;
+import com.example.case_study_car.service.car.response.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,5 +72,11 @@ public class UserCarRestController {
 //        carService.delete(id);
 //        return ResponseEntity.ok().build();
 //    }
+
+    @GetMapping
+    public ResponseEntity<Page<CarPaginationResponse>> getCarsPagination(@PageableDefault(size = 5) Pageable pageable
+                                                               ) {
+        return new ResponseEntity<>(carService.getCarPagination(pageable), HttpStatus.OK);
+    }
 
 }

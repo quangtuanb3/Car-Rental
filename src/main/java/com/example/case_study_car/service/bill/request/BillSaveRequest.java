@@ -39,4 +39,6 @@ public class BillSaveRequest {
 
     private  String licensePlate;
 
+    private String billStatus;
+
 }

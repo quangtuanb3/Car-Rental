@@ -108,14 +108,14 @@
                 <div class="row mt-5">
                     <div class="col text-center">
                         <div class="block-27">
-                            <ul>
-                                <li><a href="#">&lt;</a></li>
+                            <ul class="car-Pagination" id="car-Pagination">
+                                <li><a href="#"><</a></li>
                                 <li class="active"><span>1</span></li>
                                 <li><a href="#">2</a></li>
                                 <li><a href="#">3</a></li>
                                 <li><a href="#">4</a></li>
                                 <li><a href="#">5</a></li>
-                                <li><a href="#">&gt;</a></li>
+                                <li><a href="#">></a></li>
                             </ul>
                         </div>
                     </div>
@@ -208,6 +208,8 @@
 
 
 <th:block th:replace="layoutUser::myScript"></th:block>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/assets/user/my-js/car-pagination.js"></script>
 <script>
     document.getElementById("menu-car").classList.add("active");
     document.getElementById("menu-home").classList.remove("active");

@@ -9,6 +9,7 @@ import com.example.case_study_car.service.car.response.*;
 import com.example.case_study_car.service.car.response.CarDetailResponse;
 import com.example.case_study_car.service.car.response.CarListResponse;
 import com.example.case_study_car.service.car.response.CarShowDetailResponse;
+import com.example.case_study_car.service.response.SelectOptionResponse;
 import com.example.case_study_car.util.AppUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -213,6 +214,9 @@ public class CarService {
             result.setPriceHours(e.getPriceHours());
             result.setPriceDays(e.getPriceDays());
             result.setPriceDelivery(e.getPriceDelivery());
+            result.setExcessDistanceFee(e.getExcessDistanceFee());
+            result.setOvertimeFee(e.getOvertimeFee());
+            result.setCleaningFee(e.getCleaningFee());
             result.setAgency(e.getAgency().getName());
             result.setSpecifications(e.getCarSpecifications()
                     .stream().map(s -> s.getSpecification().getName())
@@ -288,5 +292,25 @@ public class CarService {
                 .stream().map(Image::getUrl)
                 .collect(Collectors.toList()));
         return result;
+    }
+
+    public Page<CarPaginationResponse> getCarPagination(Pageable pageable) {
+        return carRepository.findAllCarsWithPagination(pageable).map(e -> {
+            var result = new CarPaginationResponse();
+            result.setName(e.getName());
+            result.setId(e.getId());
+            result.setDescription(e.getDescription());
+            result.setPriceDays(e.getPriceDays());
+            result.setUrlImages(e.getImages()
+                    .stream().map(Image::getUrl)
+                    .collect(Collectors.joining(", ")));
+            return result;
+        });
+    }
+
+    public List<SelectOptionResponse> findAll() {
+        return carRepository.findAll().stream()
+                .map(car -> new SelectOptionResponse(car.getId().toString(), car.getName()))
+                .collect(Collectors.toList());
     }
 }

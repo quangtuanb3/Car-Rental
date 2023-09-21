@@ -25,6 +25,12 @@ public class CarShowDetailResponse {
 
     private BigDecimal priceDelivery;
 
+    private BigDecimal excessDistanceFee;
+
+    private BigDecimal overtimeFee;
+
+    private BigDecimal cleaningFee;
+
     private String description;
 
     private String agencyName;
@@ -35,5 +41,5 @@ public class CarShowDetailResponse {
 
     private List<String> urlImages;
 
-//    private List<String> surchargeNames;
+    private List<String> surchargeNames;
 }

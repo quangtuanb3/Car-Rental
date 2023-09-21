@@ -25,29 +25,33 @@ let eModalFeature = document.getElementById("modal-car-feature");
 // let eModalSurcharge = document.getElementById("modal-car-surcharge");
 let eModalImage = document.getElementsByClassName("modal-car-image");
 let eModalAgency = document.getElementById("modal-car-agency");
+let eModalExcessDistanceFee = document.getElementById("modal-car-excessDistanceFee");
+let eModalOvertimeFee = document.getElementById("modal-car-overtimeFee");
+let eModalCleaningFee = document.getElementById("modal-car-cleaningFee");
+
 
 //modal-car-populate price Hours và Day:
 
 // Đoạn mã JavaScript để lấy giá trị từ các thẻ <td> và định dạng chúng thành tiền tệ VND
-const priceHoursElement = document.getElementById("modal-car-priceHours");
-const priceDaysElement = document.getElementById("modal-car-priceDays");
-const priceDeliverysElement = document.getElementById("modal-car-priceDeliverys");
+// const priceHoursElement = document.getElementById("modal-car-priceHours");
+// const priceDaysElement = document.getElementById("modal-car-priceDays");
+// const priceDeliverysElement = document.getElementById("modal-car-priceDeliverys");
 
 // Lấy giá trị từ các thẻ <td>
-const priceHoursValue = parseFloat(priceHoursElement.textContent.replace("$", ""));
-const priceDaysValue = parseFloat(priceDaysElement.textContent.replace("$", ""));
-const priceDeliverysValue = parseFloat(priceDeliverysElement.textContent.replace("$", ""));
+// const priceHoursValue = parseFloat(priceHoursElement.textContent.replace("$", ""));
+// const priceDaysValue = parseFloat(priceDaysElement.textContent.replace("$", ""));
+// const priceDeliverysValue = parseFloat(priceDeliverysElement.textContent.replace("$", ""));
 
 
 // Chuyển đổi và định dạng giá trị thành tiền tệ VND bằng hàm formatCurrency
-const formattedPriceHours = formatCurrency(priceHoursValue);
-const formattedPriceDays = formatCurrency(priceDaysValue);
-const formattedPriceDeliverys = formatCurrency(priceDeliverysValue);
+// const formattedPriceHours = formatCurrency(priceHoursValue);
+// const formattedPriceDays = formatCurrency(priceDaysValue);
+// const formattedPriceDeliverys = formatCurrency(priceDeliverysValue);
 
 // Cập nhật giá trị đã định dạng vào các thẻ <td>
-priceHoursElement.textContent = formattedPriceHours;
-priceDaysElement.textContent = formattedPriceDays;
-priceDeliverysElement.textContent = formattedPriceDeliverys;
+// priceHoursElement.textContent = formattedPriceHours;
+// priceDaysElement.textContent = formattedPriceDays;
+// priceDeliverysElement.textContent = formattedPriceDeliverys;
 
 let specifications;
 let features;
@@ -71,14 +75,16 @@ carForm.onsubmit = async (e) => {
     let data = getDataFromForm(carForm);
 
 
-    //
-    // // Định dạng giá trị thành tiền tệ VND
-    // const formattedPriceHours = formatCurrency(priceHoursValue);x`
-    // const formattedPriceDays = formatCurrency(priceDaysValue);
-    //
-    // // Cập nhật giá trị hiển thị trong modal chi tiết xe
-    // document.getElementById("priceHoursValue").textContent = formattedPriceHours;
-    // document.getElementById("priceDaysValue").textContent = formattedPriceDays;
+
+     // Định dạng giá trị thành tiền tệ VND
+     const formattedPriceHours = formatCurrency(priceHoursValue);
+     const formattedPriceDays = formatCurrency(priceDaysValue);
+
+     // Cập nhật giá trị hiển thị trong modal chi tiết xe
+     document.getElementById("priceHoursValue").textContent = formattedPriceHours;
+     document.getElementById("priceDaysValue").textContent = formattedPriceDays;
+
+
    let specificationSelect =  getSpecificationSelects();
     data = {
         ...data,
@@ -160,7 +166,7 @@ function getDataInput() {
     return [
         {
             label: 'Name',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'name',
             value: carSelected.name,
             required: true,
@@ -169,7 +175,7 @@ function getDataInput() {
         },
         {
             label: 'Status',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'status',
             type: 'select',
             value: carSelected.status,
@@ -182,7 +188,7 @@ function getDataInput() {
         },
         {
             label: 'License Plate',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'licensePlate',
             value: carSelected.licensePlate,
             required: true,
@@ -191,7 +197,7 @@ function getDataInput() {
         },
         {
             label: 'Agency',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'agency',
             value: carSelected.agencyId,
             type: 'select',
@@ -201,7 +207,7 @@ function getDataInput() {
         },
         {
             label: 'Price Hours',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'priceHours',
             value: carSelected.priceHours,
             pattern: "[1-9][0-9]{1,10}",
@@ -210,7 +216,7 @@ function getDataInput() {
         },
         {
             label: 'Price Days',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'priceDays',
             value: carSelected.priceDays,
             pattern: "[1-9][0-9]{1,10}",
@@ -219,7 +225,7 @@ function getDataInput() {
         },
         {
             label: 'Price Deliverys',
-            classContainer: "col-6",
+            classContainer: "col-6 mt-3",
             name: 'priceDelivery',
             value: carSelected.priceDelivery,
             pattern: "[1-9][0-9]{1,10}",
@@ -227,8 +233,35 @@ function getDataInput() {
             required: true
         },
         {
+            label: 'Excess Distance Fee',
+            classContainer: "col-6 mt-3",
+            name: 'excessDistanceFee',
+            value: carSelected.excessDistanceFee,
+            required: true,
+            pattern: "^[A-Za-z ]{6,20}",
+            message: "Name must have minimum is 6 characters and maximum is 20 characters",
+        },
+        {
+            label: 'Overtime Fee',
+            classContainer: "col-6 mt-3",
+            name: 'overtimeFee',
+            value: carSelected.overtimeFee,
+            required: true,
+            pattern: "^[A-Za-z ]{6,20}",
+            message: "Name must have minimum is 6 characters and maximum is 20 characters",
+        },
+        {
+            label: 'Cleaning Fee',
+            classContainer: "col-6 mt-3",
+            name: 'cleaningFee',
+            value: carSelected.cleaningFee,
+            required: true,
+            pattern: "^[A-Za-z ]{6,20}",
+            message: "Name must have minimum is 6 characters and maximum is 20 characters",
+        },
+        {
             label: 'Description',
-            classContainer: "col-6",
+            classContainer: "col-12 mt-3",
             name: 'description',
             value: carSelected.description,
             pattern: "^[A-Za-z ]{6,120}",
@@ -530,10 +563,14 @@ let carDetail = await findRoomDetailById(id)
       eModalImage[index].src=imgUrl;
   });
 
+    eModalExcessDistanceFee.innerText = carDetail.excessDistanceFee;
+    eModalOvertimeFee.innerText = carDetail.overtimeFee;
+    eModalCleaningFee.innerText = carDetail.cleaningFee;
+
     // const formattedPriceHours = formatCurrency(carDetail.priceHours);
     // const formattedPriceDays = formatCurrency(carDetail.priceDays);
     // const formattedPriceDeliverys = formatCurrency(carDetail.priceDeliveys);
-    // eModalPriceHours.innerText = carDetail.priceHours;
+    // eModalPriceHours.innerText = formattedPriceHours;
     // eModalPriceDays.innerText = formattedPriceDays;
     // eModalPriceDeliverys.innerText = formattedPriceDeliverys;
 }

@@ -1,15 +1,17 @@
 package com.example.case_study_car.domain;
 
+import com.example.case_study_car.domain.enumaration.EBillStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Table
+@Table(name = "bills")
 @Entity
 @NoArgsConstructor
 @Getter
@@ -37,9 +39,9 @@ public class Bill {
 
     private LocalDateTime actualDropOffTime;
 
-    private String deliveryFee;
+    private BigDecimal deliveryFee;
 
-    private String totalPrice;
+    private BigDecimal totalPrice;
 
     private BigDecimal rentPrice;
 
@@ -53,7 +55,10 @@ public class Bill {
 
     private String tradeCode;
 
+    private String licensePlate;
 
+    @Enumerated(value = EnumType.STRING)
+    private EBillStatus billStatus;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -61,4 +66,6 @@ public class Bill {
 
     @ManyToOne()
     private Car car;
+
+
 }
