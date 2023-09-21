@@ -214,15 +214,7 @@
                     <th>No.</th>
                     <th>Name</th>
                     <th>LicensePlate</th>
-                    <!--          <th>Description</th>-->
-                    <!--          <th>PriceHours</th>-->
-                    <!--          <th>PriceDays</th>-->
-                    <!--          <th class="sortable" id="header-price">Price</th>-->
                     <th>Agency</th>
-                    <!--          <th>Specifications</th>-->
-                    <!--          <th>Features</th>-->
-                    <!--          <th>Surcharges</th>-->
-                    <!--          <th>Images</th>-->
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -250,29 +242,29 @@
         $('[data-toggle="dropdown"]').dropdown();
     });
 </script>
-<!--<script>-->
-<!--    // Sử dụng AJAX để lấy danh sách ảnh từ cơ sở dữ liệu (giả sử là JSON)-->
-<!--    $.getJSON('your_database_endpoint', function (data) {-->
-<!--        console.log('your_database_endpoint', data)-->
-<!--        var $carouselInner = $('#carouselExample .carousel-inner');-->
+<script>
+    // Sử dụng AJAX để lấy danh sách ảnh từ cơ sở dữ liệu (giả sử là JSON)
+    $.getJSON('your_database_endpoint', function (data) {
+        console.log('your_database_endpoint', data)
+        var $carouselInner = $('#carouselExample .carousel-inner');
 
-<!--        // Thêm các slide dựa trên số lượng ảnh từ cơ sở dữ liệu-->
-<!--        $.each(data, function (index, image) {-->
-<!--            var $carouselItem = $('<div class="carousel-item"><img class="modal-car-image img-fluid" alt="Car Image ' + (index + 1) + '" src="' + image.url + '"></div>');-->
-<!--            if (index === 0) {-->
-<!--                $carouselItem.addClass('active'); // Đánh dấu slide đầu tiên là active-->
-<!--            }-->
-<!--            $carouselInner.append($carouselItem);-->
-<!--        });-->
+        // Thêm các slide dựa trên số lượng ảnh từ cơ sở dữ liệu
+        $.each(data, function (index, image) {
+            var $carouselItem = $('<div class="carousel-item"><img class="modal-car-image img-fluid" alt="Car Image ' + (index + 1) + '" src="' + image.url + '"></div>');
+            if (index === 0) {
+                $carouselItem.addClass('active'); // Đánh dấu slide đầu tiên là active
+            }
+            $carouselInner.append($carouselItem);
+        });
 
-<!--        // Khởi tạo carousel-->
-<!--        $('#carouselExample').carousel({-->
-<!--            interval: 1000, // Thời gian chuyển đổi mỗi slide (3 giây)-->
-<!--            ride: "carousel",-->
-<!--            wrap: true // Cho phép lặp lại khi đến slide cuối cùng-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
+        // Khởi tạo carousel
+        $('#carouselExample').carousel({
+            interval: 1000, // Thời gian chuyển đổi mỗi slide (3 giây)
+            ride: "carousel",
+            wrap: true // Cho phép lặp lại khi đến slide cuối cùng
+        });
+    });
+</script>
 
 <script>
     function getSpecificationSelect(selectElement) {

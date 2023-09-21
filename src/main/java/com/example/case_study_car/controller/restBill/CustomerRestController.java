@@ -1,4 +1,4 @@
-package com.example.case_study_car.controller.restAdmin;
+package com.example.case_study_car.controller.restBill;
 
 
 import com.example.case_study_car.repository.CustomerRepository;

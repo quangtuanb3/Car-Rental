@@ -32,4 +32,10 @@ public class CustomerService {
                 .orElseThrow(()-> new RuntimeException("Not found"));
     }
 
+    public List<SelectOptionResponse> findAll() {
+        return customerRepository.findAll().stream()
+                .map(customer -> new SelectOptionResponse(customer.getId().toString(), customer.getName()))
+                .collect(Collectors.toList());
+    }
+
 }
