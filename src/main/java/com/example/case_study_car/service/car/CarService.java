@@ -298,11 +298,11 @@ public class CarService {
                     .map(Image::getFileUrl)
                     .collect(Collectors.toList());
             result.setUrlImages(imageUrls);
-
             System.out.println(result);
             return result;
         }).collect(Collectors.toList());
     }
+
     public Boolean iskAvailable(Long id, LocalDateTime pickup, LocalDateTime dropOff) {
         return carRepository.isAvailable(id, pickup, dropOff);
     }
