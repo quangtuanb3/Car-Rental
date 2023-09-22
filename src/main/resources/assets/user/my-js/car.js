@@ -248,12 +248,15 @@ async function handleLogBtn() {
         loginBtn.onclick = () => {
             showLogin();
         };
-        eRegisterLi.innerHTML= `<a href="/register" class="nav-link">Register</a>`
+        eRegisterLi.innerHTML= `<a href="/register" class="nav-link">Register</a>`;
     } else {
         loginBtn.innerText = "Logout"; // Change the text for authenticated users
         loginBtn.href = "/logout"; // Update the "href" attribute for logout
         loginBtn.onclick = null; // Remove the click event handler
         eRegisterLi.innerHTML="";
+        if(customer.role === "ROLE_ADMIN"){
+            eRegisterLi.innerHTML=`<a href="/home" class="nav-link">Dashboard</a>`;
+        }
     }
 }
 
