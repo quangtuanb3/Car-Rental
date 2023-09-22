@@ -203,6 +203,24 @@ function handleSearchCar() {
     //     alert('OK')
     // }
     eSearchCarBtn.onclick = async () => {
+        const currentTime = new Date();
+
+        // Validate pickup time and drop-off time
+        const pickup = document.getElementById("pickup_time").value;
+        const dropOff = document.getElementById("drop_off_time").value;
+        if (pickup === '' || dropOff === '') {
+            toastr.error("Invalid rental time");
+            return;
+        }
+        if (new Date(pickup) <= currentTime) {
+            toastr.error("Invalid Pickup time");
+            return;
+        }
+
+        if (new Date(dropOff) <= pickup_time) {
+            toastr.error("Invalid drop-off time");
+            return;
+        }
         // let form = new FormData(eSearchCarForm);
         let form = new FormData(eSearchForm);
         pageable.search = form.get("key-search");
@@ -217,12 +235,6 @@ function handleSearchCar() {
         await renderAvailableCars();
     }
 }
-
-// function showLogin() {
-//     // $("#exampleModal").show()
-//     $('#exampleModal').modal('hide');
-// }
-
 
 async function getCurrentCustom() {
     let res = await fetch("user/api/customer-detail");
@@ -256,26 +268,3 @@ async function handleLogBtn() {
         eRegisterLi.innerHTML="";
     }
 }
-
-// async function getCurrentCustom() {
-//     let res = await fetch("user/api/customer-detail");
-//     return await res.json();
-// }
-
-// function showMsg() {
-//     // Check if a "message" query parameter exists in the URL
-//     const message = getQueryParam("message");
-//
-// // Show the logout message if it exists
-//     if (message.includes("successfully")) {
-//         toastr.success(message);
-//     } else {
-//         toastr.error(message);
-//     }
-// }
-
-// function getQueryParam(key) {
-//     const urlSearchParams = new URLSearchParams(window.location.search);
-//     return urlSearchParams.get(key);
-// }
-//
