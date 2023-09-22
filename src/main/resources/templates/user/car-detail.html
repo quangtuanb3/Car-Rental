@@ -11,15 +11,15 @@
     <div class="container-fluid">
         <div class="row justify-content-around">
             <div class="col-7">
-                <a href="/assets/user/images/car-1.jpg" data-lightbox="gallery">
+                <a th:href="${car.urlImages[0]}" data-lightbox="gallery">
                     <img th:src="${car.urlImages[0]}" alt="Image 1" id="poster" class="detail-img">
                 </a>
             </div>
             <div class="col-5 justify-content-around">
-                <a href="/assets/user/images/car-2.jpg" data-lightbox="gallery">
+                <a th:href="${car.urlImages[1]}" data-lightbox="gallery">
                     <img th:src="${car.urlImages[1]}" alt="Image 2" class="sub-img detail-img">
                 </a>
-                <a href="/assets/user/images/car-3.jpg" data-lightbox="gallery">
+                <a th:href="${car.urlImages[2]}" data-lightbox="gallery">
                     <img th:src="${car.urlImages[2]}" alt="Image 3" class="sub-img detail-img"
                          style="margin-top: 20px">
                 </a>

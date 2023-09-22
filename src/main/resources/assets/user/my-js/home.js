@@ -12,15 +12,27 @@ let pageable = {
     dropOffLocation: '',
 }
 eSearchCarBtn.onclick = () => {
+    const currentTime = new Date();
+    // Validate pickup time and drop-off time
+    const pickup = document.getElementById("pickup_time").value;
+    const dropOff = document.getElementById("drop_off_time").value;
+
+    if (new Date(pickup) <= currentTime) {
+        toastr.error("Invalid Pickup time");
+        return;
+    }
+
+    if (new Date(dropOff) <= pickup_time) {
+        toastr.error("Invalid drop-off time");
+        return;
+    }
     const form = new FormData(eSearchCarForm);
     pageable.search = form.get("key-search");
     pageable.pickupTime = form.get("pickup_time")
     pageable.dropOffTime = form.get("drop_off_time")
     pageable.pickupLocation = form.get("pickup_location")
     pageable.dropOffLocation = form.get("drop_off_location")
-    let url = `/cars/available-cars?search=${pageable.search}&pickupTime=${pageable.pickupTime}&dropOffTime=${pageable.dropOffTime}&pickupLocation=${pageable.pickupLocation}&dropOffLocation=${pageable.dropOffLocation}`
-    console.log(url);
-    window.location.href = url;
+    window.location.href = `/cars/available-cars?search=${pageable.search}&pickupTime=${pageable.pickupTime}&dropOffTime=${pageable.dropOffTime}&pickupLocation=${pageable.pickupLocation}&dropOffLocation=${pageable.dropOffLocation}`;
 
 }
 

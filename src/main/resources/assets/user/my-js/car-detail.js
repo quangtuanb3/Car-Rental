@@ -81,19 +81,24 @@ async function calculateTotal() {
 }
 
 function renderDataInFormSearch() {
-    pageable = JSON.parse(localStorage.getItem('pageable'));
-    if (pageable) {
-        ePickup_time.value = pageable.pickupTime;
-        eDrop_off_time.value = pageable.dropOffTime;
-        ePickUpLocation.value = pageable.pickupLocation;
-        eDropOffLocation.value = pageable.dropOffLocation;
+
+    let formInputData = JSON.parse(localStorage.getItem('formData'));
+    if (formInputData) {
+        document.getElementById("pickup-time").value = formInputData.pickupTime;
+        document.getElementById("pickup-time").innerText = formInputData.pickupTime;
+        document.getElementById("drop-off-time").value = formInputData.dropOffTime;
+        document.getElementById("drop-off-time").innerText = formInputData.dropOffTime;
+        document.getElementById("pickup-location").value = formInputData.pickupLocation;
+        document.getElementById("pickup-location").innerText = formInputData.pickupLocation;
+        document.getElementById("drop-off-location").value = formInputData.dropOffLocation;
+        document.getElementById("drop-off-location").innerText = formInputData.dropOffLocation;
     }
 
 }
 
 window.onload = async () => {
-    renderDataInFormSearch();
     await handleLogBtn();
+    renderDataInFormSearch();
     car = await getCurrentCar(urlAPICar);
     await renderRelatedCars();
     await calculateTotal()
@@ -370,7 +375,7 @@ function sendRentalNotification() {
     const time = Date.now();
 
     var rentalMessage = customer.name + " rented a car at " + formatDate(time);
-    stompClient.send("/app/message",{},
+    stompClient.send("/app/message", {},
         JSON.stringify({
             'content': rentalMessage
         }));

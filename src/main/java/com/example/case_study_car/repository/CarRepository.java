@@ -28,7 +28,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query(value = "SELECT c FROM Car c " +
             "ORDER BY (SELECT COUNT(cf.id) FROM CarFeature cf WHERE cf.car = c) DESC LIMIT 5")
-    List<Car> getBestCars();
+   List<Car> getBestCars();
 
     @Query(value = "SELECT c FROM Car c " +
             "WHERE (EXISTS (SELECT 1 FROM CarSpecification cs " +
@@ -36,7 +36,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             "                 AND cs.specification.type = 'SEAT' " +
             "                 AND cs.specification.name = :seat) " +
             "    OR c.agency.name = :agency " +
-            "    OR (c.priceDays BETWEEN (:priceDays - 30) AND (:priceDays + 30))) " +
+            "    OR (c.priceDays BETWEEN (:priceDays - 100) AND (:priceDays + 100))) " +
             "    AND c.id <> :id " +
             "ORDER BY (CASE " +
             "   WHEN c.agency.name = :agency THEN 1 " +
