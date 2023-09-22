@@ -28,7 +28,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query(value = "SELECT c FROM Car c " +
             "ORDER BY (SELECT COUNT(cf.id) FROM CarFeature cf WHERE cf.car = c) DESC LIMIT 5")
-    List<Car> getBestCars();
+   List<Car> getBestCars();
 
     @Query(value = "SELECT c FROM Car c " +
             "WHERE (EXISTS (SELECT 1 FROM CarSpecification cs " +
@@ -36,7 +36,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             "                 AND cs.specification.type = 'SEAT' " +
             "                 AND cs.specification.name = :seat) " +
             "    OR c.agency.name = :agency " +
-            "    OR (c.priceDays BETWEEN (:priceDays - 30) AND (:priceDays + 30))) " +
+            "    OR (c.priceDays BETWEEN (:priceDays - 100) AND (:priceDays + 100))) " +
             "    AND c.id <> :id " +
             "ORDER BY (CASE " +
             "   WHEN c.agency.name = :agency THEN 1 " +
@@ -56,9 +56,9 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             "c.agency.name LIKE :search " +
             " OR EXISTS (SELECT 1 FROM CarSpecification cs WHERE cs.car = c AND cs.specification.name LIKE :search)" +
             " OR EXISTS (SELECT 1 FROM CarFeature cf WHERE cf.car = c AND cf.feature.name LIKE :search))" +
-            " AND NOT EXISTS (SELECT 1 FROM Bill b WHERE b.car = c " +
-            "AND (:pickupTime BETWEEN b.pickupTime AND b.expectedDropOffTime " +
-            "OR :dropOffTime BETWEEN b.pickupTime AND b.expectedDropOffTime))"
+            " AND c.id not in (SELECT b.car.id FROM Bill b WHERE " +
+            " ( FUNCTION( 'DATE_FORMAT',:pickupTime , '%Y-%m-%d') BETWEEN FUNCTION( 'DATE_FORMAT',b.pickupTime , '%Y-%m-%d') AND  FUNCTION( 'DATE_FORMAT', b.expectedDropOffTime , '%Y-%m-%d') " +
+            "OR FUNCTION( 'DATE_FORMAT',:dropOffTime , '%Y-%m-%d') BETWEEN FUNCTION( 'DATE_FORMAT',b.pickupTime , '%Y-%m-%d') AND  FUNCTION( 'DATE_FORMAT', b.expectedDropOffTime , '%Y-%m-%d')   ) )"
     )
     Page<Car> searchAvailableCar(@Param("search") String search,
                                  @Param("pickupTime") LocalDateTime pickupTime,
@@ -69,8 +69,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             "FROM Car c " +
             "WHERE c.id = :id " +
             "AND NOT EXISTS (SELECT 1 FROM Bill b WHERE b.car = c " +
-            "AND (:pickup BETWEEN b.pickupTime AND b.expectedDropOffTime " +
-            "OR :dropOff BETWEEN b.pickupTime AND b.expectedDropOffTime))"
+            "AND ( FUNCTION( 'DATE_FORMAT',:pickup , '%Y-%m-%d') BETWEEN FUNCTION( 'DATE_FORMAT',b.pickupTime , '%Y-%m-%d') AND  FUNCTION( 'DATE_FORMAT', b.expectedDropOffTime , '%Y-%m-%d') " +
+            "OR FUNCTION( 'DATE_FORMAT',:dropOff , '%Y-%m-%d') BETWEEN FUNCTION( 'DATE_FORMAT',b.pickupTime , '%Y-%m-%d') AND  FUNCTION( 'DATE_FORMAT', b.expectedDropOffTime , '%Y-%m-%d')   ) )"
     )
     Boolean isAvailable(Long id, LocalDateTime pickup, LocalDateTime dropOff);
 }
