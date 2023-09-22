@@ -97,7 +97,7 @@ function renderCars(cars) {
                                 <h2 class="mb-0"><a href="/car-detai/${car.id}">${car.name}</a></h2>
                                 <div class="d-flex mb-3">
                                     <span class="cat">${car.agency}</span>
-                                    <p class="price ml-auto">${car.priceDays} <span>/day</span></p>
+                                    <p class="price ml-auto">${car.priceDays}$ <span>/day</span></p>
                                 </div>
                                 <div class="d-flex justify-content-center">
                                     <p class="d-flex mb-0 d-block"><a href="/car-detail/${car.id}" class="btn btn-primary py-2 mr-1">Book

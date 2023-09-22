@@ -182,6 +182,7 @@ public class CarService {
             result.setOvertimeFee(e.getOvertimeFee());
             result.setCleaningFee(e.getCleaningFee());
             result.setAgency(e.getAgency().getName());
+            result.setLogo(e.getAgency().getSvg());
 //            result.setImage(e.getImages().get(0).getFileUrl());
             result.setImages(
                     e.getImages().stream()
@@ -305,5 +306,14 @@ public class CarService {
 
     public Boolean iskAvailable(Long id, LocalDateTime pickup, LocalDateTime dropOff) {
         return carRepository.isAvailable(id, pickup, dropOff);
+    }
+
+    public void softDeleteCar(Long id) {
+        Optional<Car> car = carRepository.findById(id);
+        if (car.isPresent()) {
+            Car existingCar = car.get();
+            existingCar.setDeleted(true);
+            carRepository.save(existingCar);
+        }
     }
 }

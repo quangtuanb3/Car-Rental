@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@Where(clause = "deleted = 0")
+@SQLDelete(sql= "UPDATE task SET `deleted` = 1 WHERE (`id` = ?) ")
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +42,8 @@ public class Car {
     private BigDecimal overtimeFee;
 
     private BigDecimal cleaningFee;
+
+    private boolean deleted = false;
 
     @Column(columnDefinition = "LONGTEXT")
     private String description;
