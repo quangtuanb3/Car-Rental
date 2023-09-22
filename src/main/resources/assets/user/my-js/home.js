@@ -190,7 +190,7 @@ function validateEmail(email) {
 }
 
 function validateFullName(fullName) {
-    var re = /^[^\d]+$/;
+    var re = /^[^\d\s]+(\s+[^\d\s]+)*$/;
     return re.test(fullName);
 }
 
@@ -204,7 +204,7 @@ function validateForm() {
     var errorMessage = "";
 
     if (!validateFullName(fullName)) {
-        errorMessage += "- FULL NAME can't contain numbers.<br>";
+        errorMessage += "- FULL NAME can't contain numbers or blank.<br>";
     }
 
     if (!validatePhoneNumber(phoneNumber)) {
