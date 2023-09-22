@@ -1,7 +1,11 @@
 package com.example.case_study_car.controller;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.example.case_study_car.service.car.CarService;
@@ -10,11 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDateTime;
 
 @Controller
-@RequestMapping("")
+@RequestMapping("/")
 @AllArgsConstructor
 public class UserController {
     private final CarService carService;
-
 
 
     @GetMapping
@@ -54,6 +57,7 @@ public class UserController {
         return new ModelAndView("user/car");
 
     }
+
     @GetMapping("/user/login")
     public ModelAndView login() {
         ModelAndView view = new ModelAndView("user/login");
@@ -64,4 +68,10 @@ public class UserController {
     public ModelAndView accessDenied() {
         return new ModelAndView("user/error");
     }
+
+    @GetMapping("/errors")
+    public ModelAndView handleError() {
+        return new ModelAndView("user/errors");
+    }
+
 }
