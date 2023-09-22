@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:replace="~{layoutAdmin.html :: header}"></th:block>
 
@@ -23,7 +23,7 @@
             </div>
         </div>
     </div>
-<!--     Modal-->
+    <!--     Modal-->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width: 800px">
@@ -41,7 +41,7 @@
         </div>
     </div>
 
-<!--    Modal-BillDetail-->
+    <!--    Modal-BillDetail-->
     <div class="modal fade" id="detail-bill-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -53,7 +53,8 @@
                 <div class="modal-body">
 
                     <h3 id="modal-bill-customerName" class="mt-3 text-center">Customer Name</h3>
-                    <p id="modal-bill-customerEmail" class="mt-3 text-center">Description Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <p id="modal-bill-customerEmail" class="mt-3 text-center">Description Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit.</p>
                     <table class="table table-bordered mt-3">
                         <tbody>
                         <tr>
@@ -61,16 +62,20 @@
                             <td id="modal-bill-billStatus"><strong><span id="status-enum-value"></span></strong></td>
                         </tr>
                         <tr>
-                            <th scope="row"><strong>Delivery Fee</strong></th>
-                            <td id="modal-bill-deliveryFee"><strong>$XX.XX</strong></td>
+                            <th scope="row"><strong>Pickup Time</strong></th>
+                            <td id="modal-bill-pickup-time"><strong>$XX.XX</strong></td>
                         </tr>
                         <tr>
-                            <th scope="row"><strong>Cleaning Fee</strong></th>
-                            <td id="modal-bill-cleaningFee"><strong>$XXX.XX</strong></td>
+                            <th scope="row"><strong>Drop Off Time</strong></th>
+                            <td id="modal-bill-drop-off-time"><strong>$XXX.XX</strong></td>
                         </tr>
                         <tr>
-                            <th scope="row"><strong>Overtime Fee</strong></th>
-                            <td id="modal-bill-overtimeFee"><strong>$XXX.XX</strong></td>
+                            <th scope="row"><strong>Pickup Location</strong></th>
+                            <td id="modal-bill-pickup-location"><strong>$XXX.XX</strong></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><strong>Drop Off Location</strong></th>
+                            <td id="modal-bill-drop-off-location"><strong>$XXX.XX</strong></td>
                         </tr>
                         <tr>
                             <th scope="row"><strong>Deposit</strong></th>
@@ -82,28 +87,27 @@
                         </tr>
                         <tr>
                             <th scope="row"><strong>License Plate</strong></th>
-                            <td id="modal-bill-licensePlate"><strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</strong></td>
+                            <td id="modal-bill-licensePlate"><strong>Lorem ipsum dolor sit amet, consectetur adipiscing
+                                elit.</strong></td>
                         </tr>
                         <tr>
                             <th scope="row"><strong>Total Price</strong></th>
                             <td id="modal-bill-totalPrice"><strong>$XX.XX</strong></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <th scope="row"><strong>Key Features</strong></th>-->
-<!--                            <td id="modal-car-feature"><strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</strong></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <th scope="row"><strong>Agency</strong></th>-->
-<!--                            <td id="modal-car-agency"><strong>XYZ Rental</strong></td>-->
-<!--                        </tr>-->
+                        <!--                        <tr>-->
+                        <!--                            <th scope="row"><strong>Key Features</strong></th>-->
+                        <!--                            <td id="modal-car-feature"><strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</strong></td>-->
+                        <!--                        </tr>-->
+                        <!--                        <tr>-->
+                        <!--                            <th scope="row"><strong>Agency</strong></th>-->
+                        <!--                            <td id="modal-car-agency"><strong>XYZ Rental</strong></td>-->
+                        <!--                        </tr>-->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
-
 
 
     <div class="card">
@@ -139,7 +143,6 @@
 <th:block th:replace="~{layoutAdmin.html :: footer}"></th:block>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/assets/admin/myjs/bill.js"></script>
-
 
 
 </html>

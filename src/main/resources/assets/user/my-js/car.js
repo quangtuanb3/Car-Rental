@@ -36,9 +36,7 @@ function buildApiUrl(pageable) {
 }
 
 function renderSearchForm() {
-
-    let formHTML =
-        `
+    eSearchForm.innerHTML = `
         <h2>Make your trip</h2>
                                     <div class="form-group">
                                         <label for="key-search" class="label">Enter your keyword</label>
@@ -71,8 +69,7 @@ function renderSearchForm() {
                                             Check Available
                                         </button>
                                     </div>
-        `
-    eSearchForm.innerHTML = formHTML;
+        `;
 
 }
 
@@ -100,7 +97,7 @@ function renderCars(cars) {
                                 <h2 class="mb-0"><a href="/car-detai/${car.id}">${car.name}</a></h2>
                                 <div class="d-flex mb-3">
                                     <span class="cat">${car.agency}</span>
-                                    <p class="price ml-auto">${car.priceDays} <span>/day</span></p>
+                                    <p class="price ml-auto">${car.priceDays}$ <span>/day</span></p>
                                 </div>
                                 <div class="d-flex justify-content-center">
                                     <p class="d-flex mb-0 d-block"><a href="/car-detail/${car.id}" class="btn btn-primary py-2 mr-1">Book
@@ -221,20 +218,11 @@ function handleSearchCar() {
     }
 }
 
-function showLogin() {
-    // $("#exampleModal").show()
-    $('#exampleModal').modal('hide');
-}
+// function showLogin() {
+//     // $("#exampleModal").show()
+//     $('#exampleModal').modal('hide');
+// }
 
-async function handleLogBtn() {
-    let customer = await getCurrentCustom();
-    console.log(customer);
-    if (customer.username === "anonymousUser") {
-        document.getElementById("log-btn").innerText = "Log in";
-        document.getElementById("log-btn").setAttribute("href", "");
-        document.getElementById("log-btn").setAttribute("click", showLogin);
-    }
-}
 
 async function getCurrentCustom() {
     let res = await fetch("user/api/customer-detail");
@@ -252,38 +240,42 @@ async function handleLogBtn() {
     console.log(customer);
 
     const loginBtn = document.getElementById("log-btn");
+    const eRegisterLi = document.getElementById("menu-register");
+
     if (customer.email === null) {
         loginBtn.innerText = "Login";
         loginBtn.href = "javascript:void(0)"; // Remove the "href" attribute
         loginBtn.onclick = () => {
             showLogin();
         };
+        eRegisterLi.innerHTML= `<a href="/register" class="nav-link">Register</a>`
     } else {
         loginBtn.innerText = "Logout"; // Change the text for authenticated users
         loginBtn.href = "/logout"; // Update the "href" attribute for logout
         loginBtn.onclick = null; // Remove the click event handler
+        eRegisterLi.innerHTML="";
     }
 }
 
-async function getCurrentCustom() {
-    let res = await fetch("user/api/customer-detail");
-    return await res.json();
-}
+// async function getCurrentCustom() {
+//     let res = await fetch("user/api/customer-detail");
+//     return await res.json();
+// }
 
-function showMsg() {
-    // Check if a "message" query parameter exists in the URL
-    const message = getQueryParam("message");
+// function showMsg() {
+//     // Check if a "message" query parameter exists in the URL
+//     const message = getQueryParam("message");
+//
+// // Show the logout message if it exists
+//     if (message.includes("successfully")) {
+//         toastr.success(message);
+//     } else {
+//         toastr.error(message);
+//     }
+// }
 
-// Show the logout message if it exists
-    if (message.includes("successfully")) {
-        toastr.success(message);
-    } else {
-        toastr.error(message);
-    }
-}
-
-function getQueryParam(key) {
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    return urlSearchParams.get(key);
-}
-
+// function getQueryParam(key) {
+//     const urlSearchParams = new URLSearchParams(window.location.search);
+//     return urlSearchParams.get(key);
+// }
+//

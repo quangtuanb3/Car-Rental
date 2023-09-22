@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
-   <th:block th:replace="~{layoutUser::header-link}"></th:block>
+	  <th:block th:replace="~{layoutUser::header-link}"></th:block>
+	  <th:block th:replace="~{layoutUser::my-navbar}"></th:block>
   </head>
   <body>
-    
-	<th:block th:replace="~{layoutUser::my-navbar}"></th:block>
 
-    <!-- END nav -->
-    
     <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url(/assets/user/images/bg_2.jpg);" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
@@ -39,7 +36,7 @@
 						    <tbody>
 							<tr th:each="car : ${cars}">
 								<td class="car-image">
-									<img th:src="${car.urlImages[0]}" style="width: 250px; height: 150px">
+									<img th:src="${car.urlImages.get(0)}" style="width: 250px; height: 150px">
 								</td>
 								<td class="product-name">
 									<h3 th:text="${car.name}" style="font-weight: bold"></h3>
@@ -58,7 +55,7 @@
                         <small class="currency">$</small>
                         <span th:text="${car.priceHours}"></span>
                     </span>
-											<span class="per">/per hour</span>
+											<span class="per">/ hour</span>
 										</h3>
 <!--										<span class="subheading">$3/hour fuel surcharges</span>-->
 									</div>
@@ -73,7 +70,7 @@
                         <small class="currency">$</small>
                         <span th:text="${car.priceDays}"></span>
                     </span>
-											<span class="per">/per day</span>
+											<span class="per">/ day</span>
 										</h3>
 <!--										<span class="subheading">$3/hour fuel surcharges</span>-->
 									</div>
@@ -88,7 +85,7 @@
                         <small class="currency">$</small>
                         <span th:text="${car.priceDelivery}"></span>
                     </span>
-											<span class="per">/per delivery</span>
+											<span class="per">/Km delivery</span>
 										</h3>
 <!--										<span class="subheading">$3/hour fuel surcharges</span>-->
 									</div>

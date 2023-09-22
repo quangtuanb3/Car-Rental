@@ -224,6 +224,7 @@ hr {
 .page-link.btn-primary {
     box-shadow: none !important;
 }
+
 .input-icon-container{
     position: relative;
 }
@@ -242,5 +243,10 @@ hr {
     font-size: 2em;
     color: #162938;
     text-align: center;
+}
+
+
+.car-image{
+    padding: 5px 0!important;
 }
 

@@ -1,5 +1,6 @@
 package com.example.case_study_car.service.customer.response;
 
+import com.example.case_study_car.domain.enumaration.ERole;
 import lombok.*;
 
 @NoArgsConstructor
@@ -17,4 +18,6 @@ public class CustomerResponse {
     private String email;
 
     private String idNumber;
+
+    private String role;
 }

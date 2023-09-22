@@ -54,7 +54,7 @@
                     <li class="nav-item" id="menu-pricing"><a href="/pricing" class="nav-link">Pricing</a></li>
                     <li class="nav-item" id="menu-car"><a href="/cars" class="nav-link">Cars</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
-                    <li class="nav-item"><a href="/register" class="nav-link">Register</a></li>
+                    <li class="nav-item" id="menu-register"><a href="/register" class="nav-link">Register</a></li>
                     <li class="nav-item"><a href="javascript:void(0)" class="nav-link" id="log-btn">Login</a></li>
                 </ul>
             </div>
@@ -536,18 +536,14 @@
 
 <th:block th:fragment="loginForm">
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Login</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="margin-top: 150px">
+            <div class="modal-content" style="border-radius: 10px; ">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; margin:10px 10px">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-12">
+                    <div>
                         <div th:if="${param.error}">
                             <div class="alert alert-danger">Invalid Email or Password</div>
                         </div>
@@ -555,53 +551,50 @@
                             <div class="alert alert-success"> You have been logged out.</div>
                         </div>
 
-                        <div class=" container">
-                            <div>
-                                <form
-                                        method="post"
-                                        role="form"
-                                        th:action="@{/login}"
-                                        class="form-horizontal"
-                                >
-                                    <div class="form-group mb-3">
-                                        <label class="control-label"> Email</label>
-                                        <input
-                                                type="text"
-                                                id="username"
-                                                name="username"
-                                                class="form-control"
-                                                placeholder="Enter email address"
-                                                value="aaa@gmail.com"
-                                        />
-                                    </div>
-
-                                    <div class="form-group mb-3">
-                                        <label class="control-label"> Password</label>
-                                        <input
-                                                type="password"
-                                                id="password"
-                                                name="password"
-                                                class="form-control"
-                                                placeholder="Enter password"
-                                                value="123"
-                                        />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <span> Not registered ?
-                                <a th:href="@{/register}">Register/Signup here</a>
-                            </span>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                                        </button>
-                                        <button type="submit" class="btn btn-primary">Login</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+<!--                        <th:block th:fragment="form-search">-->
+                            <form
+                                    th:action="@{/login}"
+                                    class="request-form bg-dark-blue"
+                                    id="login-form"
+                                    method="post"
+                                    role="form"
+                                    style="width: 100%"
+                            >
+                                <h2>Login Form</h2>
+                                <div class="form-group">
+                                    <label for="username" class="label">Email</label>
+                                    <input
+                                            type="text"
+                                            class="form-control"
+                                            id="username"
+                                            name="username"
+                                            placeholder="Enter Email Address"
+                                            value="aaa@gmail.com"
+                                    />
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="label">Password</label>
+                                    <input
+                                            type="password"
+                                            class="form-control"
+                                            id="password"
+                                            name="password"
+                                            placeholder="Enter Password"
+                                            value="123"
+                                    />
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" id="login-btn" class="btn btn-secondary py-3 px-4">
+                                        Login
+                                    </button>
+                                    <span> Not registered ?
+                                       <a th:href="@{/register}">Register/Signup here!</a>
+                                    </span>
+                                </div>
+                            </form>
+<!--                        </th:block>-->
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -736,6 +729,8 @@
             // });
         });
     </script>
+
 </th:block>
+
 </body>
 </html>
