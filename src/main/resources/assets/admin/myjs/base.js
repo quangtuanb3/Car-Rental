@@ -5,6 +5,8 @@ function createInput(props) {
                 <input id="${props.id || ''}" class="input-custom form-control ${props.classInput || ''}" 
                 <input class="input-custom form-control ${props.classInput || ''}" 
                 type="${props.type || 'text'}" name="${props.name}"
+                ${props.min ? `min="${props.min}"` : ""} 
+                ${props.max ? `max="${props.max}"` : ""} 
                 ${props.pattern ? `pattern="${props.pattern}"` : ""} 
                 value="${props.value || ''}"
                 ${props.required ? 'required' : ''}
@@ -107,7 +109,7 @@ const inputs = [
         label: "Username",
         name: "username",
         pattern: "^[A-Za-z ]{6,20}",
-        message: "Username must have minimun is 6 charaters and maximum is 20 charaters",
+        message: "Username must have minimum is 6 charaters and maximum is 20 charaters",
         require: false,
         value: ""
     },

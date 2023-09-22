@@ -224,6 +224,29 @@ hr {
 .page-link.btn-primary {
     box-shadow: none !important;
 }
+
+.input-icon-container{
+    position: relative;
+}
+.input-icon{
+    position: absolute;
+    margin-left: 6px;
+    font-size: 1rem;
+    line-height: 1rem;
+    top: calc(50% - calc(1rem / 2));
+}
+.input-icon-container input{
+    padding-left: 24px;
+}
+
+.form-box h2 {
+    font-size: 2em;
+    color: #162938;
+    text-align: center;
+}
+
+
 .car-image{
     padding: 5px 0!important;
 }
+

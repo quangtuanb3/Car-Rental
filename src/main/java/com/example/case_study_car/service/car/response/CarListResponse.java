@@ -39,6 +39,8 @@ public class CarListResponse {
 
     private String agency;
 
+    private String logo;
+
     private String specifications;
 
     private String features;

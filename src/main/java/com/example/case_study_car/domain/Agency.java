@@ -17,6 +17,7 @@ public class Agency {
     private String name;
 
 
+
     @Column(columnDefinition = "LONGTEXT")
     private String svg;
 
