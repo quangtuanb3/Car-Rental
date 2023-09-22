@@ -167,16 +167,16 @@ async function showBillDetail(id) {
     eModalBillEmail.innerText = billDetail.customerEmail;
     eModalBillStatus.innerText = billDetail.billStatus;
 
-    eModalBillPickupTime.innerText = billDetail.pickupTime;
-    eModalBillDropOffTime.innerText = billDetail.expectedDropOffTime;
+    eModalBillPickupTime.innerText =formatDate( billDetail.pickupTime);
+    eModalBillDropOffTime.innerText = formatDate(billDetail.expectedDropOffTime);
     eModalBillPickupLocation.innerText = billDetail.pickupLocation;
     eModalBillDropOfLocation.innerText = billDetail.dropOffLocation;
 
 
-    eModalDeposit.innerText = billDetail.deposit;
-    eModalRentPrice.innerText = billDetail.rentPrice;
+    eModalDeposit.innerText = billDetail.deposit + "$";
+    eModalRentPrice.innerText = billDetail.rentPrice + "$";
     eModalLicensePlate.innerText = billDetail.licensePlate;
-    eModalTotalPrice.innerText = billDetail.totalPrice;
+    eModalTotalPrice.innerText = billDetail.totalPrice + "$";
 
 
     // const formattedPriceHours = formatCurrency(carDetail.priceHours);
@@ -291,15 +291,25 @@ async function onChangeSelect(selectElement) {
 
         if (response.ok) {
             const message = await response.text();
-            alert(message);
+            toastr.success(message);
             await renderTable();
         } else {
             const errorMessage = await response.text();
-            alert(`Error: ${errorMessage}`);
+            toastr.error(`Error: ${errorMessage}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while changing status.');
+        toastr.error('An error occurred while changing status.');
     }
 }
 
+function formatDate(inputDateString) {
+    const inputDate = new Date(inputDateString);
+
+    const yyyy = inputDate.getFullYear();
+    const mm = String(inputDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const dd = String(inputDate.getDate()).padStart(2, '0');
+    const HH = String(inputDate.getHours()).padStart(2, '0');
+    const mmFormatted = String(inputDate.getMinutes()).padStart(2, '0');
+
+    return `${yyyy}-${mm}-${dd} ${HH}:${mmFormatted}`;
+}
