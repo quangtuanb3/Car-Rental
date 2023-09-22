@@ -44,12 +44,14 @@ public class SpringSecurity {
                                 .requestMatchers("/admin/public").permitAll()
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/").permitAll()
+                                .requestMatchers("/cars/available-cars").permitAll()
                                 .requestMatchers("/cars/**").permitAll()
                                 .requestMatchers("user/api/customer-detail/**").permitAll()
                                 .requestMatchers("/pricing").permitAll()
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/car-detail/**").permitAll()
-                                .requestMatchers("/home").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers("/home").hasAnyRole("ADMIN")
+                                .requestMatchers("/bill").hasAnyRole("ADMIN")
                                 .requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/user/api/cars/rent").hasAnyRole("USER")
                                 .requestMatchers("/user/api/customers/**").permitAll()
@@ -72,7 +74,12 @@ public class SpringSecurity {
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
                                 .logoutSuccessUrl("/?message=Logout%20successfully")
-                );
+                )
+                .exceptionHandling()
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.sendRedirect("/403");
+
+                        });
         return http.build();
     }
 

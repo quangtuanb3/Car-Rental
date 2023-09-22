@@ -1,16 +1,8 @@
 package com.example.case_study_car.controller;
-import com.example.case_study_car.domain.Car;
-import com.example.case_study_car.domain.UserLogin;
-import com.example.case_study_car.service.car.response.UserCarDetailResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.example.case_study_car.service.car.CarService;
 import org.springframework.web.servlet.ModelAndView;
@@ -68,4 +60,8 @@ public class UserController {
         return view;
     }
 
+    @GetMapping("/403")
+    public ModelAndView accessDenied() {
+        return new ModelAndView("user/error");
+    }
 }

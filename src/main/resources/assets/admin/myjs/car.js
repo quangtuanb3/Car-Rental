@@ -129,7 +129,6 @@ window.onload = async () => {
     renderForm(formBody, getDataInput());
 }
 
-
 function getDataInput() {
     return [
         {

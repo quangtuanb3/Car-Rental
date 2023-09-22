@@ -22,7 +22,7 @@ eSearchCarBtn.onclick = () => {
         return;
     }
 
-    if (new Date(dropOff) <= pickup_time) {
+    if (new Date(dropOff) <= new Date(pickup)) {
         toastr.error("Invalid drop-off time");
         return;
     }
@@ -177,3 +177,52 @@ function getQueryParam(key) {
     return urlSearchParams.get(key);
 }
 
+
+// validate register
+function validatePhoneNumber(phoneNumber) {
+    var re = /^[0-9]+$/;
+    return re.test(phoneNumber);
+}
+
+function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
+function validateFullName(fullName) {
+    var re = /^[^\d]+$/;
+    return re.test(fullName);
+}
+
+function validateForm() {
+    var phoneNumber = document.getElementById("numberPhone").value;
+    var email = document.getElementById("email").value;
+    var fullName = document.getElementById("fullName").value;
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirmPassword").value;
+
+    var errorMessage = "";
+
+    if (!validateFullName(fullName)) {
+        errorMessage += "- FULL NAME can't contain numbers.<br>";
+    }
+
+    if (!validatePhoneNumber(phoneNumber)) {
+        errorMessage += "- Unvalid PHONE NUMBER (numbers only).<br>";
+    }
+
+    if (!validateEmail(email)) {
+        errorMessage += "- Unvalid EMAIL (abc123@example.com).";
+    }
+
+    if (password !== confirmPassword) {
+        errorMessage += "- PASSWORD do not match.<br>";
+    }
+
+    if (errorMessage !== "") {
+        toastr.error(errorMessage);
+        return false;
+    }
+
+    return true;
+}

@@ -137,7 +137,30 @@ function renderItems(result) {
     eRelatedCars.innerHTML = divItems;
 }
 
+async function handleLogBtn() {
+    let customer = await getCurrentCustom();
+    console.log(customer);
 
+    const loginBtn = document.getElementById("log-btn");
+    const eRegisterLi = document.getElementById("menu-register");
+
+    if (customer.email === null) {
+        loginBtn.innerText = "Login";
+        loginBtn.href = "javascript:void(0)"; // Remove the "href" attribute
+        loginBtn.onclick = () => {
+            showLogin();
+        };
+        eRegisterLi.innerHTML= `<a href="/register" class="nav-link">Register</a>`;
+    } else {
+        loginBtn.innerText = "Logout"; // Change the text for authenticated users
+        loginBtn.href = "/logout"; // Update the "href" attribute for logout
+        loginBtn.onclick = null; // Remove the click event handler
+        eRegisterLi.innerHTML="";
+        if(customer.role === "ROLE_ADMIN"){
+            eRegisterLi.innerHTML=`<a href="/home" class="nav-link">Dashboard</a>`;
+        }
+    }
+}
 async function getDistancePickUp() {
     let pickup = ePickUpLocation.value.trim();
     if (pickup !== "") {
@@ -206,10 +229,11 @@ rentNowButton.addEventListener("click", async function () {
         return;
     }
 
-    if (new Date(dropOff) <= pickup_time) {
+    if (new Date(dropOff) <= new Date(pickup) ){
         toastr.error("Invalid drop-off time");
         return;
     }
+
     const isCarAvailable = await checkCarIfAvailable();
     if (!isCarAvailable) {
         toastr.warning("Car is not available this time");
@@ -313,8 +337,6 @@ function calculateRentPrice() {
     drop_off_time = eDrop_off_time.value;
     let result = 0;
     if (pickup_time && drop_off_time) {
-        console.log(pickup_time)
-        console.log(drop_off_time)
         data.pickup_time = pickup_time;
         data.drop_off_time = drop_off_time;
         const date1 = new Date(pickup_time);
@@ -442,16 +464,23 @@ async function handleLogBtn() {
     console.log(customer);
 
     const loginBtn = document.getElementById("log-btn");
+    const eRegisterLi = document.getElementById("menu-register");
+
     if (customer.email === null) {
         loginBtn.innerText = "Login";
         loginBtn.href = "javascript:void(0)"; // Remove the "href" attribute
         loginBtn.onclick = () => {
             showLogin();
         };
+        eRegisterLi.innerHTML= `<a href="/register" class="nav-link">Register</a>`;
     } else {
         loginBtn.innerText = "Logout"; // Change the text for authenticated users
         loginBtn.href = "/logout"; // Update the "href" attribute for logout
         loginBtn.onclick = null; // Remove the click event handler
+        eRegisterLi.innerHTML="";
+        if(customer.role === "ROLE_ADMIN"){
+            eRegisterLi.innerHTML=`<a href="/home" class="nav-link">Dashboard</a>`;
+        }
     }
 }
 

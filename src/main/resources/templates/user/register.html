@@ -4,7 +4,7 @@
     <th:block th:replace="~{layoutRegister :: header-link}"></th:block>
     <style>
         .featured-top{
-            margin-top: -700px;
+            margin-top: -650px;
         }
     </style>
 </head>
@@ -29,6 +29,7 @@
                                 method="post"
                                 role="form"
                                 style="width: 100%"
+                                onsubmit="return validateForm()"
                         >
                             <h2>Register Form</h2>
                             <div class="form-group">
@@ -88,6 +89,17 @@
                                    th:if="${#fields.hasErrors('password')}"></p>
                             </div>
                             <div class="form-group">
+                                <label for="confirmPassword" class="label">Confirm Password</label>
+                                <input
+                                        required
+                                        class="form-control"
+                                        id="confirmPassword"
+                                        name="confirmPassword"
+                                        placeholder="Confirm Password"
+                                        type="password"
+                                />
+                            </div>
+                            <div class="form-group">
                                 <button type="submit" id="login-btn" class="btn btn-secondary py-3 px-4">
                                     Register
                                 </button>
@@ -145,5 +157,6 @@
 <th:block th:replace="~{layoutRegister.html:: myFooter}"></th:block>
 <th:block th:replace="~{layoutRegister.html::myScript}"></th:block>
 <script src="/assets/user/my-js/home.js"></script>
+
 </body>
 </html>

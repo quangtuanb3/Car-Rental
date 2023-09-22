@@ -5,7 +5,6 @@
 	  <th:block th:replace="~{layoutUser::my-navbar}"></th:block>
   </head>
   <body>
-
     <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url(/assets/user/images/bg_2.jpg);" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
@@ -110,6 +109,42 @@
 		document.getElementById("menu-pricing").classList.add("active");
 		document.getElementById("menu-home").classList.remove("active");
 	</script>
+<script>
+	window.onload = async () => {
+		await handleLogBtn();
+	}
+	async function handleLogBtn() {
+		let customer = await getCurrentCustom();
+		console.log(customer);
+
+		const loginBtn = document.getElementById("log-btn");
+		const eRegisterLi = document.getElementById("menu-register");
+
+		if (customer.email === null) {
+			loginBtn.innerText = "Login";
+			loginBtn.href = "javascript:void(0)"; // Remove the "href" attribute
+			loginBtn.onclick = () => {
+				showLogin();
+			};
+			eRegisterLi.innerHTML= `<a href="/register" class="nav-link">Register</a>`;
+		} else {
+			loginBtn.innerText = "Logout"; // Change the text for authenticated users
+			loginBtn.href = "/logout"; // Update the "href" attribute for logout
+			loginBtn.onclick = null; // Remove the click event handler
+			eRegisterLi.innerHTML="";
+			if(customer.role === "ROLE_ADMIN"){
+				eRegisterLi.innerHTML=`<a href="/home" class="nav-link">Dashboard</a>`;
+			}
+		}
+	}
+</script>
+
+  <script>
+	  async function getCurrentCustom() {
+		  let res = await fetch("user/api/customer-detail");
+		  return await res.json();
+	  }
+  </script>
 
   </body>
 

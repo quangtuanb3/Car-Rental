@@ -48,12 +48,12 @@ public class AuthService implements UserDetailsService {
         boolean check = false;
         if (customerRepository.existsByEmailIgnoreCase(request.getEmail())) {
             result.rejectValue("email", "email",
-                    "There is already an account registered with the same email");
+                    "Another account is already registered with this email");
             check = true;
         }
         if (customerRepository.existsByNumberPhone(request.getNumberPhone())) {
             result.rejectValue("numberPhone", "numberPhone",
-                    "There is already an account registered with the same phone number");
+                    "Another account is already registered with this number");
             check = true;
         }
         return check;

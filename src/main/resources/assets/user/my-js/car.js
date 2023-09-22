@@ -73,7 +73,10 @@ function renderSearchForm() {
 }
 
 async function getAvailableCars() {
+    pageable.pickupTime = document.getElementById("pickup_time").value;
+    pageable.dropOffTime = document.getElementById("drop_off_time").value;
     const APIAvailableCars = buildApiUrl(pageable); // Build the API URL
+    console.log(APIAvailableCars);
     const res = await fetch(APIAvailableCars);
     return await res.json();
 }
@@ -212,7 +215,7 @@ function handleSearchCar() {
             return;
         }
 
-        if (new Date(dropOff) <= pickup_time) {
+        if (new Date(dropOff) <= new Date(pickup)) {
             toastr.error("Invalid drop-off time");
             return;
         }
@@ -235,6 +238,7 @@ function handleSearchCar() {
         }
         localStorage.setItem('formData', JSON.stringify(formData));
         await renderAvailableCars();
+
     })
 }
 
@@ -263,10 +267,15 @@ async function handleLogBtn() {
             showLogin();
         };
         eRegisterLi.innerHTML = `<a href="/register" class="nav-link">Register</a>`
+
     } else {
         loginBtn.innerText = "Logout"; // Change the text for authenticated users
         loginBtn.href = "/logout"; // Update the "href" attribute for logout
         loginBtn.onclick = null; // Remove the click event handler
-        eRegisterLi.innerHTML = "";
+
+        eRegisterLi.innerHTML="";
+        if(customer.role === "ROLE_ADMIN"){
+            eRegisterLi.innerHTML=`<a href="/home" class="nav-link">Dashboard</a>`;
+        }
     }
 }
