@@ -92,6 +92,7 @@ function renderDataInFormSearch() {
 }
 
 window.onload = async () => {
+    await handleLogBtn();
     renderDataInFormSearch();
     await handleLogBtn();
     car = await getCurrentCar(urlAPICar);
@@ -132,7 +133,30 @@ function renderItems(result) {
     eRelatedCars.innerHTML = divItems;
 }
 
+async function handleLogBtn() {
+    let customer = await getCurrentCustom();
+    console.log(customer);
 
+    const loginBtn = document.getElementById("log-btn");
+    const eRegisterLi = document.getElementById("menu-register");
+
+    if (customer.email === null) {
+        loginBtn.innerText = "Login";
+        loginBtn.href = "javascript:void(0)"; // Remove the "href" attribute
+        loginBtn.onclick = () => {
+            showLogin();
+        };
+        eRegisterLi.innerHTML= `<a href="/register" class="nav-link">Register</a>`;
+    } else {
+        loginBtn.innerText = "Logout"; // Change the text for authenticated users
+        loginBtn.href = "/logout"; // Update the "href" attribute for logout
+        loginBtn.onclick = null; // Remove the click event handler
+        eRegisterLi.innerHTML="";
+        if(customer.role === "ROLE_ADMIN"){
+            eRegisterLi.innerHTML=`<a href="/home" class="nav-link">Dashboard</a>`;
+        }
+    }
+}
 async function getDistancePickUp() {
     let pickup = ePickUpLocation.value.trim();
     if (pickup !== "") {
@@ -437,16 +461,23 @@ async function handleLogBtn() {
     console.log(customer);
 
     const loginBtn = document.getElementById("log-btn");
+    const eRegisterLi = document.getElementById("menu-register");
+
     if (customer.email === null) {
         loginBtn.innerText = "Login";
         loginBtn.href = "javascript:void(0)"; // Remove the "href" attribute
         loginBtn.onclick = () => {
             showLogin();
         };
+        eRegisterLi.innerHTML= `<a href="/register" class="nav-link">Register</a>`;
     } else {
         loginBtn.innerText = "Logout"; // Change the text for authenticated users
         loginBtn.href = "/logout"; // Update the "href" attribute for logout
         loginBtn.onclick = null; // Remove the click event handler
+        eRegisterLi.innerHTML="";
+        if(customer.role === "ROLE_ADMIN"){
+            eRegisterLi.innerHTML=`<a href="/home" class="nav-link">Dashboard</a>`;
+        }
     }
 }
 
