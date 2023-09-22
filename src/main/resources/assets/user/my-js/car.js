@@ -249,10 +249,8 @@ async function getCurrentCustom() {
 
 
 function showLogin() {
-    // $("#exampleModal").show()
     $('#exampleModal').modal('show');
 }
-
 async function handleLogBtn() {
     let customer = await getCurrentCustom();
     console.log(customer);
