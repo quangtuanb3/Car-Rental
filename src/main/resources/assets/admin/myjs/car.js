@@ -53,6 +53,7 @@ carForm.onsubmit = async (e) => {
     let data = getDataFromForm(carForm);
 
     let specificationSelect = getSpecificationSelects();
+    //
 
     data = {
         ...data,
@@ -70,16 +71,20 @@ carForm.onsubmit = async (e) => {
             }
         })
     }
+    if (idImages.length < 3) {
+        toastr.error("Please select at least 3 images");
+        return;
+    }
 
-    let message = "Created"
+    let message = "Created successfully"
     if (carSelected.id) {
         await editCar(data);
-        message = "Edited"
+        message = "Edited successfully"
     } else {
         await createCar(data)
     }
 
-    alert(message);
+    toastr.success(message);
     await renderTable();
     $('#staticBackdrop').modal('hide');
 
@@ -133,8 +138,8 @@ function getDataInput() {
             name: 'name',
             value: carSelected.name,
             required: true,
-            pattern: "^[A-Za-z ]{6,20}",
-            message: "Name must have minimum is 6 characters and maximum is 20 characters",
+            pattern: "^[A-Za-z0-9 ]{4,25}",
+            message: "Name must have minimum is 4 characters and maximum is 25 characters",
         },
         {
             label: 'Status',
@@ -155,8 +160,8 @@ function getDataInput() {
             name: 'licensePlate',
             value: carSelected.licensePlate,
             required: true,
-            pattern: "^[A-Z0-9 ]{6,20}",
-            message: "License Plate must have minimum is 6 characters and maximum is 20 characters",
+            pattern: "\\d{2}[A-Za-z]-\\d{4,5}",
+            message: "Invalid License Plate (Ex: 75H-1234)",
         },
         {
             label: 'Agency',
@@ -172,46 +177,60 @@ function getDataInput() {
             label: 'Price Hours',
             classContainer: "col-6 mt-3",
             name: 'priceHours',
+            type: "number",
+            min: 1,
+            max: 10000,
             value: carSelected.priceHours,
             pattern: "[1-9][0-9]{1,10}",
-            message: 'Price Hours errors',
+            message: 'Price is between 1 - 10,000 USD',
             required: true
         },
         {
             label: 'Price Days',
             classContainer: "col-6 mt-3",
             name: 'priceDays',
+            type: "number",
+            min: 1,
+            max: 10000,
             value: carSelected.priceDays,
             pattern: "[1-9][0-9]{1,10}",
-            message: 'Price Days Hours errors',
+            message: 'Price is between 1 - 10,000 USD',
             required: true
         },
         {
-            label: 'Price Deliverys',
+            label: 'Price Delivery',
             classContainer: "col-6 mt-3",
             name: 'priceDelivery',
+            type: "number",
+            min: 1,
+            max: 200,
             value: carSelected.priceDelivery,
             pattern: "[1-9][0-9]{1,10}",
-            message: 'Price Deliverys Hours errors',
+            message: "Delivery price is between 1 to 200",
             required: true
         },
         {
             label: 'Excess Distance Fee',
             classContainer: "col-6 mt-3",
             name: 'excessDistanceFee',
+            type: "number",
+            min: 1,
+            max: 200,
             value: carSelected.excessDistanceFee,
             required: true,
-            pattern: "^[A-Za-z ]{6,20}",
-            message: "Name must have minimum is 6 characters and maximum is 20 characters",
+            message: "Fee is between 1 to 200",
         },
         {
             label: 'Overtime Fee',
             classContainer: "col-6 mt-3",
             name: 'overtimeFee',
+            min: 1,
+            max: 200,
+            type: "number",
             value: carSelected.overtimeFee,
             required: true,
-            pattern: "^[A-Za-z ]{6,20}",
-            message: "Name must have minimum is 6 characters and maximum is 20 characters",
+
+            message: "Fee is between 1 to 200",
         },
         {
             label: 'Cleaning Fee',
@@ -219,16 +238,18 @@ function getDataInput() {
             name: 'cleaningFee',
             value: carSelected.cleaningFee,
             required: true,
-            pattern: "^[A-Za-z ]{6,20}",
-            message: "Name must have minimum is 6 characters and maximum is 20 characters",
+            min: 1,
+            max: 200,
+            type: "number",
+            message: "Fee is between 1 to 200",
         },
         {
             label: 'Description',
             classContainer: "col-12 mt-3",
             name: 'description',
             value: carSelected.description,
-            pattern: "^[A-Za-z ]{6,120}",
-            message: "Description must have minimum is 6 charactfers and maximum is 20 characters",
+            pattern: ".{6,3000}",
+            message: "Description is between 6-3000 characters",
             required: true
         },
     ];
@@ -393,15 +414,15 @@ function showImgInForm(images) {
         imgEle.removeChild(imageOld[i])
     }
     const avatarDefault = document.createElement('img');
-    avatarDefault.src = '/assets/inputicon.png';
-    avatarDefault.classList.add('avatar-preview');
-    imgEle.append(avatarDefault)
     images.forEach((img, index) => {
         let image = document.createElement('img');
         image.src = img;
         image.classList.add('avatar-preview');
         imgEle.append(image)
     })
+    avatarDefault.src = '/assets/inputicon.png';
+    avatarDefault.classList.add('avatar-preview');
+    imgEle.append(avatarDefault)
 
 }
 
@@ -484,13 +505,6 @@ async function deleteCar(id) {
     }
 }
 
-const sortButton = document.getElementById('sortButton');
-sortButton.addEventListener('click', () => {
-    const sortDirection = document.getElementById('sortDirection').value;
-    pageable.sortCustom = `price,${sortDirection}`;
-    renderTable();
-});
-
 
 async function showDetail(id) {
     const carDetail = await findRoomDetailById(id);
@@ -507,12 +521,12 @@ async function showDetail(id) {
     eModalFeature.innerText = carDetail.featureNames.join(", ");
     eModalAgency.innerText = carDetail.agencyName;
 
-  carDetail.urlImages.forEach((imgUrl, index)=> {
-      eModalImage[index].src = imgUrl;
-      eModalExcessDistanceFee.innerText = carDetail.excessDistanceFee;
-      eModalOvertimeFee.innerText = carDetail.overtimeFee;
-      eModalCleaningFee.innerText = carDetail.cleaningFee;
-  })
+    carDetail.urlImages.forEach((imgUrl, index) => {
+        eModalImage[index].src = imgUrl;
+        eModalExcessDistanceFee.innerText = carDetail.excessDistanceFee;
+        eModalOvertimeFee.innerText = carDetail.overtimeFee;
+        eModalCleaningFee.innerText = carDetail.cleaningFee;
+    })
 }
 
 
@@ -534,9 +548,9 @@ async function previewImage(evt) {
     const files = evt.target.files
 
     for (let i = 0; i < files.length; i++) {
+        toastr.info(`Uploading  ${i+1} / ${files.length} . . . `, '', {timeOut: 1000})
         const file = files[i];
         await previewImageFile(file, i);
-
         if (file) {
             disableSaveChangesButton();
             // Create a new FormData object and append the selected file
@@ -556,20 +570,22 @@ async function previewImage(evt) {
                         idImages.push(id);
 
                     } else {
-                        console.error('Image ID not found in the response.');
+                        toastr.error('Image ID not found in the response.');
                     }
                 } else {
                     // Handle non-OK response (e.g., show an error message)
-                    console.error('Failed to upload image:', response.statusText);
+                    toastr.error('Failed to upload image:', response.statusText);
                 }
             } catch (error) {
                 // Handle network or other errors
                 console.error('An error occurred:', error);
             }
+
             enableSaveChangesButton();
         }
     }
-    console.log(idImages)
+    renderUploadIcon();
+    toastr.success("Upload completed!");
 }
 
 async function previewImageFile(file) {
@@ -583,7 +599,13 @@ async function previewImageFile(file) {
 
     };
     reader.readAsDataURL(file);
-
+}
+ function renderUploadIcon() {
+        const imgEle = document.getElementById("images");
+        const img = document.createElement('img');
+        img.src =  '/assets/inputicon.png';
+        img.classList.add('avatar-preview');
+        imgEle.append(img);
 }
 
 

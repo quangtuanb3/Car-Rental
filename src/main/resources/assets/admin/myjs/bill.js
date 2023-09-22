@@ -106,11 +106,12 @@ async function getCustomersSelectOption() {
 
 
 window.onload = async () => {
+    document.getElementById("menu-car").classList.remove("active");
+    document.getElementById("menu-bill").classList.add("active");
+    billStatus = await getBillStatus();
     await loadBills();
     customers = await getCustomersSelectOption();
     // features = await getFeaturesSelectOption();
-
-    billStatus = await getBillStatus();
     console.log(billStatus)
     await renderTable();
 

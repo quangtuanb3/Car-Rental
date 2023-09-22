@@ -45,40 +45,49 @@
                                 </label>
                             </div>
 
-
+                            <!--                            Specifications: -->
                             <div class="form-group">
                                 <label class="mt-3 form-label">Specifications:</label>
                                 <div class="row justify-content-around">
                                     <label class="mt-3 col-3 form-label" style="width: 22%">
                                         SEATS
                                         <select name="seats" id="seats" onchange="getSpecificationSelect(this)"
-                                                class="form-control">
-                                            <option value="2" class="valueOptions">4-SEATS</option>
-                                            <option value="3" class="valueOptions">7-SEATS</option>
+                                                class="form-control" >
+                                            <option th:each="option : ${seats}"
+                                                    th:value="${option.value}"
+                                                    th:text="${option.name}" class="valueOptions">
+                                            </option>
+
                                         </select>
                                     </label>
                                     <label class="mt-3 col-3 form-label" style="width: 22%">
                                         FUEL
                                         <select name="fuel" id="fuel" onchange="getSpecificationSelect(this)"
                                                 class="form-control">
-                                            <option value="1" class="valueOptions">Electric</option>
-                                            <option value="7" class="valueOptions">Petro</option>
+                                            <option th:each="option : ${fuel}"
+                                                    th:value="${option.value}"
+                                                    th:text="${option.name}" class="valueOptions">
+                                            </option>
                                         </select>
                                     </label>
                                     <label class="mt-3  col-3 form-label" style="width: 22%">
                                         TRANSMISSION
                                         <select name="transmission" id="transmission"
                                                 onchange="getSpecificationSelect(this)" class="form-control">
-                                            <option value="4" class="valueOptions">Auto</option>
-                                            <option value="6" class="valueOptions">Manuel</option>
+                                            <option th:each="option : ${transmission}"
+                                                    th:value="${option.value}"
+                                                    th:text="${option.name}" class="valueOptions">
+                                            </option>
                                         </select>
                                     </label>
                                     <label class="mt-3  col-3 form-label" style="width: 22%">
                                         LUGGAGE
                                         <select name="luggage" id="luggage" onchange="getSpecificationSelect(this)"
                                                 class="form-control">
-                                            <option value="5" class="valueOptions">4-Luggages</option>
-                                            <option value="8" class="valueOptions">6-Luggages</option>
+                                            <option th:each="option : ${luggage}"
+                                                    th:value="${option.value}"
+                                                    th:text="${option.name}" class="valueOptions">
+                                            </option>
                                         </select>
                                     </label>
                                 </div>
@@ -220,7 +229,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/assets/admin/myjs/car.js"></script>
 <script>
+
     $(document).ready(function () {
+        document.getElementById("menu-bill").classList.remove("active");
+        document.getElementById("menu-car").classList.add("active");
         // Kích hoạt Bootstrap JavaScript ở đây
         $('[data-toggle="dropdown"]').dropdown();
     });

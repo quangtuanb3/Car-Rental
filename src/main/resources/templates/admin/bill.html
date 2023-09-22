@@ -5,24 +5,7 @@
 
 <div class="container">
 
-    <div class="container">
-        <div class="row mb-3">
-            <div class="col-md-8"></div> <!-- Cột trống để căn chỉnh sang trái -->
-            <div class="col-md-4 ml-auto">
-                <div class="row">
-                    <div class="col-md-6">
-                        <select id="sortDirection" class="form-select">
-                            <option value="asc">Price Ascending</option>
-                            <option value="desc">Price Descending</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <button type="button" class="btn btn-primary" id="sortButton">Sort</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!--     Modal-->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -111,7 +94,7 @@
 
 
     <div class="card">
-        <h5 class="card-header">Table Bill</h5>
+        <h5 class="card-header">List Bills</h5>
         <div class="table-responsive text-nowrap">
             <table class="table">
                 <thead>
@@ -143,6 +126,5 @@
 <th:block th:replace="~{layoutAdmin.html :: footer}"></th:block>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/assets/admin/myjs/bill.js"></script>
-
 
 </html>
