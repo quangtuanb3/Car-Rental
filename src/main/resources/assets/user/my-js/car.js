@@ -20,7 +20,6 @@ const pickupLocation = urlParams.get("pickupLocation");
 const dropOffLocation = urlParams.get("dropOffLocation");
 
 
-
 let pageable = {
     page: 1,
     sort: 'id,desc',
@@ -74,7 +73,10 @@ function renderSearchForm() {
 }
 
 async function getAvailableCars() {
+    pageable.pickupTime = document.getElementById("pickup_time").value;
+    pageable.dropOffTime = document.getElementById("drop_off_time").value;
     const APIAvailableCars = buildApiUrl(pageable); // Build the API URL
+    console.log(APIAvailableCars);
     const res = await fetch(APIAvailableCars);
     return await res.json();
 }
@@ -94,10 +96,10 @@ function renderCars(cars) {
                                  style="background-image: url(${car.urlImages[0]});">
                             </div>
                             <div class="text">
-                                <h2 class="mb-0"><a href="/car-detai/${car.id}">${car.name}</a></h2>
+                                <h2 class="mb-0"><a href="/car-detail/${car.id}">${car.name}</a></h2>
                                 <div class="d-flex mb-3">
                                     <span class="cat">${car.agency}</span>
-                                    <p class="price ml-auto">${car.priceDays} <span>/day</span></p>
+                                    <p class="price ml-auto">${car.priceDays}$ <span>/day</span></p>
                                 </div>
                                 <div class="d-flex justify-content-center">
                                     <p class="d-flex mb-0 d-block"><a href="/car-detail/${car.id}" class="btn btn-primary py-2 mr-1">Book
@@ -202,42 +204,46 @@ function handleSearchCar() {
     // eSearchCarBtn.onclick = () => {
     //     alert('OK')
     // }
-    eSearchCarBtn.onclick = async () => {
+    eSearchCarBtn.addEventListener('click', async () => {
         const currentTime = new Date();
-
         // Validate pickup time and drop-off time
         const pickup = document.getElementById("pickup_time").value;
         const dropOff = document.getElementById("drop_off_time").value;
-        if (pickup === '' || dropOff === '') {
-            toastr.error("Invalid rental time");
-            return;
-        }
+
         if (new Date(pickup) <= currentTime) {
             toastr.error("Invalid Pickup time");
             return;
         }
 
-        if (new Date(dropOff) <= pickup_time) {
+        if (new Date(dropOff) <= new Date(pickup)) {
             toastr.error("Invalid drop-off time");
             return;
         }
         // let form = new FormData(eSearchCarForm);
         let form = new FormData(eSearchForm);
-        pageable.search = form.get("key-search");
-        pageable.pickupTime = form.get("pickup_time")
-        pageable.dropOffTime = form.get("drop_off_time")
-        pageable.pickupLocation = form.get("pickup_location")
-        pageable.dropOffLocation = form.get("drop_off_location")
-        let url = `/cars/available-cars?search=${pageable.search}&pickupTime=${pageable.pickupTime}&dropOffTime=${pageable.dropOffTime}&pickupLocation=${pageable.pickupLocation}&dropOffLocation=${pageable.dropOffLocation}`
-        console.log("search btn:  ")
-        console.log(url);
-        localStorage.setItem('pageable', JSON.stringify(pageable));
+        let formData = {};
+        formData.search = form.get("key-search");
+        formData.pickupTime = form.get("pickup_time")
+        formData.dropOffTime = form.get("drop_off_time")
+        formData.pickupLocation = form.get("pickup_location")
+        formData.dropOffLocation = form.get("drop_off_location")
+        pageable = {
+            page: 1,
+            sort: 'id,desc',
+            pickupTime: formData.pickupTime,
+            dropOffTime: formData.dropOffTime,
+            search: formData.search,
+            pickupLocation: formData.pickupLocation,
+            dropOffLocation: formData.dropOffLocation,
+        }
+        localStorage.setItem('formData', JSON.stringify(formData));
         await renderAvailableCars();
-    }
+
+    })
 }
 
 async function getCurrentCustom() {
-    let res = await fetch("user/api/customer-detail");
+    let res = await fetch("http://localhost:8080/user/api/customer-detail");
     return await res.json();
 }
 
@@ -260,11 +266,13 @@ async function handleLogBtn() {
         loginBtn.onclick = () => {
             showLogin();
         };
-        eRegisterLi.innerHTML= `<a href="/register" class="nav-link">Register</a>`;
+        eRegisterLi.innerHTML = `<a href="/register" class="nav-link">Register</a>`
+
     } else {
         loginBtn.innerText = "Logout"; // Change the text for authenticated users
         loginBtn.href = "/logout"; // Update the "href" attribute for logout
         loginBtn.onclick = null; // Remove the click event handler
+
         eRegisterLi.innerHTML="";
         if(customer.role === "ROLE_ADMIN"){
             eRegisterLi.innerHTML=`<a href="/home" class="nav-link">Dashboard</a>`;

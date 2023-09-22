@@ -82,3 +82,6 @@ th.sorted-desc::after {
     max-height: 100px; /* Đặt kích thước tối đa cho chiều cao */
 }
 
+td, th {
+    text-align: center !important;
+}

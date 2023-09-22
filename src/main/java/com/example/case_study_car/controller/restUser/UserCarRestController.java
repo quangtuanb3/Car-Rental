@@ -53,9 +53,9 @@ public class UserCarRestController {
     @GetMapping("/available-cars")
     public ResponseEntity<Page<BestCarResponse>> getCars(@PageableDefault(size = 4) Pageable pageable,
                                                          @RequestParam(defaultValue = "") String search,
-                                                         @RequestParam(defaultValue = "") LocalDateTime pickup,
-                                                         @RequestParam(defaultValue = "") LocalDateTime dropOff) {
-        return new ResponseEntity<>(carService.searchAvailableCar(pageable, pickup, dropOff, search), HttpStatus.OK);
+                                                         @RequestParam(defaultValue = "") LocalDateTime pickupTime,
+                                                         @RequestParam(defaultValue = "") LocalDateTime dropOffTime) {
+        return new ResponseEntity<>(carService.searchAvailableCar(pageable, pickupTime, dropOffTime, search), HttpStatus.OK);
     }
 
     @GetMapping("/check-available")

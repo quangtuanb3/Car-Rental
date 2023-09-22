@@ -63,4 +63,11 @@ public class CarRestController {
         return ResponseEntity.ok().build();
     }
 
+
+    @PutMapping("/{id}/softdelete")
+    public ResponseEntity<?> softDeleteCar(@PathVariable Long id) {
+        carService.softDeleteCar(id);
+        return ResponseEntity.ok("Xe đã được xóa mềm thành công.");
+    }
+
 }

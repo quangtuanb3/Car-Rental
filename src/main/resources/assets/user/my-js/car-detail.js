@@ -81,12 +81,17 @@ async function calculateTotal() {
 }
 
 function renderDataInFormSearch() {
-    pageable = JSON.parse(localStorage.getItem('pageable'));
-    if (pageable) {
-        ePickup_time.value = pageable.pickupTime;
-        eDrop_off_time.value = pageable.dropOffTime;
-        ePickUpLocation.value = pageable.pickupLocation;
-        eDropOffLocation.value = pageable.dropOffLocation;
+
+    let formInputData = JSON.parse(localStorage.getItem('formData'));
+    if (formInputData) {
+        document.getElementById("pickup-time").value = formInputData.pickupTime;
+        document.getElementById("pickup-time").innerText = formInputData.pickupTime;
+        document.getElementById("drop-off-time").value = formInputData.dropOffTime;
+        document.getElementById("drop-off-time").innerText = formInputData.dropOffTime;
+        document.getElementById("pickup-location").value = formInputData.pickupLocation;
+        document.getElementById("pickup-location").innerText = formInputData.pickupLocation;
+        document.getElementById("drop-off-location").value = formInputData.dropOffLocation;
+        document.getElementById("drop-off-location").innerText = formInputData.dropOffLocation;
     }
 
 }
@@ -94,7 +99,6 @@ function renderDataInFormSearch() {
 window.onload = async () => {
     await handleLogBtn();
     renderDataInFormSearch();
-    await handleLogBtn();
     car = await getCurrentCar(urlAPICar);
     await renderRelatedCars();
     await calculateTotal()
@@ -225,10 +229,11 @@ rentNowButton.addEventListener("click", async function () {
         return;
     }
 
-    if (new Date(dropOff) <= pickup_time) {
+    if (new Date(dropOff) <= new Date(pickup) ){
         toastr.error("Invalid drop-off time");
         return;
     }
+
     const isCarAvailable = await checkCarIfAvailable();
     if (!isCarAvailable) {
         toastr.warning("Car is not available this time");
@@ -332,8 +337,6 @@ function calculateRentPrice() {
     drop_off_time = eDrop_off_time.value;
     let result = 0;
     if (pickup_time && drop_off_time) {
-        console.log(pickup_time)
-        console.log(drop_off_time)
         data.pickup_time = pickup_time;
         data.drop_off_time = drop_off_time;
         const date1 = new Date(pickup_time);
@@ -394,7 +397,7 @@ function sendRentalNotification() {
     const time = Date.now();
 
     var rentalMessage = customer.name + " rented a car at " + formatDate(time);
-    stompClient.send("/app/message",{},
+    stompClient.send("/app/message", {},
         JSON.stringify({
             'content': rentalMessage
         }));

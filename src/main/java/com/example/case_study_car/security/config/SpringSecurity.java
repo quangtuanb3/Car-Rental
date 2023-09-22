@@ -44,6 +44,7 @@ public class SpringSecurity {
                                 .requestMatchers("/admin/public").permitAll()
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/").permitAll()
+                                .requestMatchers("/cars/available-cars").permitAll()
                                 .requestMatchers("/cars/**").permitAll()
                                 .requestMatchers("user/api/customer-detail/**").permitAll()
                                 .requestMatchers("/pricing").permitAll()
