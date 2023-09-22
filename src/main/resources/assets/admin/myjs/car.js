@@ -19,7 +19,7 @@ let eModalPriceDays = document.getElementById("modal-car-priceDays");
 let eModalPriceDeliverys = document.getElementById("modal-car-priceDeliverys");
 let eModalSpecification = document.getElementById("modal-car-specification");
 let eModalFeature = document.getElementById("modal-car-feature");
-// let eModalSurcharge = document.getElementById("modal-car-surcharge");
+
 let eModalImage = document.getElementsByClassName("modal-car-image");
 let eModalAgency = document.getElementById("modal-car-agency");
 let eModalExcessDistanceFee = document.getElementById("modal-car-excessDistanceFee");
@@ -217,7 +217,8 @@ function getDataInput() {
             max: 200,
             value: carSelected.excessDistanceFee,
             required: true,
-            message: "Fee is between 1 to 200",
+            message: "Fee is between 1 to 200"
+
         },
         {
             label: 'Overtime Fee',
@@ -228,8 +229,7 @@ function getDataInput() {
             type: "number",
             value: carSelected.overtimeFee,
             required: true,
-
-            message: "Fee is between 1 to 200",
+            message: "Fee is between 1 to 200"
         },
         {
             label: 'Cleaning Fee',
@@ -240,7 +240,8 @@ function getDataInput() {
             min: 1,
             max: 200,
             type: "number",
-            message: "Fee is between 1 to 200",
+            message: "Fee is between 1 to 200"
+
         },
         {
             label: 'Description',
@@ -282,9 +283,8 @@ function renderItemStr(item) {
                     <td>
                         ${item.licensePlate}
                     </td>
-
-                    <td>
-                        ${item.agency}
+                      <td>
+                       ${item.logo}
                     </td>
 
                     <td>
@@ -389,7 +389,7 @@ const addEventEditAndDelete = () => {
     }
 
 }
-
+let idImages = [];
 function clearForm() {
     idImages = [];
 
@@ -481,29 +481,43 @@ async function editCar(data) {
 }
 
 
+// async function deleteCar(id) {
+//     const confirmed = confirm("Bạn có chắc chắn muốn xóa xe này?");
+//     if (confirmed) {
+//         try {
+//             const response = await fetch(`/api/cars/${id}`, {
+//                 method: 'DELETE',
+//             });
+//             if (response.ok) {
+//                 // Nếu xóa thành công, cập nhật danh sách và hiển thị thông báo
+//                 await renderTable();
+//                 toastr.success('Xe đã được xóa thành công.');
+//             } else {
+//                 // Xử lý lỗi nếu cần
+//                 toastr.error('Đã xảy ra lỗi khi xóa xe.');
+//             }
+//         } catch (error) {
+//             // Xử lý lỗi nếu cần
+//             console.error('Lỗi khi gửi yêu cầu xóa xe:', error);
+//             toastr.error('Đã xảy ra lỗi khi xóa xe.');
+//         }
+//     }
+// }
+
 async function deleteCar(id) {
     const confirmed = confirm("Bạn có chắc chắn muốn xóa xe này?");
     if (confirmed) {
         try {
-            const response = await fetch(`/api/cars/${id}`, {
-                method: 'DELETE',
-            });
-            if (response.ok) {
-                // Nếu xóa thành công, cập nhật danh sách và hiển thị thông báo
-                await renderTable();
-                toastr.success('Xe đã được xóa thành công.');
-            } else {
-                // Xử lý lỗi nếu cần
-                toastr.error('Đã xảy ra lỗi khi xóa xe.');
-            }
+            await softDeleteCar(id); // Gọi hàm softDeleteCar thay vì gửi yêu cầu DELETE
+            await renderTable(); // Cập nhật danh sách và hiển thị thông báo
+            toastr.success('Xe đã được xóa mềm thành công.');
         } catch (error) {
             // Xử lý lỗi nếu cần
-            console.error('Lỗi khi gửi yêu cầu xóa xe:', error);
+            console.error('Lỗi khi xóa xe:', error);
             toastr.error('Đã xảy ra lỗi khi xóa xe.');
         }
     }
 }
-
 
 async function showDetail(id) {
     const carDetail = await findRoomDetailById(id);
@@ -529,7 +543,7 @@ async function showDetail(id) {
 }
 
 
-let idImages = [];
+
 
 async function previewImage(evt) {
     if (evt.target.files.length === 0) {
@@ -654,3 +668,35 @@ function enableSaveChangesButton() {
     const saveChangesButton = document.getElementById('saveChangesButton');
     saveChangesButton.disabled = false;
 }
+
+
+
+
+// Thêm một hàm để xóa mềm xe hơi
+async function softDeleteCar(id) {
+    const confirmed = confirm("Bạn có chắc chắn muốn xóa xe này?");
+    if (confirmed) {
+        try {
+            const response = await fetch(`/api/cars/${id}/softdelete`, {
+                method: 'PUT',
+            });
+            if (response.ok) {
+                // Nếu xóa thành công, cập nhật danh sách và hiển thị thông báo
+                await renderTable();
+                toastr.success('Xe đã được xóa mềm thành công.');
+            } else {
+                // Xử lý lỗi nếu cần
+                toastr.error('Đã xảy ra lỗi khi xóa mềm xe.');
+            }
+        } catch (error) {
+            // Xử lý lỗi nếu cần
+            console.error('Lỗi khi gửi yêu cầu xóa mềm xe:', error);
+            toastr.error('Đã xảy ra lỗi khi xóa mềm xe.');
+        }
+    }
+}
+
+
+
+
+
