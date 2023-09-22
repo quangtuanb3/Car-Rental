@@ -40,7 +40,7 @@ public class SpringSecurity {
                         authorize.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/user/**").permitAll()
                                 .requestMatchers("/ws/**").permitAll()
-                                .requestMatchers("/socket").permitAll()
+                                .requestMatchers("/socket", "/errors", "/403").permitAll()
                                 .requestMatchers("/admin/public").permitAll()
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/").permitAll()
@@ -58,7 +58,6 @@ public class SpringSecurity {
                                 .requestMatchers("/assets/**").permitAll()
                                 .requestMatchers("/user/api/cars/related-cars/**").permitAll()
                                 .anyRequest().authenticated()
-
                 )
                 .formLogin(
                         form -> form
@@ -66,7 +65,6 @@ public class SpringSecurity {
                                 .loginProcessingUrl("/login")
                                 .successHandler(customAuthenticationSuccessHandler())
                                 .permitAll()
-
                 )
                 .logout(
                         logout -> logout
@@ -77,8 +75,10 @@ public class SpringSecurity {
                 .exceptionHandling()
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             response.sendRedirect("/403");
-
-                        });
+                        })
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendRedirect("/errors");
+                });
         return http.build();
     }
 
