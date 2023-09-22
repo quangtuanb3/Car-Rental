@@ -5,24 +5,7 @@
 
 <div class="container">
 
-    <div class="container">
-        <div class="row mb-3">
-            <div class="col-md-8"></div> <!-- Cột trống để căn chỉnh sang trái -->
-            <div class="col-md-4 ml-auto">
-                <div class="row">
-                    <div class="col-md-6">
-                        <select id="sortDirection" class="form-select">
-                            <option value="asc">Price Ascending</option>
-                            <option value="desc">Price Descending</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <button type="button" class="btn btn-primary" id="sortButton">Sort</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!--     Modal-->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -58,6 +41,11 @@
                     <table class="table table-bordered mt-3">
                         <tbody>
                         <tr>
+                            <th scope="row"><strong>License Plate</strong></th>
+                            <td id="modal-bill-licensePlate"><strong>Lorem ipsum dolor sit amet, consectetur adipiscing
+                                elit.</strong></td>
+                        </tr>
+                        <tr>
                             <th scope="row"><strong>Status</strong></th>
                             <td id="modal-bill-billStatus"><strong><span id="status-enum-value"></span></strong></td>
                         </tr>
@@ -86,11 +74,6 @@
                             <td id="modal-bill-rentPrice"><strong>$XX.XX</strong></td>
                         </tr>
                         <tr>
-                            <th scope="row"><strong>License Plate</strong></th>
-                            <td id="modal-bill-licensePlate"><strong>Lorem ipsum dolor sit amet, consectetur adipiscing
-                                elit.</strong></td>
-                        </tr>
-                        <tr>
                             <th scope="row"><strong>Total Price</strong></th>
                             <td id="modal-bill-totalPrice"><strong>$XX.XX</strong></td>
                         </tr>
@@ -111,7 +94,7 @@
 
 
     <div class="card">
-        <h5 class="card-header">Table Bill</h5>
+        <h5 class="card-header">List Bills</h5>
         <div class="table-responsive text-nowrap">
             <table class="table">
                 <thead>
@@ -143,6 +126,5 @@
 <th:block th:replace="~{layoutAdmin.html :: footer}"></th:block>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/assets/admin/myjs/bill.js"></script>
-
 
 </html>
