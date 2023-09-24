@@ -96,14 +96,6 @@ function renderDataInFormSearch() {
 
 }
 
-window.onload = async () => {
-    await handleLogBtn();
-    renderDataInFormSearch();
-    car = await getCurrentCar(urlAPICar);
-    await renderRelatedCars();
-    await calculateTotal()
-    customer = await getCurrentCustom();
-}
 
 async function renderRelatedCars() {
     let url = `/user/api/cars/related-cars/${car.id}/${car.agency}/${car.seats || '4-seats'}/${car.priceDays}`;
@@ -150,17 +142,18 @@ async function handleLogBtn() {
         loginBtn.onclick = () => {
             showLogin();
         };
-        eRegisterLi.innerHTML= `<a href="/register" class="nav-link">Register</a>`;
+        eRegisterLi.innerHTML = `<a href="/register" class="nav-link">Register</a>`;
     } else {
         loginBtn.innerText = "Logout"; // Change the text for authenticated users
         loginBtn.href = "/logout"; // Update the "href" attribute for logout
         loginBtn.onclick = null; // Remove the click event handler
-        eRegisterLi.innerHTML="";
-        if(customer.role === "ROLE_ADMIN"){
-            eRegisterLi.innerHTML=`<a href="/home" class="nav-link">Dashboard</a>`;
+        eRegisterLi.innerHTML = "";
+        if (customer.role === "ROLE_ADMIN") {
+            eRegisterLi.innerHTML = `<a href="/home" class="nav-link">Dashboard</a>`;
         }
     }
 }
+
 async function getDistancePickUp() {
     let pickup = ePickUpLocation.value.trim();
     if (pickup !== "") {
@@ -229,7 +222,7 @@ rentNowButton.addEventListener("click", async function () {
         return;
     }
 
-    if (new Date(dropOff) <= new Date(pickup) ){
+    if (new Date(dropOff) <= new Date(pickup)) {
         toastr.error("Invalid drop-off time");
         return;
     }
@@ -472,14 +465,14 @@ async function handleLogBtn() {
         loginBtn.onclick = () => {
             showLogin();
         };
-        eRegisterLi.innerHTML= `<a href="/register" class="nav-link">Register</a>`;
+        eRegisterLi.innerHTML = `<a href="/register" class="nav-link">Register</a>`;
     } else {
         loginBtn.innerText = "Logout"; // Change the text for authenticated users
         loginBtn.href = "/logout"; // Update the "href" attribute for logout
         loginBtn.onclick = null; // Remove the click event handler
-        eRegisterLi.innerHTML="";
-        if(customer.role === "ROLE_ADMIN"){
-            eRegisterLi.innerHTML=`<a href="/home" class="nav-link">Dashboard</a>`;
+        eRegisterLi.innerHTML = "";
+        if (customer.role === "ROLE_ADMIN") {
+            eRegisterLi.innerHTML = `<a href="/home" class="nav-link">Dashboard</a>`;
         }
     }
 }
@@ -502,3 +495,34 @@ function getQueryParam(key) {
     return urlSearchParams.get(key);
 }
 
+
+async function handleReceiveMsg() {
+    let customer = await getCurrentCustom();
+    if (customer.email !== null) {
+        // Create a WebSocket connection
+        var socket = new SockJS('/ws');
+        var stompClient = Stomp.over(socket);
+
+        // Connect to the WebSocket server
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            var destination = `/user/${customer.email}/private`; // Replace 'your-username' with the user's username
+            stompClient.subscribe(destination, function (message) {
+                // Handle incoming messages from the admin here
+                var notification = JSON.parse(message.body);
+                toastr.info('From Admin', notification.content);
+                // console.log('Received message from admin:', notification);
+            });
+        });
+    }
+}
+
+window.onload = async () => {
+    await handleLogBtn();
+    renderDataInFormSearch();
+    car = await getCurrentCar(urlAPICar);
+    await renderRelatedCars();
+    await calculateTotal()
+    customer = await getCurrentCustom();
+    await handleReceiveMsg()
+}

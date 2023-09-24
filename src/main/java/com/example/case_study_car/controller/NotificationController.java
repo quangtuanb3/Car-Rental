@@ -27,4 +27,13 @@ public class NotificationController {
         return notification;
     }
 
+    @MessageMapping("/admin-private-message")
+    public void sendAdminPrivateMessage(@Payload Notification notification) {
+        // Assuming that the 'notification' object contains the 'receiverName' of the user.
+        String userDestination = "/user/" + notification.getReceiverName() + "/private";
+        System.out.println(userDestination);
+
+        simpMessageTemplate.convertAndSend(userDestination, notification);
+    }
+
 }

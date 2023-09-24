@@ -167,7 +167,7 @@ async function showBillDetail(id) {
     eModalBillEmail.innerText = billDetail.customerEmail;
     eModalBillStatus.innerText = billDetail.billStatus;
 
-    eModalBillPickupTime.innerText =formatDate( billDetail.pickupTime);
+    eModalBillPickupTime.innerText = formatDate(billDetail.pickupTime);
     eModalBillDropOffTime.innerText = formatDate(billDetail.expectedDropOffTime);
     eModalBillPickupLocation.innerText = billDetail.pickupLocation;
     eModalBillDropOfLocation.innerText = billDetail.dropOffLocation;
@@ -225,8 +225,8 @@ function renderBillTable(bills) {
                         <label>
                           <select class="form-control"
                                   id="${bill.id}"
+                                  data-email="${bill.customerEmail}"
                                   onchange="onChangeSelect(this)">
-                
                           </select>
                         </label>
                     </td>
@@ -282,16 +282,16 @@ async function loadBills() {
 async function onChangeSelect(selectElement) {
     const billId = selectElement.id;
     const newStatus = selectElement.value;
+    const customer = selectElement.getAttribute('data-email');
 
     try {
         const response = await fetch(`/api/bills/${billId}/change-status?status=${newStatus}`, {
             method: 'GET',
         });
-
-
         if (response.ok) {
             const message = await response.text();
             toastr.success(message);
+            sendRentalNotification(customer, newStatus)
             await renderTable();
         } else {
             const errorMessage = await response.text();
@@ -301,6 +301,19 @@ async function onChangeSelect(selectElement) {
         toastr.error('An error occurred while changing status.');
     }
 }
+
+function sendRentalNotification(customer, status) {
+    const time = Date.now();
+
+    var rentalMessage = `Your bill has been ${status} rented a car at ${formatDate(time)}`;
+
+    stompClient.send("/app/admin-private-message", {},
+        JSON.stringify({
+            'content': rentalMessage,
+            'receiverName': customer,
+        }));
+}
+
 
 function formatDate(inputDateString) {
     const inputDate = new Date(inputDateString);

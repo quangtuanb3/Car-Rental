@@ -126,14 +126,6 @@ async function renderAvailableCars() {
 }
 
 
-window.onload = async () => {
-    await handleLogBtn();
-    renderSearchForm();
-    handleSearchCar();
-    await renderAvailableCars();
-
-};
-
 const genderPagination = () => {
     ePagination.innerHTML = '';
     let str = '';
@@ -251,6 +243,7 @@ async function getCurrentCustom() {
 function showLogin() {
     $('#exampleModal').modal('show');
 }
+
 async function handleLogBtn() {
     let customer = await getCurrentCustom();
     console.log(customer);
@@ -271,9 +264,39 @@ async function handleLogBtn() {
         loginBtn.href = "/logout"; // Update the "href" attribute for logout
         loginBtn.onclick = null; // Remove the click event handler
 
-        eRegisterLi.innerHTML="";
-        if(customer.role === "ROLE_ADMIN"){
-            eRegisterLi.innerHTML=`<a href="/home" class="nav-link">Dashboard</a>`;
+        eRegisterLi.innerHTML = "";
+        if (customer.role === "ROLE_ADMIN") {
+            eRegisterLi.innerHTML = `<a href="/home" class="nav-link">Dashboard</a>`;
         }
     }
 }
+
+async function handleReceiveMsg() {
+    let customer = await getCurrentCustom();
+    if (customer.email !== null) {
+        // Create a WebSocket connection
+        var socket = new SockJS('/ws');
+        var stompClient = Stomp.over(socket);
+
+        // Connect to the WebSocket server
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            var destination = `/user/${customer.email}/private`; // Replace 'your-username' with the user's username
+            stompClient.subscribe(destination, function (message) {
+                // Handle incoming messages from the admin here
+                var notification = JSON.parse(message.body);
+                toastr.info('From Admin', notification.content);
+                // console.log('Received message from admin:', notification);
+            });
+        });
+    }
+}
+
+window.onload = async () => {
+    await handleLogBtn();
+    renderSearchForm();
+    handleSearchCar();
+    await renderAvailableCars();
+    await handleReceiveMsg();
+
+};
