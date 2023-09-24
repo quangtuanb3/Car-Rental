@@ -132,16 +132,16 @@
 
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-
         stompClient.subscribe('/message/public', function (notification) {
             var message = JSON.parse(notification.body);
             displayNotification(message);
         });
 
     });
-
     function displayNotification(notification) {
         toastr.success(notification.content, 'Notification'); // Display a success notification
     }
+
+
 </script>
 </html>

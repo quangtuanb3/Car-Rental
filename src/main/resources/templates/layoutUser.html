@@ -536,11 +536,13 @@
 
 <th:block th:fragment="loginForm">
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document" style="margin-top: 150px">
             <div class="modal-content" style="border-radius: 10px; ">
                 <div>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; margin:10px 10px">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            style="color: white; margin:10px 10px">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <div>
@@ -551,48 +553,48 @@
                             <div class="alert alert-success"> You have been logged out.</div>
                         </div>
 
-<!--                        <th:block th:fragment="form-search">-->
-                            <form
-                                    th:action="@{/login}"
-                                    class="request-form bg-dark-blue"
-                                    id="login-form"
-                                    method="post"
-                                    role="form"
-                                    style="width: 100%"
-                            >
-                                <h2>Login Form</h2>
-                                <div class="form-group">
-                                    <label for="username" class="label">Email</label>
-                                    <input
-                                            type="text"
-                                            class="form-control"
-                                            id="username"
-                                            name="username"
-                                            placeholder="Enter Email Address"
-                                            value="aaa@gmail.com"
-                                    />
-                                </div>
-                                <div class="form-group">
-                                    <label for="password" class="label">Password</label>
-                                    <input
-                                            type="password"
-                                            class="form-control"
-                                            id="password"
-                                            name="password"
-                                            placeholder="Enter Password"
-                                            value="123"
-                                    />
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" id="login-btn" class="btn btn-secondary py-3 px-4">
-                                        Login
-                                    </button>
-                                    <span> Not registered ?
+                        <!--                        <th:block th:fragment="form-search">-->
+                        <form
+                                th:action="@{/login}"
+                                class="request-form bg-dark-blue"
+                                id="login-form"
+                                method="post"
+                                role="form"
+                                style="width: 100%"
+                        >
+                            <h2>Login Form</h2>
+                            <div class="form-group">
+                                <label for="username" class="label">Email</label>
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        id="username"
+                                        name="username"
+                                        placeholder="Enter Email Address"
+                                        value="aaa@gmail.com"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="label">Password</label>
+                                <input
+                                        type="password"
+                                        class="form-control"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Enter Password"
+                                        value="123"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" id="login-btn" class="btn btn-secondary py-3 px-4">
+                                    Login
+                                </button>
+                                <span> Not registered ?
                                        <a th:href="@{/register}">Register/Signup here!</a>
                                     </span>
-                                </div>
-                            </form>
-<!--                        </th:block>-->
+                            </div>
+                        </form>
+                        <!--                        </th:block>-->
                     </div>
                 </div>
             </div>
@@ -704,29 +706,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
     <script src="/assets/user/js/scrollax.min.js"></script>
-<!--    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>-->
+    <!--    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>-->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
     <script src="/assets/user/js/main.js"></script>
-<script>
-    toastr.options = {
-        closeButton: true,
-        progressBar: true,
-        positionClass: 'toast-top-right',
-        timeOut: 800
-    };
-</script>
     <script>
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-top-right',
+            timeOut: 800
+        };
+    </script>
+    <script>
+
         var socket = new SockJS('/ws');
         var stompClient = Stomp.over(socket);
 
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            // stompClient.subscribe('/message/public', function (notification) {
-            //     // Handle received notifications
-            //     var message = JSON.parse(notification.body);
-            //     alert('Received Notification: ' + message.content);
-            // });
+            var destination = '/user/your-username/private'; // Replace 'your-username' with the user's username
+            stompClient.subscribe(destination, function (message) {
+                // Handle incoming messages from the admin here
+                var notification = JSON.parse(message.body);
+                console.log('Received message from admin:', notification);
+            });
         });
     </script>
 

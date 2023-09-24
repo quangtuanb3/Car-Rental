@@ -10,19 +10,13 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-//    @Override
-//    public void configureMessageBroker(MessageBrokerRegistry config) {
-//        // Enable a simple in-memory message broker to handle messages
-//        config.setApplicationDestinationPrefixes("/app");
-//        config.enableSimpleBroker("/message");
-//        config.setUserDestinationPrefix("/message");
-//    }
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/message");
-        registry.setUserDestinationPrefix("/message");
+        registry.enableSimpleBroker("/user", "/message"); // Change this to /user
+        registry.setUserDestinationPrefix("/user");
     }
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // Define WebSocket endpoint for clients to connect

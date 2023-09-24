@@ -56,7 +56,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             "c.agency.name LIKE :search " +
             " OR EXISTS (SELECT 1 FROM CarSpecification cs WHERE cs.car = c AND cs.specification.name LIKE :search)" +
             " OR EXISTS (SELECT 1 FROM CarFeature cf WHERE cf.car = c AND cf.feature.name LIKE :search))" +
-            " AND c.id not in (SELECT b.car.id FROM Bill b WHERE " +
+            " AND c.id not in (SELECT b.car.id FROM Bill b WHERE b.billStatus <> 'CANCEL' AND " +
             " ( FUNCTION( 'DATE_FORMAT',:pickupTime , '%Y-%m-%d') BETWEEN FUNCTION( 'DATE_FORMAT',b.pickupTime , '%Y-%m-%d') AND  FUNCTION( 'DATE_FORMAT', b.expectedDropOffTime , '%Y-%m-%d') " +
             "OR FUNCTION( 'DATE_FORMAT',:dropOffTime , '%Y-%m-%d') BETWEEN FUNCTION( 'DATE_FORMAT',b.pickupTime , '%Y-%m-%d') AND  FUNCTION( 'DATE_FORMAT', b.expectedDropOffTime , '%Y-%m-%d')   ) )"
     )
@@ -68,7 +68,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END " +
             "FROM Car c " +
             "WHERE c.id = :id " +
-            "AND NOT EXISTS (SELECT 1 FROM Bill b WHERE b.car = c " +
+            "AND NOT EXISTS (SELECT 1 FROM Bill b WHERE b.car = c AND b.billStatus <> 'CANCEL' " +
             "AND ( FUNCTION( 'DATE_FORMAT',:pickup , '%Y-%m-%d') BETWEEN FUNCTION( 'DATE_FORMAT',b.pickupTime , '%Y-%m-%d') AND  FUNCTION( 'DATE_FORMAT', b.expectedDropOffTime , '%Y-%m-%d') " +
             "OR FUNCTION( 'DATE_FORMAT',:dropOff , '%Y-%m-%d') BETWEEN FUNCTION( 'DATE_FORMAT',b.pickupTime , '%Y-%m-%d') AND  FUNCTION( 'DATE_FORMAT', b.expectedDropOffTime , '%Y-%m-%d')   ) )"
     )

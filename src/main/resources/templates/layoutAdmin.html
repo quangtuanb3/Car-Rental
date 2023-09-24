@@ -164,7 +164,7 @@
 
                     <!--                    Management Bill-->
                     <li class="menu-item" id="menu-bill">
-                        <a href="/bill" class="menu-link" >
+                        <a href="/bill" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-layout"></i>
                             <div data-i18n="Without menu"> Bills Management</div>
                         </a>
@@ -305,7 +305,7 @@
                     document.write(new Date().getFullYear());
                 </script>
                 , made with ❤️ by
-              Mr. Minh and Mr. Hung
+                Mr. Minh and Mr. Hung
             </div>
 
         </div>
@@ -355,20 +355,6 @@
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="../assets/admin/myjs/base.js"></script>
-    <script>
-        var socket = new SockJS('/ws');
-        var stompClient = Stomp.over(socket);
-
-        stompClient.connect({}, function (frame) {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/app/message', function (notification) {
-                // Handle received notifications
-                var message = JSON.parse(notification.body);
-                alert('Received Notification: ' + message.content);
-            });
-        });
-
-    </script>
     <script>
         toastr.options = {
             closeButton: true,
