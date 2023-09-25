@@ -305,7 +305,7 @@ async function onChangeSelect(selectElement) {
 function sendRentalNotification(customer, status) {
     const time = Date.now();
 
-    var rentalMessage = `Your bill has been ${status} rented a car at ${formatDate(time)}`;
+    var rentalMessage = `Your bill has been set ${status} at ${formatDate(time)}`;
 
     stompClient.send("/app/admin-private-message", {},
         JSON.stringify({
