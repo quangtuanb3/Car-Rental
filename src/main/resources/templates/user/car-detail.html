@@ -230,13 +230,13 @@ m67 -230 c27 -30 33 -44 33 -82 0 -84 -55 -139 -136 -136 -106 4 -162 125 -98
                 <div class="form-group col-12 d-flex justify-content-between mb-0">
                     <label style=" color: gainsboro">Rent price:</label>
                     <span id="rent-price" class="text-right"
-                          style="font-weight: bold; color: gainsboro">0 <span>VND</span></span>
+                          style="font-weight: bold; color: gainsboro">0 <span>$</span></span>
 
                 </div>
                 <div class="form-group col-12 d-flex justify-content-between">
                     <label for="delivery-fee" style="color: gainsboro">Delivery Fee:</label>
                     <span id="delivery-fee-display" class="text-right"
-                          style="color: gainsboro">0 <span>VND</span></span>
+                          style="color: gainsboro">0 <span>$</span></span>
                     <input type="text" class="form-control d-none" id="delivery-fee" name="delivery-fee"
                     >
                 </div>
@@ -244,7 +244,7 @@ m67 -230 c27 -30 33 -44 33 -82 0 -84 -55 -139 -136 -136 -106 4 -162 125 -98
                 <div class="form-group col-12 d-flex justify-content-between">
                     <label for="total-price" style="font-weight: bold; color: gainsboro">Total price:</label>
                     <span id="total-display" class="text-right "
-                          style="font-weight: bold; color: gainsboro">0 <span>VND</span></span>
+                          style="font-weight: bold; color: gainsboro">0 <span>$</span></span>
                     <input type="text" class="form-control d-none" id="total-price" name="total-price"
                     >
                 </div>
@@ -273,7 +273,7 @@ m67 -230 c27 -30 33 -44 33 -82 0 -84 -55 -139 -136 -136 -106 4 -162 125 -98
                     </div>
                     <div class="content">
                         <div class="content-item"><p class="title">Excess Distance Fee</p>
-                            <p class="cost"><span th:text="${car.excessDistanceFee} + ' VND per kilometer'"></span></p>
+                            <p class="cost"><span th:text="${car.excessDistanceFee} + ' $ per kilometer'"></span></p>
                         </div>
                         <div class="content-item"><p>An additional fee that applies if the travel distance exceeds
                             <span>300km</span> when renting a car for <span> 1 day</span></p></div>
@@ -292,7 +292,7 @@ m67 -230 c27 -30 33 -44 33 -82 0 -84 -55 -139 -136 -136 -106 4 -162 125 -98
                     </div>
                     <div class="content">
                         <div class="content-item"><p class="title">Overtime Fee</p>
-                            <p class="cost"><span th:text="${car.overtimeFee}+' VND per hour'"></span></p></div>
+                            <p class="cost"><span th:text="${car.overtimeFee}+' $ per hour'"></span></p></div>
                         <div class="content-item"><p>An additional fee that applies if the car is returned late. In case
                             of a delay exceeding <span>4 hours</span> , an extra day's rental fee will be charged.</p>
                         </div>
@@ -311,7 +311,7 @@ m67 -230 c27 -30 33 -44 33 -82 0 -84 -55 -139 -136 -136 -106 4 -162 125 -98
                     </div>
                     <div class="content">
                         <div class="content-item"><p class="title">Cleaning Fee</p>
-                            <p class="cost"><span th:text="${car.cleaningFee}+ ' VND'"></span></p></div>
+                            <p class="cost"><span th:text="${car.cleaningFee}+ ' $'"></span></p></div>
                         <div class="content-item"><p>An additional fee that applies when the returned car is not in a
                             clean condition (e.g., with stains, mud, or dirt).</p></div>
                     </div>

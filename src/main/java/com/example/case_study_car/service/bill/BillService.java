@@ -41,7 +41,7 @@ public class BillService {
         Bill bill = AppUtil.mapper.map(request, Bill.class);
         Car car = carRepository.findById(Long.valueOf(request.getCarId())).orElse(new Car());
         Customer customer = customerService.findByEmail(request.getCustomerEmail());
-        bill.setBillStatus(EBillStatus.DEPOSITED);
+        bill.setBillStatus(EBillStatus.WAITING);
         bill.setCustomer(customer);
         bill.setCleaningFee(car.getCleaningFee());
         bill.setExcessDistanceFee(car.getExcessDistanceFee());

@@ -57,13 +57,13 @@ async function calculateDeliveryFee() {
     let distanceDropOff = await getDistanceDropOff();
     let deliveryFee = 0;
     if (!Number.isNaN(Number.parseFloat(distancePickUp))) {
-        deliveryFee += distancePickUp * car.priceDelivery.toFixed(1);
+        deliveryFee = (+deliveryFee + +distancePickUp * car.priceDelivery).toFixed(1);
     }
     if (!Number.isNaN(Number.parseFloat(distanceDropOff))) {
-        deliveryFee += +distanceDropOff * car.priceDelivery.toFixed(1);
+        deliveryFee = (+deliveryFee + +distanceDropOff * car.priceDelivery).toFixed(1);
 
     }
-    eDeliveryFeeDisplay.innerText = deliveryFee + ' VND';
+    eDeliveryFeeDisplay.innerText = deliveryFee + ' $';
     data.delivery_fee = deliveryFee;
     return deliveryFee;
 }
@@ -278,13 +278,13 @@ function showConfirm(data) {
                     <p class="col-12">Pickup Location: <span id="confirm-pickup-location">${pickup_location}</span></p>
                     <p class="col-12">Drop-off Location: <span id="confirm-drop-off-location">loc${drop_off_location}ation</span></p>
                     <p class="col-6">Rent price: </p>
-                    <p class="col-6 text-right pr-5" id="confirm-rent-price">${data.rent_price} VND</p>
+                    <p class="col-6 text-right pr-5" id="confirm-rent-price">${data.rent_price} $</p>
                     <p class="col-6">Delivery Fee: </p>
-                    <p class="col-6 text-right pr-5" id="confirm-delivery-fee">${data.delivery_fee} VND</p>
+                    <p class="col-6 text-right pr-5" id="confirm-delivery-fee">${data.delivery_fee} $</p>
                     <p class="col-6 ">Total: </p>
-                    <p class="col-6 text-right pr-5" id="confirm-total">${data.total} VND</p>
+                    <p class="col-6 text-right pr-5" id="confirm-total">${data.total} $</p>
                     <p class="col-6 ">Deposit: </p>
-                    <p class="col-6 text-right pr-5" id="confirm-deposit">${data.deposit} VND</p>
+                    <p class="col-6 text-right pr-5" id="confirm-deposit">${data.deposit} $</p>
                     <p class="col-12">(Please scan the QR code below to make a deposit)</p>
                     <div style="width: 25%; margin: auto">
                         <img src="/assets/user/images/QR.jpg" alt="qr" style="width: 100%">
@@ -300,7 +300,7 @@ function showConfirm(data) {
 }
 
 function formatCurrency(currency) {
-    return currency + " VND"
+    return currency + " $"
 }
 
 function formatDate(inputDateString) {

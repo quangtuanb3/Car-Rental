@@ -234,7 +234,7 @@ async function handleReceiveMsg() {
             stompClient.subscribe(destination, function (message) {
                 // Handle incoming messages from the admin here
                 var notification = JSON.parse(message.body);
-                toastr.info('From Admin', notification.content);
+                toastr.info(notification.content, 'From Admin');
                 // console.log('Received message from admin:', notification);
             });
         });
